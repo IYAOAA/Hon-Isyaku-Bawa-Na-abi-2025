@@ -1,0 +1,100 @@
+* {
+  margin: 0;
+  padding: 0;
+  box-sizing: border-box;
+}
+
+body {
+  font-family: 'Segoe UI', sans-serif;
+  color: #2b3d34;
+}
+
+/* ✅ Background image setup */
+.home {
+  position: relative;
+  background-image: url('images/Chairman.jpg'); /* path must match your folder/file */
+  background-size: cover;
+  background-position: center;
+  background-repeat: no-repeat;
+  min-height: 100vh; /* full screen */
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  align-items: center;
+  text-align: center;
+  color: white; /* text readable */
+  padding: 4rem 2rem;
+  z-index: 1;
+}
+
+/* ✅ Semi-transparent overlay for readability */
+.home::before {
+  content: "";
+  position: absolute;
+  top: 0; left: 0; right: 0; bottom: 0;
+  background: rgba(0,0,0,0.4); /* adjust transparency */
+  z-index: -1; /* keeps it behind text */
+}
+
+.header {
+  background-color: rgba(58, 122, 87, 0.9);
+  padding: 1rem;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+}
+
+.logo {
+  font-size: 2rem;
+  font-weight: bold;
+  color: white;
+}
+
+.logo span {
+  color: #c9f0d1;
+}
+
+.nav {
+  margin-top: 0.5rem;
+}
+
+.nav a {
+  color: white;
+  text-decoration: none;
+  margin: 0 10px;
+  font-weight: bold;
+}
+
+.home h1 {
+  font-size: 2.5rem;
+  margin-bottom: 1rem;
+}
+
+.home p {
+  font-size: 1.2rem;
+  margin-bottom: 1.5rem;
+}
+
+.btn {
+  display: inline-block;
+  padding: 12px 24px;
+  background-color: #248f52;
+  color: white;
+  border-radius: 6px;
+  text-decoration: none;
+  font-weight: bold;
+}
+
+.footer {
+  background-color: rgba(201, 240, 209, 0.9);
+  text-align: center;
+  padding: 1rem;
+  margin-top: 2rem;
+}
+
+@media (min-width: 600px) {
+  .header {
+    flex-direction: row;
+    justify-content: space-between;
+  }
+}
