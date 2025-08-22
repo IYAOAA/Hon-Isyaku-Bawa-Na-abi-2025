@@ -1,4 +1,3 @@
-/* Reset and Base Setup */
 * {
   margin: 0;
   padding: 0;
@@ -8,115 +7,94 @@
 body {
   font-family: 'Segoe UI', sans-serif;
   color: #2b3d34;
-  background: url('images/Chairman.jpg') no-repeat center center/cover;
-  min-height: 100vh;
-  display: flex;
-  flex-direction: column;
 }
 
-/* Header Styling */
-.header {
-  background: rgba(43, 61, 52, 0.9);
-  display: flex;
-  justify-content: space-between;
-  align-items: center;
-  padding: 10px 20px;
-  color: #fff;
-}
-
-.logo {
-  font-size: 1.4rem;
-  font-weight: bold;
-}
-
-.nav a {
-  color: #fff;
-  margin-left: 15px;
-  text-decoration: none;
-  font-weight: 500;
-}
-
-.nav a:hover {
-  text-decoration: underline;
-}
-
-/* Main Content Area */
-.home, .about, .contact, .login, .register {
-  flex: 1;
+/* ✅ Background image setup */
+.home {
+  position: relative;
+  background-image: url('images/Chairman.jpg'); /* path must match your folder/file */
+  background-size: cover;
+  background-position: center;
+  background-repeat: no-repeat;
+  min-height: 100vh; /* full screen */
   display: flex;
   flex-direction: column;
   justify-content: center;
   align-items: center;
   text-align: center;
-  padding: 40px 20px;
-  background: rgba(255, 255, 255, 0.8);
-  margin: 20px;
-  border-radius: 10px;
+  color: white; /* text readable */
+  padding: 4rem 2rem;
+  z-index: 1;
 }
 
-.home h1, .about h1, .contact h1, .login h1, .register h1 {
-  font-size: 2.5rem;
-  margin-bottom: 15px;
+/* ✅ Semi-transparent overlay for readability */
+.home::before {
+  content: "";
+  position: absolute;
+  top: 0; left: 0; right: 0; bottom: 0;
+  background: rgba(0,0,0,0.4); /* adjust transparency */
+  z-index: -1; /* keeps it behind text */
 }
 
-.home p, .about p, .contact p, .login p, .register p {
-  font-size: 1.2rem;
-  max-width: 600px;
-  margin-bottom: 20px;
-}
-
-/* Buttons */
-.btn {
-  background: #2b3d34;
-  color: #fff;
-  padding: 10px 20px;
-  border: none;
-  border-radius: 5px;
-  font-size: 1rem;
-  text-decoration: none;
-  cursor: pointer;
-  transition: background 0.3s;
-}
-
-.btn:hover {
-  background: #8B0000;
-}
-
-/* Footer */
-.footer {
-  text-align: center;
-  padding: 10px;
-  background: rgba(43, 61, 52, 0.9);
-  color: #fff;
-  font-size: 0.9rem;
-}
-
-/* Form Styling */
-form {
+.header {
+  background-color: rgba(58, 122, 87, 0.9);
+  padding: 1rem;
   display: flex;
   flex-direction: column;
-  width: 100%;
-  max-width: 400px;
+  align-items: center;
 }
 
-input, textarea {
-  padding: 10px;
-  margin-bottom: 15px;
-  border: 1px solid #ccc;
-  border-radius: 5px;
-  font-size: 1rem;
-}
-
-input[type="submit"], button {
-  background: #2b3d34;
+.logo {
+  font-size: 2rem;
+  font-weight: bold;
   color: white;
-  border: none;
-  border-radius: 5px;
-  padding: 10px;
-  cursor: pointer;
-  transition: background 0.3s;
 }
 
-input[type="submit"]:hover, button:hover {
-  background: #8B0000;
+.logo span {
+  color: #c9f0d1;
+}
+
+.nav {
+  margin-top: 0.5rem;
+}
+
+.nav a {
+  color: white;
+  text-decoration: none;
+  margin: 0 10px;
+  font-weight: bold;
+}
+
+.home h1 {
+  font-size: 2.5rem;
+  margin-bottom: 1rem;
+}
+
+.home p {
+  font-size: 1.2rem;
+  margin-bottom: 1.5rem;
+}
+
+.btn {
+  display: inline-block;
+  padding: 12px 24px;
+  background-color: #248f52;
+  color: white;
+  border-radius: 6px;
+  text-decoration: none;
+  font-weight: bold;
+}
+
+.footer {
+  background-color: rgba(201, 240, 209, 0.9);
+  text-align: center;
+  padding: 1rem;
+  margin-top: 2rem;
+}
+
+@media (min-width: 600px) {
+  .header {
+    flex-direction: row;
+    justify-content: space-between;
+  }
 }
