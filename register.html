@@ -1,11 +1,14 @@
-<html>
+<!DOCTYPE html>
+<html lang="en">
 <head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <title>Register</title>
   <link rel="stylesheet" href="styles.css">
   <style>
     /* ✅ Registration form styling */
     .registration-form {
-      width: 95%; /* wider form */
+      width: 95%;
       max-width: 1100px;
       margin: 30px auto;
       padding: 30px;
@@ -16,7 +19,7 @@
     .registration-form label {
       display: block;
       font-weight: bold;
-      color: #000; /* black for easy reading */
+      color: #000;
       margin: 10px 0 5px;
     }
     .registration-form input,
@@ -39,7 +42,7 @@
     .form-actions button {
       flex: 1;
       text-align: center;
-      background: #006400; /* royal green */
+      background: #006400;
       color: white;
       font-weight: bold;
       padding: 14px;
@@ -57,7 +60,7 @@
 
     /* ✅ Modal styling */
     .modal {
-      display: none; /* hidden by default */
+      display: none;
       position: fixed;
       z-index: 1000;
       left: 0;
@@ -86,6 +89,11 @@
     .modal-content p {
       font-size: 16px;
       margin-bottom: 20px;
+    }
+    .checkmark {
+      font-size: 60px;
+      color: #28a745;
+      margin-bottom: 15px;
     }
     .close-btn {
       background: #006400;
@@ -118,7 +126,7 @@
 
   <main class="home">
     <h1 style="text-align:center;">Registration</h1>
-    <form class="registration-form" id="regForm" action="#" method="post">
+    <form class="registration-form" id="regForm">
       <label>First Name:</label>
       <input type="text" name="first_name" required>
 
@@ -174,7 +182,8 @@
   <!-- ✅ Success Modal -->
   <div id="successModal" class="modal">
     <div class="modal-content">
-      <h2>🎉 Registration Successful!</h2>
+      <div class="checkmark">✔</div>
+      <h2>Registration Successful!</h2>
       <p>Thank you for joining. Your details have been recorded successfully.</p>
       <button class="close-btn" id="closeModal">Close</button>
     </div>
@@ -198,32 +207,31 @@
       }
     });
 
-    // ✅ Show modal only after real submission
+    // ✅ Modal logic
     const regForm = document.getElementById("regForm");
     const modal = document.getElementById("successModal");
     const closeModal = document.getElementById("closeModal");
 
     regForm.addEventListener("submit", function(event) {
-      event.preventDefault(); // prevent page reload
-      modal.style.display = "flex"; // show modal
-      regForm.reset(); // clear form after showing success
+      event.preventDefault();
+      modal.style.display = "flex";
+      regForm.reset();
     });
 
     closeModal.addEventListener("click", function() {
       modal.style.display = "none";
     });
 
-    // Close modal if user clicks outside the box
     window.addEventListener("click", function(event) {
       if (event.target === modal) {
         modal.style.display = "none";
       }
     });
 
-    // ✅ Prevent browser from trying to re-submit form on refresh
-    if (window.history.replaceState) {
-      window.history.replaceState(null, null, window.location.href);
-    }
+    // ✅ Ensure modal never shows on refresh
+    window.onload = () => {
+      modal.style.display = "none";
+    };
   </script>
 </body>
 </html>
