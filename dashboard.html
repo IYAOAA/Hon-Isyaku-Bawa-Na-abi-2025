@@ -1,0 +1,85 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+  <title>Dashboard - Hon-Isyaku-Bawa-Na'abi-2025</title>
+  <link rel="stylesheet" href="styles.css" />
+  <style>
+    .dashboard-container {
+      max-width: 800px;
+      margin: 40px auto;
+      background: #fff;
+      padding: 20px;
+      border-radius: 10px;
+      box-shadow: 0 4px 8px rgba(0,0,0,0.1);
+    }
+    .dashboard-header {
+      text-align: center;
+      margin-bottom: 20px;
+    }
+    .user-info {
+      background: #f9f9f9;
+      padding: 15px;
+      border-radius: 5px;
+      margin-bottom: 20px;
+    }
+    .logout-btn {
+      background: #dc3545;
+      color: #fff;
+      padding: 10px 15px;
+      border: none;
+      border-radius: 5px;
+      cursor: pointer;
+    }
+    .logout-btn:hover {
+      background: #c82333;
+    }
+  </style>
+</head>
+<body>
+<header class="header">
+  <div class="logo">Hon-Isyaku-Bawa-Na'abi-2025<span>.com</span></div>
+  <nav class="nav">
+    <a href="index.html">Home</a>
+    <a href="about.html">About</a>
+    <a href="contact.html">Contact</a>
+  </nav>
+</header>
+
+<main class="home">
+  <div class="dashboard-container">
+    <div class="dashboard-header">
+      <h2>Welcome, <span id="userName">User</span>!</h2>
+      <p>Your personal dashboard.</p>
+    </div>
+    <div class="user-info">
+      <p><strong>Email:</strong> <span id="userEmail">example@email.com</span></p>
+      <p><strong>Status:</strong> Registered Applicant</p>
+    </div>
+    <button class="logout-btn" id="logoutBtn">Logout</button>
+  </div>
+</main>
+
+<footer class="footer">
+  <p>&copy; 2025 IBN APC</p>
+</footer>
+
+<script>
+  // Load user info from localStorage
+  const user = JSON.parse(localStorage.getItem('loggedInUser'));
+  if (!user) {
+    window.location.href = "login.html"; // Redirect if not logged in
+  } else {
+    document.getElementById('userName').textContent = user.name;
+    document.getElementById('userEmail').textContent = user.email;
+  }
+
+  // Logout
+  document.getElementById('logoutBtn').addEventListener('click', () => {
+    localStorage.removeItem('loggedInUser');
+    window.location.href = "login.html";
+  });
+</script>
+</body>
+</html>
