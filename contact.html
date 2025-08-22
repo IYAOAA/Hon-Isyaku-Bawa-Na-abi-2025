@@ -1,1 +1,145 @@
-<html><head><title>Contact</title><link rel='stylesheet' href='styles.css'></head><body><header class='header'><div class='logo'>InnerKeys<span>.com</span></div><nav class='nav'><a href='index.html'>Home</a><a href='products.html'>Products</a><a href='cart.html'>Cart</a><a href='about.html'>About</a><a href='contact.html'>Contact</a></nav></header><main class='home'><h1>Contact Us</h1><p>Email us at: yourname@example.com</p></main><footer class='footer'><p>&copy; 2025 InnerKeys.com</p></footer></body></html>
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Contact Us - Isyaku-Bawa-Na-abi-2025</title>
+  <link rel="stylesheet" href="styles.css">
+  <style>
+    .contact-container {
+      width: 95%;
+      max-width: 1100px;
+      margin: 30px auto;
+      padding: 30px;
+      background: #ffffff;
+      border-radius: 12px;
+      box-shadow: 0 4px 16px rgba(0,0,0,0.15);
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: 20px;
+    }
+
+    .contact-info {
+      display: flex;
+      flex-direction: column;
+      justify-content: center;
+    }
+
+    .contact-info h2 {
+      color: #006400;
+      margin-bottom: 15px;
+    }
+
+    .contact-info p {
+      font-size: 16px;
+      margin: 5px 0;
+    }
+
+    .contact-info .highlight {
+      font-weight: bold;
+      color: #800000;
+    }
+
+    .contact-form label {
+      display: block;
+      font-weight: bold;
+      margin: 10px 0 5px;
+    }
+
+    .contact-form input,
+    .contact-form textarea {
+      width: 100%;
+      padding: 12px;
+      border: 1px solid #ccc;
+      border-radius: 6px;
+      font-size: 15px;
+      margin-bottom: 15px;
+    }
+
+    .contact-form button {
+      background: #006400;
+      color: white;
+      font-weight: bold;
+      padding: 14px;
+      border: none;
+      border-radius: 8px;
+      font-size: 16px;
+      cursor: pointer;
+      transition: 0.3s;
+      width: 100%;
+    }
+
+    .contact-form button:hover {
+      background: #004d00;
+    }
+
+    .success-message {
+      display: none;
+      margin-top: 10px;
+      color: #28a745;
+      font-weight: bold;
+    }
+
+    @media (max-width: 768px) {
+      .contact-container {
+        grid-template-columns: 1fr;
+      }
+    }
+  </style>
+</head>
+<body>
+<header class="header">
+  <div class="logo">Isyaku-Bawa-Na-abi-2025<span>.com</span></div>
+  <nav class="nav">
+    <a href="index.html">Home</a>
+    <a href="login.html">Login</a>
+    <a href="register.html">Register</a>
+    <a href="about.html">About</a>
+    <a href="contact.html" class="active">Contact</a>
+  </nav>
+</header>
+
+<main class="home">
+  <h1 style="text-align:center;">Contact Us</h1>
+  <div class="contact-container">
+    <div class="contact-info">
+      <h2>Get in Touch</h2>
+      <p><span class="highlight">Address:</span> Campaign Headquarters, Suleja, Niger State, Nigeria</p>
+      <p><span class="highlight">Phone:</span> +234 801 234 5678</p>
+      <p><span class="highlight">Email:</span> info@isyaku-bawa-na-abi-2025.com</p>
+      <p><span class="highlight">Working Hours:</span> Mon - Sat, 8:00 AM - 6:00 PM</p>
+    </div>
+
+    <form class="contact-form" id="contactForm">
+      <label>Your Name:</label>
+      <input type="text" name="name" required>
+
+      <label>Email Address:</label>
+      <input type="email" name="email" required>
+
+      <label>Message:</label>
+      <textarea name="message" rows="5" required></textarea>
+
+      <button type="submit">Send Message</button>
+      <p id="successMsg" class="success-message">Thank you! Your message has been sent successfully.</p>
+    </form>
+  </div>
+</main>
+
+<footer class="footer">
+  <p>&copy; 2025 Isyaku-Bawa-Na-abi-2025.com. All Rights Reserved.</p>
+</footer>
+
+<script>
+  const contactForm = document.getElementById("contactForm");
+  const successMsg = document.getElementById("successMsg");
+
+  contactForm.addEventListener("submit", function(event) {
+    event.preventDefault();
+    successMsg.style.display = "block";
+    contactForm.reset();
+    setTimeout(() => successMsg.style.display = "none", 4000);
+  });
+</script>
+</body>
+</html>
