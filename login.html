@@ -17,6 +17,8 @@
     }
     .login-container h2 {
       margin-bottom: 20px;
+      font-weight: bold;
+      font-size: 24px;
     }
     .login-container input {
       width: 100%;
@@ -85,7 +87,6 @@
   </div>
 </main>
 
-<!-- Success Popup -->
 <div class="success-popup" id="successPopup">
   <div class="popup-content">
     <div class="checkmark">✔</div>
@@ -102,7 +103,6 @@
   document.getElementById('loginForm').addEventListener('submit', function(e) {
     e.preventDefault();
     
-    // Simulated login validation (replace with real backend later)
     let email = document.getElementById('email').value;
     let password = document.getElementById('password').value;
 
