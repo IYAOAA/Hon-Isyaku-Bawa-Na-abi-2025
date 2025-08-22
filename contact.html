@@ -1,145 +1,156 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-  <meta charset="UTF-8">
-  <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>Contact Us - Isyaku-Bawa-Na-abi-2025</title>
-  <link rel="stylesheet" href="styles.css">
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Contact - Hon-Isyaku-Bawa-Na-abi-2025</title>
+  <link rel="stylesheet" href="styles.css" />
   <style>
-    .contact-container {
-      width: 95%;
-      max-width: 1100px;
-      margin: 30px auto;
-      padding: 30px;
-      background: #ffffff;
-      border-radius: 12px;
-      box-shadow: 0 4px 16px rgba(0,0,0,0.15);
-      display: grid;
-      grid-template-columns: 1fr 1fr;
-      gap: 20px;
+    body {
+      margin: 0;
+      font-family: 'Segoe UI', sans-serif;
+      color: #2b3d34;
+      background: url('images/Chairman.jpg') no-repeat center center/cover;
+      min-height: 100vh;
+      display: flex;
+      flex-direction: column;
+    }
+
+    .header {
+      background: rgba(43, 61, 52, 0.9);
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      padding: 10px 20px;
+      color: #fff;
+    }
+
+    .logo {
+      font-size: 1.4rem;
+      font-weight: bold;
+    }
+
+    .nav a {
+      color: #fff;
+      margin-left: 15px;
+      text-decoration: none;
+      font-weight: 500;
+    }
+
+    .nav a.active, .nav a:hover {
+      text-decoration: underline;
+    }
+
+    .contact-section {
+      flex: 1;
+      max-width: 900px;
+      margin: 40px auto;
+      padding: 20px;
+      text-align: center;
+      background: rgba(255, 255, 255, 0.85);
+      border-radius: 15px;
+      box-shadow: 0 4px 6px rgba(0, 0, 0, 0.2);
+    }
+
+    .contact-section h1 {
+      font-size: 2.5rem;
+      margin-bottom: 20px;
+      color: #2b3d34;
     }
 
     .contact-info {
-      display: flex;
-      flex-direction: column;
-      justify-content: center;
+      margin: 20px 0;
+      font-size: 1.1rem;
+      line-height: 1.8;
+      text-align: left;
     }
 
-    .contact-info h2 {
-      color: #006400;
-      margin-bottom: 15px;
+    .contact-info strong {
+      color: darkred;
     }
 
-    .contact-info p {
-      font-size: 16px;
-      margin: 5px 0;
-    }
-
-    .contact-info .highlight {
-      font-weight: bold;
-      color: #800000;
+    .contact-form {
+      margin-top: 30px;
+      text-align: left;
     }
 
     .contact-form label {
       display: block;
-      font-weight: bold;
       margin: 10px 0 5px;
+      font-weight: 600;
     }
 
-    .contact-form input,
+    .contact-form input, 
     .contact-form textarea {
       width: 100%;
-      padding: 12px;
+      padding: 10px;
+      border-radius: 8px;
       border: 1px solid #ccc;
-      border-radius: 6px;
-      font-size: 15px;
       margin-bottom: 15px;
+      font-size: 1rem;
     }
 
     .contact-form button {
-      background: #006400;
-      color: white;
-      font-weight: bold;
-      padding: 14px;
+      background: darkred;
+      color: #fff;
+      padding: 10px 20px;
       border: none;
       border-radius: 8px;
-      font-size: 16px;
+      font-size: 1rem;
       cursor: pointer;
       transition: 0.3s;
-      width: 100%;
     }
 
     .contact-form button:hover {
-      background: #004d00;
+      background: #a00000;
     }
 
-    .success-message {
-      display: none;
-      margin-top: 10px;
-      color: #28a745;
-      font-weight: bold;
-    }
-
-    @media (max-width: 768px) {
-      .contact-container {
-        grid-template-columns: 1fr;
-      }
+    .footer {
+      text-align: center;
+      padding: 10px;
+      background: rgba(43, 61, 52, 0.9);
+      color: #fff;
+      font-size: 0.9rem;
     }
   </style>
 </head>
 <body>
-<header class="header">
-  <div class="logo">Isyaku-Bawa-Na-abi-2025<span>.com</span></div>
-  <nav class="nav">
-    <a href="index.html">Home</a>
-    <a href="login.html">Login</a>
-    <a href="register.html">Register</a>
-    <a href="about.html">About</a>
-    <a href="contact.html" class="active">Contact</a>
-  </nav>
-</header>
+  <header class="header">
+    <div class="logo">Hon-Isyaku-Bawa-Na-abi-2025</div>
+    <nav class="nav">
+      <a href="index.html">Home</a>
+      <a href="register.html">Register</a>
+      <a href="login.html">Login</a>
+      <a href="about.html">About</a>
+      <a href="contact.html" class="active">Contact</a>
+    </nav>
+  </header>
 
-<main class="home">
-  <h1 style="text-align:center;">Contact Us</h1>
-  <div class="contact-container">
+  <main class="contact-section">
+    <h1>Contact Us</h1>
+
     <div class="contact-info">
-      <h2>Get in Touch</h2>
-      <p><span class="highlight">Address:</span> Campaign Headquarters, Suleja, Niger State, Nigeria</p>
-      <p><span class="highlight">Phone:</span> +234 801 234 5678</p>
-      <p><span class="highlight">Email:</span> info@isyaku-bawa-na-abi-2025.com</p>
-      <p><span class="highlight">Working Hours:</span> Mon - Sat, 8:00 AM - 6:00 PM</p>
+      <p><strong>Office Address:</strong> No. 15 Main Street, Central City, Nigeria</p>
+      <p><strong>Phone:</strong> +234 812 345 6789</p>
+      <p><strong>Email:</strong> info@isyakubawanaabi2025.ng</p>
     </div>
 
-    <form class="contact-form" id="contactForm">
-      <label>Your Name:</label>
-      <input type="text" name="name" required>
+    <form class="contact-form" action="#" method="post">
+      <label for="name">Full Name</label>
+      <input type="text" id="name" name="name" placeholder="Enter your name" required>
 
-      <label>Email Address:</label>
-      <input type="email" name="email" required>
+      <label for="email">Email Address</label>
+      <input type="email" id="email" name="email" placeholder="Enter your email" required>
 
-      <label>Message:</label>
-      <textarea name="message" rows="5" required></textarea>
+      <label for="message">Your Message</label>
+      <textarea id="message" name="message" rows="5" placeholder="Write your message here..." required></textarea>
 
       <button type="submit">Send Message</button>
-      <p id="successMsg" class="success-message">Thank you! Your message has been sent successfully.</p>
     </form>
-  </div>
-</main>
+  </main>
 
-<footer class="footer">
-  <p>&copy; 2025 Isyaku-Bawa-Na-abi-2025.com. All Rights Reserved.</p>
-</footer>
-
-<script>
-  const contactForm = document.getElementById("contactForm");
-  const successMsg = document.getElementById("successMsg");
-
-  contactForm.addEventListener("submit", function(event) {
-    event.preventDefault();
-    successMsg.style.display = "block";
-    contactForm.reset();
-    setTimeout(() => successMsg.style.display = "none", 4000);
-  });
-</script>
+  <footer class="footer">
+    <p>&copy; 2025 Hon-Isyaku-Bawa-Na-abi | Built with purpose by Y. A. Ibrahim</p>
+  </footer>
 </body>
 </html>
