@@ -6,7 +6,6 @@
   <title>Register</title>
   <link rel="stylesheet" href="styles.css">
   <style>
-    /* ✅ Registration form styling */
     .registration-form {
       width: 95%;
       max-width: 1100px;
@@ -57,8 +56,6 @@
     .form-actions button:hover {
       background: #004d00;
     }
-
-    /* ✅ Modal styling */
     .modal {
       display: none;
       position: fixed;
@@ -114,124 +111,134 @@
   </style>
 </head>
 <body>
-  <header class="header">
-    <div class="logo">Isyaku-Bawa-Na-abi-2025<span>.com</span></div>
-    <nav class="nav">
-      <a href="index.html">Home</a>
+<header class="header">
+  <div class="logo">Isyaku-Bawa-Na-abi-2025<span>.com</span></div>
+  <nav class="nav">
+    <a href="index.html">Home</a>
+    <a href="login.html">Login</a>
+    <a href="about.html">About</a>
+    <a href="contact.html">Contact</a>
+  </nav>
+</header>
+
+<main class="home">
+  <h1 style="text-align:center;">Registration</h1>
+  <form class="registration-form" id="regForm">
+    <label>First Name:</label>
+    <input type="text" name="first_name" required>
+
+    <label>Middle Name (Optional):</label>
+    <input type="text" name="middle_name">
+
+    <label>Last Name:</label>
+    <input type="text" name="last_name" required>
+
+    <label>Date of Birth:</label>
+    <input type="date" name="dob" required>
+
+    <label>Phone No.:</label>
+    <input type="tel" name="phone" required>
+
+    <label>Email Address:</label>
+    <input type="email" name="email" required>
+
+    <label>Password:</label>
+    <input type="password" name="password" id="password" required>
+
+    <label>Confirm Password:</label>
+    <input type="password" name="confirm_password" id="confirm_password" required>
+
+    <label>NIN:</label>
+    <input type="text" name="nin" required>
+
+    <label>Voter's Card No.:</label>
+    <input type="text" name="voter_card" required>
+
+    <label>Home Address:</label>
+    <textarea name="address" rows="3" required></textarea>
+
+    <label>Ward:</label>
+    <input type="text" name="ward" required>
+
+    <label>State of Origin:</label>
+    <select id="state" name="state" required>
+      <option value="">--Select State--</option>
+      <option value="niger">Niger State</option>
+    </select>
+
+    <label>L.G.A:</label>
+    <select id="lga" name="lga" required>
+      <option value="">--Select L.G.A--</option>
+    </select>
+
+    <div class="form-actions">
+      <button type="submit">Register</button>
       <a href="login.html">Login</a>
-      <a href="about.html">About</a>
-      <a href="contact.html">Contact</a>
-    </nav>
-  </header>
-
-  <main class="home">
-    <h1 style="text-align:center;">Registration</h1>
-    <form class="registration-form" id="regForm">
-      <label>First Name:</label>
-      <input type="text" name="first_name" required>
-
-      <label>Middle Name (Optional):</label>
-      <input type="text" name="middle_name">
-
-      <label>Last Name:</label>
-      <input type="text" name="last_name" required>
-
-      <label>Date of Birth:</label>
-      <input type="date" name="dob" required>
-
-      <label>Phone No.:</label>
-      <input type="tel" name="phone" required>
-
-      <label>Email Address:</label>
-      <input type="email" name="email" required>
-
-      <label>NIN:</label>
-      <input type="text" name="nin" required>
-
-      <label>Voter's Card No.:</label>
-      <input type="text" name="voter_card" required>
-
-      <label>Home Address:</label>
-      <textarea name="address" rows="3" required></textarea>
-
-      <label>Ward:</label>
-      <input type="text" name="ward" required>
-
-      <label>State of Origin:</label>
-      <select id="state" name="state" required>
-        <option value="">--Select State--</option>
-        <option value="niger">Niger State</option>
-      </select>
-
-      <label>L.G.A:</label>
-      <select id="lga" name="lga" required>
-        <option value="">--Select L.G.A--</option>
-      </select>
-
-      <div class="form-actions">
-        <button type="submit">Register</button>
-        <a href="login.html">Login</a>
-      </div>
-    </form>
-  </main>
-
-  <footer class="footer">
-    <p>&copy; 2025</p>
-  </footer>
-
-  <!-- ✅ Success Modal -->
-  <div id="successModal" class="modal">
-    <div class="modal-content">
-      <div class="checkmark">✔</div>
-      <h2>Registration Successful!</h2>
-      <p>Thank you for joining. Your details have been recorded successfully.</p>
-      <button class="close-btn" id="closeModal">Close</button>
     </div>
+  </form>
+</main>
+
+<footer class="footer">
+  <p>&copy; 2025</p>
+</footer>
+
+<div id="successModal" class="modal">
+  <div class="modal-content">
+    <div class="checkmark">✔</div>
+    <h2>Registration Successful!</h2>
+    <p>Thank you for joining. Your details have been recorded successfully.</p>
+    <button class="close-btn" id="closeModal">Close</button>
   </div>
+</div>
 
-  <script>
-    // ✅ Populate LGAs when Niger State is selected
-    const stateSelect = document.getElementById("state");
-    const lgaSelect = document.getElementById("lga");
+<script>
+  const stateSelect = document.getElementById("state");
+  const lgaSelect = document.getElementById("lga");
 
-    stateSelect.addEventListener("change", function () {
-      lgaSelect.innerHTML = '<option value="">--Select L.G.A--</option>';
-      if (this.value === "niger") {
-        const lgas = ["Gurara", "Suleja", "Tafa"];
-        lgas.forEach(lga => {
-          const opt = document.createElement("option");
-          opt.value = lga.toLowerCase();
-          opt.textContent = lga;
-          lgaSelect.appendChild(opt);
-        });
-      }
-    });
+  stateSelect.addEventListener("change", function () {
+    lgaSelect.innerHTML = '<option value="">--Select L.G.A--</option>';
+    if (this.value === "niger") {
+      ["Gurara", "Suleja", "Tafa"].forEach(lga => {
+        const opt = document.createElement("option");
+        opt.value = lga.toLowerCase();
+        opt.textContent = lga;
+        lgaSelect.appendChild(opt);
+      });
+    }
+  });
 
-    // ✅ Modal logic
-    const regForm = document.getElementById("regForm");
-    const modal = document.getElementById("successModal");
-    const closeModal = document.getElementById("closeModal");
+  const regForm = document.getElementById("regForm");
+  const modal = document.getElementById("successModal");
+  const closeModal = document.getElementById("closeModal");
 
-    regForm.addEventListener("submit", function(event) {
-      event.preventDefault();
-      modal.style.display = "flex";
-      regForm.reset();
-    });
+  regForm.addEventListener("submit", function(event) {
+    event.preventDefault();
 
-    closeModal.addEventListener("click", function() {
+    const password = document.getElementById("password").value;
+    const confirmPassword = document.getElementById("confirm_password").value;
+
+    if (password !== confirmPassword) {
+      alert("Passwords do not match!");
+      return;
+    }
+
+    modal.style.display = "flex";
+    regForm.reset();
+  });
+
+  closeModal.addEventListener("click", function() {
+    modal.style.display = "none";
+  });
+
+  window.addEventListener("click", function(event) {
+    if (event.target === modal) {
       modal.style.display = "none";
-    });
+    }
+  });
 
-    window.addEventListener("click", function(event) {
-      if (event.target === modal) {
-        modal.style.display = "none";
-      }
-    });
-
-    // ✅ Ensure modal never shows on refresh
-    window.onload = () => {
-      modal.style.display = "none";
-    };
-  </script>
+  window.onload = () => {
+    modal.style.display = "none";
+  };
+</script>
 </body>
 </html>
