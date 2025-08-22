@@ -7,62 +7,61 @@
 body {
   font-family: 'Segoe UI', sans-serif;
   color: #2b3d34;
+  min-height: 100vh;
+  display: flex;
+  flex-direction: column;
 }
 
-/* ✅ Background image setup */
+/* ======= GLOBAL HEADER ======= */
+.header {
+  background: rgba(43, 61, 52, 0.9);
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  padding: 10px 20px;
+  color: #fff;
+}
+
+.logo {
+  font-size: 1.6rem;
+  font-weight: bold;
+}
+
+.nav a {
+  color: #fff;
+  margin-left: 15px;
+  text-decoration: none;
+  font-weight: 500;
+}
+
+.nav a.active,
+.nav a:hover {
+  text-decoration: underline;
+}
+
+/* ======= HOME SECTION ======= */
 .home {
   position: relative;
-  background-image: url('images/Chairman.jpg'); /* path must match your folder/file */
-  background-size: cover;
-  background-position: center;
-  background-repeat: no-repeat;
-  min-height: 100vh; /* full screen */
+  background: url('images/Chairman.jpg') no-repeat center center/cover;
+  flex: 1;
   display: flex;
   flex-direction: column;
   justify-content: center;
   align-items: center;
   text-align: center;
-  color: white; /* text readable */
+  color: white;
   padding: 4rem 2rem;
-  z-index: 1;
 }
 
-/* ✅ Semi-transparent overlay for readability */
 .home::before {
   content: "";
   position: absolute;
-  top: 0; left: 0; right: 0; bottom: 0;
-  background: rgba(0,0,0,0.4); /* adjust transparency */
-  z-index: -1; /* keeps it behind text */
-}
-
-.header {
-  background-color: rgba(58, 122, 87, 0.9);
-  padding: 1rem;
-  display: flex;
-  flex-direction: column;
-  align-items: center;
-}
-
-.logo {
-  font-size: 2rem;
-  font-weight: bold;
-  color: white;
-}
-
-.logo span {
-  color: #c9f0d1;
-}
-
-.nav {
-  margin-top: 0.5rem;
-}
-
-.nav a {
-  color: white;
-  text-decoration: none;
-  margin: 0 10px;
-  font-weight: bold;
+  top: 0;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  background: rgba(0, 0, 0, 0.4);
+  z-index: -1;
 }
 
 .home h1 {
@@ -72,7 +71,8 @@ body {
 
 .home p {
   font-size: 1.2rem;
-  margin-bottom: 1.5rem;
+  max-width: 700px;
+  margin: 0 auto 1.5rem auto;
 }
 
 .btn {
@@ -85,16 +85,56 @@ body {
   font-weight: bold;
 }
 
-.footer {
-  background-color: rgba(201, 240, 209, 0.9);
+/* ======= CONTENT PAGES (ABOUT, CONTACT) ======= */
+.page-section {
+  flex: 1;
+  max-width: 900px;
+  margin: 40px auto;
+  padding: 20px;
   text-align: center;
-  padding: 1rem;
-  margin-top: 2rem;
+  background: rgba(255, 255, 255, 0.85);
+  border-radius: 15px;
+  box-shadow: 0 4px 6px rgba(0, 0, 0, 0.2);
+}
+
+.page-section h1 {
+  font-size: 2.5rem;
+  margin-bottom: 20px;
+  color: #2b3d34;
+}
+
+.card {
+  background: #f9fdfb;
+  margin: 20px 0;
+  padding: 20px;
+  border-radius: 15px;
+  box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+  text-align: left;
+}
+
+.card h2 {
+  font-size: 1.8rem;
+  margin-bottom: 10px;
+  color: darkred;
+}
+
+.card p {
+  font-size: 1.1rem;
+  line-height: 1.6;
+}
+
+/* ======= FOOTER ======= */
+.footer {
+  text-align: center;
+  padding: 10px;
+  background: rgba(43, 61, 52, 0.9);
+  color: #fff;
+  font-size: 0.9rem;
+  margin-top: auto;
 }
 
 @media (min-width: 600px) {
   .header {
     flex-direction: row;
-    justify-content: space-between;
   }
 }
