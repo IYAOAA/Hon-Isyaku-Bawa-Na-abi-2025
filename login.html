@@ -3,21 +3,22 @@
 <head>
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
-  <title>Login</title>
+  <title>Login - Hon-Isyaku-Bawa-Na'abi-2025</title>
   <link rel="stylesheet" href="styles.css" />
   <style>
     .login-container {
       max-width: 400px;
-      margin: 50px auto;
+      margin: 80px auto;
       padding: 20px;
-      background: #ffffff;
-      box-shadow: 0 0 10px rgba(0,0,0,0.1);
-      border-radius: 10px;
+      background: rgba(255, 255, 255, 0.95);
+      box-shadow: 0 4px 10px rgba(0,0,0,0.1);
+      border-radius: 12px;
       text-align: center;
     }
 
     .login-container h2 {
       margin-bottom: 20px;
+      color: #2b3d34;
     }
 
     .login-container input[type="email"],
@@ -46,13 +47,13 @@
 
     .login-links a {
       display: block;
-      color: #8B0000; /* Dark red */
+      color: #8B0000;
       margin: 5px 0;
       text-decoration: none;
       font-size: 14px;
     }
 
-    /* Modal styling */
+    /* Modal Styling */
     .modal {
       display: none;
       position: fixed;
@@ -60,6 +61,7 @@
       background: rgba(0,0,0,0.6);
       justify-content: center;
       align-items: center;
+      z-index: 1000;
     }
 
     .modal-content {
@@ -69,27 +71,7 @@
       max-width: 400px;
       width: 90%;
       text-align: center;
-    }
-
-    .modal-content h3 {
-      margin-bottom: 15px;
-    }
-
-    .modal-content input[type="email"] {
-      width: 100%;
-      padding: 10px;
-      margin-bottom: 10px;
-      border: 1px solid #ccc;
-      border-radius: 5px;
-    }
-
-    .modal-content button {
-      background: #2b3d34;
-      color: #fff;
-      padding: 10px 20px;
-      border: none;
-      border-radius: 5px;
-      cursor: pointer;
+      box-shadow: 0 4px 6px rgba(0, 0, 0, 0.2);
     }
 
     .close-btn {
@@ -102,7 +84,7 @@
 </head>
 <body>
 <header class="header">
-  <div class="logo">Hon-Isyaku-Bawa-Na'abi-2025<span>.com</span></div>
+  <div class="logo">Hon-Isyaku-Bawa-Na'abi-2025</div>
   <nav class="nav">
     <a href="index.html">Home</a>
     <a href="register.html">Register</a>
@@ -137,7 +119,7 @@
 </div>
 
 <footer class="footer">
-  <p>&copy; 2025 IBN APC</p>
+  <p>&copy; Hon-Isyaku-Bawa-Na-abi-2025 | Built with purpose by Y. A. Ibrahim</p>
 </footer>
 
 <script>
@@ -147,18 +129,15 @@
   const sendResetLink = document.getElementById('sendResetLink');
   const loginForm = document.getElementById('loginForm');
 
-  // Open Modal
   forgotPasswordLink.addEventListener('click', (e) => {
     e.preventDefault();
     forgotModal.style.display = 'flex';
   });
 
-  // Close Modal
   closeModal.addEventListener('click', () => {
     forgotModal.style.display = 'none';
   });
 
-  // Send reset link simulation
   sendResetLink.addEventListener('click', () => {
     const email = document.getElementById('resetEmail').value;
     if (email) {
@@ -169,20 +148,17 @@
     }
   });
 
-  // Close modal when clicking outside
   window.addEventListener('click', (e) => {
     if (e.target === forgotModal) {
       forgotModal.style.display = 'none';
     }
   });
 
-  // Simulated Login Validation
   loginForm.addEventListener('submit', (e) => {
     e.preventDefault();
     const email = document.getElementById('email').value;
     const password = document.getElementById('password').value;
 
-    // Simple fake validation (replace with real backend later)
     if (email === "test@applicant.com" && password === "123456") {
       alert("Login Successful! Redirecting to your dashboard...");
       window.location.href = "dashboard.html";
