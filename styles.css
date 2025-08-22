@@ -1,3 +1,4 @@
+/* Reset and Base Setup */
 * {
   margin: 0;
   padding: 0;
@@ -7,12 +8,13 @@
 body {
   font-family: 'Segoe UI', sans-serif;
   color: #2b3d34;
+  background: url('images/Chairman.jpg') no-repeat center center/cover;
   min-height: 100vh;
   display: flex;
   flex-direction: column;
 }
 
-/* ======= GLOBAL HEADER ======= */
+/* Header Styling */
 .header {
   background: rgba(43, 61, 52, 0.9);
   display: flex;
@@ -23,7 +25,7 @@ body {
 }
 
 .logo {
-  font-size: 1.6rem;
+  font-size: 1.4rem;
   font-weight: bold;
 }
 
@@ -34,107 +36,87 @@ body {
   font-weight: 500;
 }
 
-.nav a.active,
 .nav a:hover {
   text-decoration: underline;
 }
 
-/* ======= HOME SECTION ======= */
-.home {
-  position: relative;
-  background: url('images/Chairman.jpg') no-repeat center center/cover;
+/* Main Content Area */
+.home, .about, .contact, .login, .register {
   flex: 1;
   display: flex;
   flex-direction: column;
   justify-content: center;
   align-items: center;
   text-align: center;
-  color: white;
-  padding: 4rem 2rem;
+  padding: 40px 20px;
+  background: rgba(255, 255, 255, 0.8);
+  margin: 20px;
+  border-radius: 10px;
 }
 
-.home::before {
-  content: "";
-  position: absolute;
-  top: 0;
-  left: 0;
-  right: 0;
-  bottom: 0;
-  background: rgba(0, 0, 0, 0.4);
-  z-index: -1;
-}
-
-.home h1 {
+.home h1, .about h1, .contact h1, .login h1, .register h1 {
   font-size: 2.5rem;
-  margin-bottom: 1rem;
+  margin-bottom: 15px;
 }
 
-.home p {
+.home p, .about p, .contact p, .login p, .register p {
   font-size: 1.2rem;
-  max-width: 700px;
-  margin: 0 auto 1.5rem auto;
-}
-
-.btn {
-  display: inline-block;
-  padding: 12px 24px;
-  background-color: #248f52;
-  color: white;
-  border-radius: 6px;
-  text-decoration: none;
-  font-weight: bold;
-}
-
-/* ======= CONTENT PAGES (ABOUT, CONTACT) ======= */
-.page-section {
-  flex: 1;
-  max-width: 900px;
-  margin: 40px auto;
-  padding: 20px;
-  text-align: center;
-  background: rgba(255, 255, 255, 0.85);
-  border-radius: 15px;
-  box-shadow: 0 4px 6px rgba(0, 0, 0, 0.2);
-}
-
-.page-section h1 {
-  font-size: 2.5rem;
+  max-width: 600px;
   margin-bottom: 20px;
-  color: #2b3d34;
 }
 
-.card {
-  background: #f9fdfb;
-  margin: 20px 0;
-  padding: 20px;
-  border-radius: 15px;
-  box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
-  text-align: left;
+/* Buttons */
+.btn {
+  background: #2b3d34;
+  color: #fff;
+  padding: 10px 20px;
+  border: none;
+  border-radius: 5px;
+  font-size: 1rem;
+  text-decoration: none;
+  cursor: pointer;
+  transition: background 0.3s;
 }
 
-.card h2 {
-  font-size: 1.8rem;
-  margin-bottom: 10px;
-  color: darkred;
+.btn:hover {
+  background: #8B0000;
 }
 
-.card p {
-  font-size: 1.1rem;
-  line-height: 1.6;
-}
-
-/* ======= FOOTER ======= */
+/* Footer */
 .footer {
   text-align: center;
   padding: 10px;
   background: rgba(43, 61, 52, 0.9);
   color: #fff;
   font-size: 0.9rem;
-  margin-top: auto;
 }
 
-@media (min-width: 600px) {
-  .header {
-    flex-direction: row;
-  }
+/* Form Styling */
+form {
+  display: flex;
+  flex-direction: column;
+  width: 100%;
+  max-width: 400px;
+}
+
+input, textarea {
+  padding: 10px;
+  margin-bottom: 15px;
+  border: 1px solid #ccc;
+  border-radius: 5px;
+  font-size: 1rem;
+}
+
+input[type="submit"], button {
+  background: #2b3d34;
+  color: white;
+  border: none;
+  border-radius: 5px;
+  padding: 10px;
+  cursor: pointer;
+  transition: background 0.3s;
+}
+
+input[type="submit"]:hover, button:hover {
+  background: #8B0000;
 }
