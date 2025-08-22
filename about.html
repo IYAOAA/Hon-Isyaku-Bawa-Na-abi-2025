@@ -2,16 +2,54 @@
 <html lang="en">
 <head>
   <meta charset="UTF-8" />
-  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
   <title>About - Hon-Isyaku-Bawa-Na-abi-2025</title>
   <link rel="stylesheet" href="styles.css" />
   <style>
+    body {
+      margin: 0;
+      font-family: 'Segoe UI', sans-serif;
+      color: #2b3d34;
+      background: url('images/Chairman.jpg') no-repeat center center/cover;
+      min-height: 100vh;
+      display: flex;
+      flex-direction: column;
+    }
+
+    .header {
+      background: rgba(43, 61, 52, 0.9);
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      padding: 10px 20px;
+      color: #fff;
+    }
+
+    .logo {
+      font-size: 1.4rem;
+      font-weight: bold;
+    }
+
+    .nav a {
+      color: #fff;
+      margin-left: 15px;
+      text-decoration: none;
+      font-weight: 500;
+    }
+
+    .nav a.active, .nav a:hover {
+      text-decoration: underline;
+    }
+
     .about-section {
+      flex: 1;
       max-width: 900px;
       margin: 40px auto;
       padding: 20px;
       text-align: center;
-      line-height: 1.6;
+      background: rgba(255, 255, 255, 0.85);
+      border-radius: 15px;
+      box-shadow: 0 4px 6px rgba(0, 0, 0, 0.2);
     }
 
     .about-section h1 {
@@ -26,6 +64,7 @@
       padding: 20px;
       border-radius: 15px;
       box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+      text-align: left;
     }
 
     .about-card h2 {
@@ -36,6 +75,15 @@
 
     .about-card p {
       font-size: 1.1rem;
+      line-height: 1.6;
+    }
+
+    .footer {
+      text-align: center;
+      padding: 10px;
+      background: rgba(43, 61, 52, 0.9);
+      color: #fff;
+      font-size: 0.9rem;
     }
   </style>
 </head>
@@ -71,7 +119,7 @@
   </main>
 
   <footer class="footer">
-    <p>&copy; Hon-Isyaku-Bawa-Na-abi-2025 | Built with purpose by Y. A. Ibrahim</p>
+    <p>&copy; 2025 Hon-Isyaku-Bawa-Na-abi | Built with purpose by Y. A. Ibrahim</p>
   </footer>
 </body>
 </html>
