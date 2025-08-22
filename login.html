@@ -145,6 +145,7 @@
   const forgotModal = document.getElementById('forgotModal');
   const closeModal = document.getElementById('closeModal');
   const sendResetLink = document.getElementById('sendResetLink');
+  const loginForm = document.getElementById('loginForm');
 
   // Open Modal
   forgotPasswordLink.addEventListener('click', (e) => {
@@ -172,6 +173,21 @@
   window.addEventListener('click', (e) => {
     if (e.target === forgotModal) {
       forgotModal.style.display = 'none';
+    }
+  });
+
+  // Simulated Login Validation
+  loginForm.addEventListener('submit', (e) => {
+    e.preventDefault();
+    const email = document.getElementById('email').value;
+    const password = document.getElementById('password').value;
+
+    // Simple fake validation (replace with real backend later)
+    if (email === "test@applicant.com" && password === "123456") {
+      alert("Login Successful! Redirecting to your dashboard...");
+      window.location.href = "dashboard.html";
+    } else {
+      alert("Invalid Email or Password. Please try again.");
     }
   });
 </script>
