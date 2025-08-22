@@ -1,1 +1,121 @@
-<html><head><title>Login</title><link rel='stylesheet' href='styles.css'></head><body><header class='header'><div class='logo'>Hon-Isyaku-Bawa-Na'abi-2025<span>.com</span></div><nav class='nav'><a href='index.html'>Home</a><a href='register.html'>Register</a><a href='about.html'>About</a><a href='contact.html'>Contact</a></nav></header><main class='home'><h1>Login</h1></main><footer class='footer'><p>&copy; 2025 IBN APC</p></footer></body></html>
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+  <title>Login - Hon-Isyaku-Bawa-Na'abi-2025</title>
+  <link rel="stylesheet" href="styles.css" />
+  <style>
+    .login-container {
+      max-width: 400px;
+      margin: 50px auto;
+      background: #fff;
+      padding: 20px;
+      border-radius: 10px;
+      box-shadow: 0 4px 8px rgba(0,0,0,0.1);
+      text-align: center;
+    }
+    .login-container h2 {
+      margin-bottom: 20px;
+    }
+    .login-container input {
+      width: 100%;
+      padding: 10px;
+      margin: 10px 0;
+      border: 1px solid #ccc;
+      border-radius: 5px;
+    }
+    .login-container button {
+      background: #28a745;
+      color: #fff;
+      padding: 10px;
+      width: 100%;
+      border: none;
+      border-radius: 5px;
+      font-size: 16px;
+      cursor: pointer;
+      transition: background 0.3s;
+    }
+    .login-container button:hover {
+      background: #218838;
+    }
+    .success-popup {
+      display: none;
+      background: rgba(0, 0, 0, 0.6);
+      position: fixed;
+      top: 0;
+      left: 0;
+      right: 0;
+      bottom: 0;
+      justify-content: center;
+      align-items: center;
+    }
+    .popup-content {
+      background: #fff;
+      padding: 30px;
+      border-radius: 10px;
+      text-align: center;
+      max-width: 300px;
+    }
+    .popup-content .checkmark {
+      font-size: 50px;
+      color: green;
+    }
+  </style>
+</head>
+<body>
+<header class="header">
+  <div class="logo">Hon-Isyaku-Bawa-Na'abi-2025<span>.com</span></div>
+  <nav class="nav">
+    <a href="index.html">Home</a>
+    <a href="register.html">Register</a>
+    <a href="about.html">About</a>
+    <a href="contact.html">Contact</a>
+  </nav>
+</header>
+
+<main class="home">
+  <div class="login-container">
+    <h2>Applicant Login</h2>
+    <form id="loginForm">
+      <input type="email" id="email" placeholder="Enter Email" required />
+      <input type="password" id="password" placeholder="Enter Password" required />
+      <button type="submit">Login</button>
+    </form>
+  </div>
+</main>
+
+<!-- Success Popup -->
+<div class="success-popup" id="successPopup">
+  <div class="popup-content">
+    <div class="checkmark">✔</div>
+    <h3>Login Successful!</h3>
+    <p>Redirecting to your dashboard...</p>
+  </div>
+</div>
+
+<footer class="footer">
+  <p>&copy; 2025 IBN APC</p>
+</footer>
+
+<script>
+  document.getElementById('loginForm').addEventListener('submit', function(e) {
+    e.preventDefault();
+    
+    // Simulated login validation (replace with real backend later)
+    let email = document.getElementById('email').value;
+    let password = document.getElementById('password').value;
+
+    if(email === "test@example.com" && password === "123456") {
+      document.getElementById('successPopup').style.display = 'flex';
+      setTimeout(() => {
+        window.location.href = "dashboard.html";
+      }, 2000);
+    } else {
+      alert("Invalid login credentials. Try again.");
+    }
+  });
+</script>
+
+</body>
+</html>
