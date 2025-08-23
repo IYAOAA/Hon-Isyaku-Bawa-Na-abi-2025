@@ -7,16 +7,17 @@
   <link rel="stylesheet" href="styles.css">
   <style>
     .admin-container {
-      background: rgba(255, 255, 255, 0.9);
-      padding: 2rem;
-      border-radius: 10px;
-      width: 90%;
       max-width: 400px;
+      margin: 100px auto;
+      background: rgba(255, 255, 255, 0.95);
+      padding: 20px;
+      border-radius: 8px;
+      box-shadow: 0 0 10px rgba(0,0,0,0.2);
       text-align: center;
     }
 
     .admin-container h2 {
-      margin-bottom: 1rem;
+      margin-bottom: 15px;
       color: #2b3d34;
     }
 
@@ -32,73 +33,105 @@
       width: 100%;
       padding: 10px;
       background: #248f52;
-      color: #fff;
+      color: white;
       border: none;
       border-radius: 5px;
+      font-weight: bold;
       cursor: pointer;
-      font-size: 1rem;
     }
 
     .admin-container button:hover {
-      background: #2b3d34;
+      background: #1d7040;
     }
 
-    .link {
-      display: block;
+    .switch-link {
       margin-top: 10px;
+      display: block;
       color: #248f52;
       cursor: pointer;
-      text-decoration: underline;
+      font-weight: bold;
     }
+
+    .hidden { display: none; }
   </style>
 </head>
 <body>
   <header class="header">
-    <div class="logo">Hon-Isyaku-Bawa-Na-abi-2025 <span>Admin</span></div>
+    <div class="logo">Hon-Isyaku-Bawa-Na-abi-2025</div>
     <nav class="nav">
       <a href="index.html">Home</a>
+      <a href="register.html">Register</a>
+      <a href="login.html">Login</a>
       <a href="about.html">About</a>
       <a href="contact.html">Contact</a>
     </nav>
   </header>
 
   <main class="home">
-    <div class="admin-container" id="login-form">
-      <h2>Admin Login</h2>
-      <input type="email" placeholder="Email" required>
-      <input type="password" placeholder="Password" required>
-      <button>Login</button>
-      <span class="link" onclick="showForm('create-form')">Create Account</span>
-      <span class="link" onclick="showForm('reset-form')">Forgot Password?</span>
-    </div>
+    <div class="admin-container">
+      <!-- LOGIN FORM -->
+      <div id="loginForm">
+        <h2>Admin Login</h2>
+        <input type="text" id="loginUsername" placeholder="Username" required>
+        <input type="password" id="loginPassword" placeholder="Password" required>
+        <button onclick="login()">Login</button>
+        <span class="switch-link" onclick="showRegister()">Create Account</span>
+        <span class="switch-link" onclick="showReset()">Forgot Password?</span>
+      </div>
 
-    <div class="admin-container" id="create-form" style="display:none;">
-      <h2>Create Admin</h2>
-      <input type="text" placeholder="Full Name" required>
-      <input type="email" placeholder="Email" required>
-      <input type="password" placeholder="Password" required>
-      <button>Create Account</button>
-      <span class="link" onclick="showForm('login-form')">Back to Login</span>
-    </div>
+      <!-- REGISTER FORM -->
+      <div id="registerForm" class="hidden">
+        <h2>Create Admin Account</h2>
+        <input type="text" id="registerUsername" placeholder="Username" required>
+        <input type="password" id="registerPassword" placeholder="Password" required>
+        <button onclick="register()">Register</button>
+        <span class="switch-link" onclick="showLogin()">Back to Login</span>
+      </div>
 
-    <div class="admin-container" id="reset-form" style="display:none;">
-      <h2>Reset Password</h2>
-      <input type="email" placeholder="Enter your Email" required>
-      <button>Send Reset Link</button>
-      <span class="link" onclick="showForm('login-form')">Back to Login</span>
+      <!-- RESET PASSWORD FORM -->
+      <div id="resetForm" class="hidden">
+        <h2>Reset Password</h2>
+        <input type="text" id="resetUsername" placeholder="Username" required>
+        <input type="password" id="newPassword" placeholder="New Password" required>
+        <button onclick="resetPassword()">Reset</button>
+        <span class="switch-link" onclick="showLogin()">Back to Login</span>
+      </div>
     </div>
   </main>
 
   <footer class="footer">
-    <p>&copy; 2025 Hon-Isyaku-Bawa-Na-abi | Admin Panel</p>
+    <p>&copy; Hon-Isyaku-Bawa-Na-abi-2025 | Built with purpose by Y. A. Ibrahim</p>
   </footer>
 
   <script>
-    function showForm(formId) {
-      document.getElementById('login-form').style.display = 'none';
-      document.getElementById('create-form').style.display = 'none';
-      document.getElementById('reset-form').style.display = 'none';
-      document.getElementById(formId).style.display = 'block';
+    function showLogin() {
+      document.getElementById('loginForm').classList.remove('hidden');
+      document.getElementById('registerForm').classList.add('hidden');
+      document.getElementById('resetForm').classList.add('hidden');
+    }
+
+    function showRegister() {
+      document.getElementById('loginForm').classList.add('hidden');
+      document.getElementById('registerForm').classList.remove('hidden');
+      document.getElementById('resetForm').classList.add('hidden');
+    }
+
+    function showReset() {
+      document.getElementById('loginForm').classList.add('hidden');
+      document.getElementById('registerForm').classList.add('hidden');
+      document.getElementById('resetForm').classList.remove('hidden');
+    }
+
+    function login() {
+      alert("Login function will connect to backend soon!");
+    }
+
+    function register() {
+      alert("Register function will connect to backend soon!");
+    }
+
+    function resetPassword() {
+      alert("Reset Password function will connect to backend soon!");
     }
   </script>
 </body>
