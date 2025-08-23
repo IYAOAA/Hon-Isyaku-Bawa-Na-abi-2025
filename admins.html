@@ -1,0 +1,152 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Admin Control</title>
+  <link rel="stylesheet" href="styles.css">
+  <style>
+    .form-container {
+      background: rgba(255,255,255,0.9);
+      padding: 2rem;
+      border-radius: 8px;
+      width: 100%;
+      max-width: 400px;
+      margin-top: 2rem;
+    }
+    .form-container h2 { color: #2b3d34; margin-bottom: 1rem; }
+    .form-container input, .form-container button {
+      width: 100%;
+      padding: 10px;
+      margin: 8px 0;
+      border: 1px solid #ccc;
+      border-radius: 5px;
+    }
+    .switch-link { color: #248f52; cursor: pointer; font-size: 0.9rem; }
+  </style>
+</head>
+<body class="home">
+  <header class="header">
+    <div class="logo">Admin<span>Panel</span></div>
+    <nav class="nav">
+      <a href="index.html">Home</a>
+    </nav>
+  </header>
+
+  <main id="formSection">
+    <!-- LOGIN FORM -->
+    <div id="loginFormContainer" class="form-container">
+      <h2>Admin Login</h2>
+      <form id="loginForm">
+        <input type="email" id="loginEmail" placeholder="Email" required>
+        <input type="password" id="loginPassword" placeholder="Password" required>
+        <button type="submit">Login</button>
+      </form>
+      <p><span class="switch-link" onclick="showCreate()">Create Account</span> | <span class="switch-link" onclick="showReset()">Forgot Password?</span></p>
+    </div>
+
+    <!-- CREATE FORM -->
+    <div id="createFormContainer" class="form-container" style="display:none;">
+      <h2>Create Admin</h2>
+      <form id="createForm">
+        <input type="text" id="createName" placeholder="Name" required>
+        <input type="email" id="createEmail" placeholder="Email" required>
+        <input type="password" id="createPassword" placeholder="Password" required>
+        <button type="submit">Create</button>
+      </form>
+      <p><span class="switch-link" onclick="showLogin()">Back to Login</span></p>
+    </div>
+
+    <!-- RESET FORM -->
+    <div id="resetFormContainer" class="form-container" style="display:none;">
+      <h2>Reset Password</h2>
+      <form id="resetForm">
+        <input type="email" id="resetEmail" placeholder="Enter your Email" required>
+        <input type="password" id="newPassword" placeholder="New Password" required>
+        <button type="submit">Reset</button>
+      </form>
+      <p><span class="switch-link" onclick="showLogin()">Back to Login</span></p>
+    </div>
+  </main>
+
+  <footer class="footer">
+    <p>&copy; 2025 Admin Panel. All Rights Reserved.</p>
+  </footer>
+
+<script>
+function showLogin() {
+  document.getElementById('loginFormContainer').style.display = 'block';
+  document.getElementById('createFormContainer').style.display = 'none';
+  document.getElementById('resetFormContainer').style.display = 'none';
+}
+function showCreate() {
+  document.getElementById('loginFormContainer').style.display = 'none';
+  document.getElementById('createFormContainer').style.display = 'block';
+}
+function showReset() {
+  document.getElementById('loginFormContainer').style.display = 'none';
+  document.getElementById('resetFormContainer').style.display = 'block';
+}
+
+const apiURL = '/.netlify/functions/admin';
+
+// LOGIN
+document.getElementById('loginForm').addEventListener('submit', async function(e) {
+  e.preventDefault();
+  const email = document.getElementById('loginEmail').value;
+  const password = document.getElementById('loginPassword').value;
+
+  const response = await fetch(apiURL);
+  const data = await response.json();
+
+  const admin = data.admins.find(a => a.email === email && a.password === password);
+  if (admin) {
+    alert('Welcome ' + admin.name);
+    sessionStorage.setItem('adminName', admin.name);
+    window.location.href = "dashboard.html";
+  } else {
+    alert('Invalid credentials');
+  }
+});
+
+// CREATE ACCOUNT
+document.getElementById('createForm').addEventListener('submit', async function(e) {
+  e.preventDefault();
+  const name = document.getElementById('createName').value;
+  const email = document.getElementById('createEmail').value;
+  const password = document.getElementById('createPassword').value;
+
+  const response = await fetch(apiURL);
+  const data = await response.json();
+  data.admins.push({ name, email, password });
+
+  await fetch(apiURL, {
+    method: 'POST',
+    body: JSON.stringify(data)
+  });
+
+  alert('Admin Created!');
+  showLogin();
+});
+
+// RESET PASSWORD
+document.getElementById('resetForm').addEventListener('submit', async function(e) {
+  e.preventDefault();
+  const email = document.getElementById('resetEmail').value;
+  const newPassword = document.getElementById('newPassword').value;
+
+  const response = await fetch(apiURL);
+  const data = await response.json();
+  const admin = data.admins.find(a => a.email === email);
+  if (admin) {
+    admin.password = newPassword;
+    await fetch(apiURL, { method: 'POST', body: JSON.stringify(data) });
+    alert('Password Updated!');
+    showLogin();
+  } else {
+    alert('Email not found');
+  }
+});
+</script>
+</body>
+</html>
