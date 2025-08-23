@@ -104,6 +104,7 @@
   </footer>
 
   <script>
+    // Show forms dynamically
     function showLogin() {
       document.getElementById('loginForm').classList.remove('hidden');
       document.getElementById('registerForm').classList.add('hidden');
@@ -122,16 +123,65 @@
       document.getElementById('resetForm').classList.remove('hidden');
     }
 
-    function login() {
-      alert("Login function will connect to backend soon!");
+    // Backend-ready Authentication
+    const API_URL = "data/admin.json"; // Simple JSON storage
+
+    async function fetchAdmins() {
+      const response = await fetch(API_URL);
+      return await response.json();
     }
 
-    function register() {
-      alert("Register function will connect to backend soon!");
+    async function saveAdmins(data) {
+      // For now, just simulate saving (backend will handle this later)
+      console.log("Saving data to backend:", data);
     }
 
-    function resetPassword() {
-      alert("Reset Password function will connect to backend soon!");
+    async function login() {
+      const username = document.getElementById('loginUsername').value;
+      const password = document.getElementById('loginPassword').value;
+
+      const admins = await fetchAdmins();
+      const match = admins.find(a => a.username === username && a.password === password);
+
+      if (match) {
+        alert("Login successful! Redirecting to dashboard...");
+        window.location.href = "dashboard.html"; // Redirect to admin dashboard
+      } else {
+        alert("Invalid login credentials!");
+      }
+    }
+
+    async function register() {
+      const username = document.getElementById('registerUsername').value;
+      const password = document.getElementById('registerPassword').value;
+
+      const admins = await fetchAdmins();
+      if (admins.some(a => a.username === username)) {
+        alert("Username already exists!");
+        return;
+      }
+
+      admins.push({ username, password });
+      await saveAdmins(admins);
+      alert("Admin account created successfully!");
+      showLogin();
+    }
+
+    async function resetPassword() {
+      const username = document.getElementById('resetUsername').value;
+      const newPassword = document.getElementById('newPassword').value;
+
+      const admins = await fetchAdmins();
+      const admin = admins.find(a => a.username === username);
+
+      if (admin) {
+        admin.password = newPassword;
+        await saveAdmins(admins);
+        alert("Password reset successfully!");
+        showLogin();
+      } else {
+        alert("Username not found!");
+      }
     }
   </script>
 </body>
