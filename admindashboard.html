@@ -1,0 +1,134 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+  <title>Admin Dashboard - Hon-Isyaku-Bawa-Na'abi-2025</title>
+  <link rel="stylesheet" href="styles.css" />
+  <style>
+    body {
+      display: flex;
+      flex-direction: column;
+      min-height: 100vh;
+      background: #f4f7fb;
+      margin: 0;
+    }
+    .admin-wrapper {
+      display: flex;
+      flex: 1;
+    }
+    .admin-sidebar {
+      width: 240px;
+      background: #002147;
+      color: white;
+      display: flex;
+      flex-direction: column;
+      padding: 20px 0;
+    }
+    .admin-sidebar h2 {
+      text-align: center;
+      margin-bottom: 20px;
+      font-size: 1.5rem;
+      font-weight: bold;
+    }
+    .admin-sidebar a {
+      display: block;
+      color: white;
+      padding: 12px 20px;
+      text-decoration: none;
+      font-size: 1rem;
+      transition: background 0.3s;
+    }
+    .admin-sidebar a:hover {
+      background: #00509e;
+    }
+    .admin-content {
+      flex: 1;
+      padding: 20px;
+    }
+    .admin-header {
+      margin-bottom: 20px;
+    }
+    .info-card {
+      background: #fff;
+      padding: 15px;
+      border-radius: 6px;
+      box-shadow: 0 2px 5px rgba(0,0,0,0.1);
+      margin-bottom: 20px;
+    }
+    .logout-btn {
+      background: #dc3545;
+      color: #fff;
+      padding: 10px 15px;
+      border: none;
+      border-radius: 5px;
+      cursor: pointer;
+    }
+    .logout-btn:hover {
+      background: #b02a37;
+    }
+  </style>
+</head>
+<body>
+
+<header class="header">
+  <div class="logo">Hon-Isyaku-Bawa-Na'abi-2025<span>.com</span></div>
+  <nav class="nav">
+    <a href="index.html">Home</a>
+    <a href="about.html">About</a>
+    <a href="contact.html">Contact</a>
+  </nav>
+</header>
+
+<div class="admin-wrapper">
+  <aside class="admin-sidebar">
+    <h2>Admin Panel</h2>
+    <a href="#">Dashboard</a>
+    <a href="manage-users.html">Manage Users</a>
+    <a href="manage-events.html">Manage Events</a>
+    <a href="manage-gallery.html">Manage Gallery</a>
+    <a href="site-settings.html">Site Settings</a>
+    <a href="#" id="logoutSidebar">Logout</a>
+  </aside>
+
+  <main class="admin-content">
+    <div class="admin-header">
+      <h2>Welcome, <span id="adminName">Admin</span>!</h2>
+      <p>Manage your website content here.</p>
+    </div>
+    <div class="info-card">
+      <h3>Quick Stats</h3>
+      <p>Total Registered Users: <span id="totalUsers">0</span></p>
+      <p>Upcoming Events: <span id="upcomingEvents">0</span></p>
+    </div>
+    <button class="logout-btn" id="logoutBtn">Logout</button>
+  </main>
+</div>
+
+<footer class="footer">
+  <p>&copy; 2025 IBN APC. All rights reserved.</p>
+</footer>
+
+<script>
+  // Load Admin Info
+  const admin = JSON.parse(localStorage.getItem('loggedInAdmin'));
+  if (!admin) {
+    window.location.href = "admin.html"; // Redirect to admin login
+  } else {
+    document.getElementById('adminName').textContent = admin.username;
+  }
+
+  // Logout
+  function logout() {
+    localStorage.removeItem('loggedInAdmin');
+    window.location.href = "admin.html";
+  }
+  document.getElementById('logoutBtn').addEventListener('click', logout);
+  document.getElementById('logoutSidebar').addEventListener('click', logout);
+
+  // Example Quick Stats (can be connected to JSON later)
+  document.getElementById('totalUsers').textContent = 25;
+  document.getElementById('upcomingEvents').textContent = 3;
+</script>
+</body>
+</html>
