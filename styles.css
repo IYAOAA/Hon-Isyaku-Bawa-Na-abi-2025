@@ -6,7 +6,8 @@
 
 body {
   font-family: 'Segoe UI', sans-serif;
-  color: #2b3d34;
+  color: #e0e6ed;
+  background-color: #0b1b2b; /* Dark background for overall theme */
 }
 
 /* ✅ Background image setup */
@@ -22,7 +23,7 @@ body {
   justify-content: center;
   align-items: center;
   text-align: center;
-  color: white; /* text readable */
+  color: white;
   padding: 4rem 2rem;
   z-index: 1;
 }
@@ -32,26 +33,28 @@ body {
   content: "";
   position: absolute;
   top: 0; left: 0; right: 0; bottom: 0;
-  background: rgba(0,0,0,0.4); /* adjust transparency */
-  z-index: -1; /* keeps it behind text */
+  background: rgba(0, 0, 40, 0.6); /* darker overlay for dark blue tone */
+  z-index: -1;
 }
 
+/* Header */
 .header {
-  background-color: rgba(58, 122, 87, 0.9);
+  background-color: rgba(10, 34, 64, 0.95); /* dark navy blue */
   padding: 1rem;
   display: flex;
   flex-direction: column;
   align-items: center;
+  box-shadow: 0 2px 6px rgba(0, 0, 0, 0.5);
 }
 
 .logo {
   font-size: 2rem;
   font-weight: bold;
-  color: white;
+  color: #ffffff;
 }
 
 .logo span {
-  color: #c9f0d1;
+  color: #3da9fc; /* accent blue */
 }
 
 .nav {
@@ -59,37 +62,54 @@ body {
 }
 
 .nav a {
-  color: white;
+  color: #ffffff;
   text-decoration: none;
-  margin: 0 10px;
+  margin: 0 12px;
   font-weight: bold;
+  transition: color 0.3s;
+}
+
+.nav a:hover {
+  color: #3da9fc; /* accent blue on hover */
 }
 
 .home h1 {
-  font-size: 2.5rem;
+  font-size: 2.8rem;
   margin-bottom: 1rem;
+  text-shadow: 0 3px 6px rgba(0, 0, 0, 0.6);
 }
 
 .home p {
   font-size: 1.2rem;
   margin-bottom: 1.5rem;
+  max-width: 600px;
 }
 
+/* Buttons */
 .btn {
   display: inline-block;
   padding: 12px 24px;
-  background-color: #248f52;
+  background-color: #3da9fc; /* bright blue accent */
   color: white;
   border-radius: 6px;
   text-decoration: none;
   font-weight: bold;
+  transition: background-color 0.3s, transform 0.2s;
 }
 
+.btn:hover {
+  background-color: #2680c2;
+  transform: scale(1.05);
+}
+
+/* Footer */
 .footer {
-  background-color: rgba(201, 240, 209, 0.9);
+  background-color: rgba(10, 34, 64, 0.95);
   text-align: center;
   padding: 1rem;
   margin-top: 2rem;
+  color: #8ca9c4;
+  font-size: 0.9rem;
 }
 
 @media (min-width: 600px) {
