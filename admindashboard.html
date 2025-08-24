@@ -3,107 +3,120 @@
 <head>
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
-  <title>Admin Dashboard - Hon-Isyaku-Bawa-Na'abi-2025</title>
+  <title>Admin Dashboard (New) - Hon-Isyaku-Bawa-Na'abi-2025</title>
   <link rel="stylesheet" href="styles.css" />
   <style>
     body {
-      display: flex;
-      flex-direction: column;
-      min-height: 100vh;
-      background: #f4f7fb;
       margin: 0;
+      font-family: 'Segoe UI', sans-serif;
+      background: #f4f7fb;
+      color: #333;
     }
-    .admin-wrapper {
+
+    header.header {
+      background-color: #001f3f; /* dark blue */
+      padding: 1rem;
       display: flex;
-      flex: 1;
+      justify-content: space-between;
+      align-items: center;
     }
-    .admin-sidebar {
-      width: 240px;
-      background: #002147;
+
+    header.header .logo {
       color: white;
-      display: flex;
-      flex-direction: column;
-      padding: 20px 0;
-    }
-    .admin-sidebar h2 {
-      text-align: center;
-      margin-bottom: 20px;
       font-size: 1.5rem;
       font-weight: bold;
     }
-    .admin-sidebar a {
-      display: block;
+
+    header.header .nav a {
       color: white;
-      padding: 12px 20px;
       text-decoration: none;
-      font-size: 1rem;
-      transition: background 0.3s;
+      margin: 0 10px;
+      font-weight: bold;
     }
-    .admin-sidebar a:hover {
-      background: #00509e;
-    }
-    .admin-content {
-      flex: 1;
+
+    .section {
+      background: white;
+      max-width: 800px;
+      margin: 2rem auto;
       padding: 20px;
-    }
-    .admin-header {
-      margin-bottom: 20px;
-    }
-    .info-card {
-      background: #fff;
-      padding: 15px;
-      border-radius: 6px;
+      border-radius: 8px;
       box-shadow: 0 2px 5px rgba(0,0,0,0.1);
-      margin-bottom: 20px;
     }
-    .logout-btn {
-      background: #dc3545;
-      color: #fff;
-      padding: 10px 15px;
+
+    .section h2 {
+      margin-bottom: 15px;
+      color: #001f3f;
+    }
+
+    input, textarea {
+      width: 100%;
+      padding: 10px;
+      margin-bottom: 10px;
+      border: 1px solid #ccc;
+      border-radius: 5px;
+    }
+
+    .btn-save {
+      background-color: #00509e;
+      color: white;
       border: none;
+      padding: 10px 15px;
       border-radius: 5px;
       cursor: pointer;
     }
-    .logout-btn:hover {
-      background: #b02a37;
+
+    .btn-save:hover {
+      background-color: #003f7f;
+    }
+
+    footer.footer {
+      background-color: #001f3f;
+      color: white;
+      text-align: center;
+      padding: 1rem;
+      margin-top: 3rem;
     }
   </style>
 </head>
 <body>
 
 <header class="header">
-  <div class="logo">Hon-Isyaku-Bawa-Na'abi-2025<span>.com</span></div>
+  <div class="logo">Admin Dashboard</div>
   <nav class="nav">
     <a href="index.html">Home</a>
     <a href="about.html">About</a>
     <a href="contact.html">Contact</a>
+    <a href="#" id="logoutBtn">Logout</a>
   </nav>
 </header>
 
-<div class="admin-wrapper">
-  <aside class="admin-sidebar">
-    <h2>Admin Panel</h2>
-    <a href="#">Dashboard</a>
-    <a href="manage-users.html">Manage Users</a>
-    <a href="manage-events.html">Manage Events</a>
-    <a href="manage-gallery.html">Manage Gallery</a>
-    <a href="site-settings.html">Site Settings</a>
-    <a href="#" id="logoutSidebar">Logout</a>
-  </aside>
+<main>
+  <!-- Homepage Section -->
+  <section class="section" id="homepageSection">
+    <h2>Homepage Info</h2>
+    <input type="text" id="homeTitle" placeholder="Website Title">
+    <input type="text" id="homeSubtitle" placeholder="Website Subtitle">
+    <input type="text" id="homeBg" placeholder="Background Image URL">
+    <button class="btn-save" onclick="saveHomepage()">Save Homepage</button>
+  </section>
 
-  <main class="admin-content">
-    <div class="admin-header">
-      <h2>Welcome, <span id="adminName">Admin</span>!</h2>
-      <p>Manage your website content here.</p>
-    </div>
-    <div class="info-card">
-      <h3>Quick Stats</h3>
-      <p>Total Registered Users: <span id="totalUsers">0</span></p>
-      <p>Upcoming Events: <span id="upcomingEvents">0</span></p>
-    </div>
-    <button class="logout-btn" id="logoutBtn">Logout</button>
-  </main>
-</div>
+  <!-- Gallery Section -->
+  <section class="section" id="gallerySection">
+    <h2>Gallery Manager</h2>
+    <input type="text" id="galleryImage" placeholder="Image URL to add">
+    <button class="btn-save" onclick="addGalleryImage()">Add Image</button>
+    <ul id="galleryList"></ul>
+  </section>
+
+  <!-- Events Section -->
+  <section class="section" id="eventsSection">
+    <h2>News & Events</h2>
+    <input type="text" id="eventTitle" placeholder="Event Title">
+    <textarea id="eventDesc" placeholder="Event Description"></textarea>
+    <button class="btn-save" onclick="addEvent()">Add Event</button>
+    <ul id="eventList"></ul>
+  </section>
+</main>
 
 <footer class="footer">
   <p>&copy; 2025 IBN APC. All rights reserved.</p>
@@ -113,22 +126,93 @@
   // Load Admin Info
   const admin = JSON.parse(localStorage.getItem('loggedInAdmin'));
   if (!admin) {
-    window.location.href = "admin.html"; // Redirect to admin login
-  } else {
-    document.getElementById('adminName').textContent = admin.username;
+    window.location.href = "admin.html"; 
   }
 
-  // Logout
-  function logout() {
+  // Logout Function
+  document.getElementById('logoutBtn').addEventListener('click', function() {
     localStorage.removeItem('loggedInAdmin');
     window.location.href = "admin.html";
-  }
-  document.getElementById('logoutBtn').addEventListener('click', logout);
-  document.getElementById('logoutSidebar').addEventListener('click', logout);
+  });
 
-  // Example Quick Stats (can be connected to JSON later)
-  document.getElementById('totalUsers').textContent = 25;
-  document.getElementById('upcomingEvents').textContent = 3;
+  // Save Homepage Info
+  function saveHomepage() {
+    const data = {
+      title: document.getElementById('homeTitle').value,
+      subtitle: document.getElementById('homeSubtitle').value,
+      bg: document.getElementById('homeBg').value
+    };
+    localStorage.setItem('homepageData', JSON.stringify(data));
+    alert('Homepage info saved!');
+  }
+
+  // Gallery Functions
+  function addGalleryImage() {
+    let imgURL = document.getElementById('galleryImage').value;
+    if (imgURL.trim() === '') return;
+    let gallery = JSON.parse(localStorage.getItem('galleryData')) || [];
+    gallery.push(imgURL);
+    localStorage.setItem('galleryData', JSON.stringify(gallery));
+    loadGallery();
+    document.getElementById('galleryImage').value = '';
+  }
+
+  function loadGallery() {
+    let gallery = JSON.parse(localStorage.getItem('galleryData')) || [];
+    let list = document.getElementById('galleryList');
+    list.innerHTML = '';
+    gallery.forEach((url, index) => {
+      list.innerHTML += `<li>${url} <button onclick="removeGallery(${index})">Remove</button></li>`;
+    });
+  }
+
+  function removeGallery(index) {
+    let gallery = JSON.parse(localStorage.getItem('galleryData')) || [];
+    gallery.splice(index, 1);
+    localStorage.setItem('galleryData', JSON.stringify(gallery));
+    loadGallery();
+  }
+
+  // Events Functions
+  function addEvent() {
+    let title = document.getElementById('eventTitle').value;
+    let desc = document.getElementById('eventDesc').value;
+    if (title.trim() === '' || desc.trim() === '') return;
+    let events = JSON.parse(localStorage.getItem('eventData')) || [];
+    events.push({ title, desc });
+    localStorage.setItem('eventData', JSON.stringify(events));
+    loadEvents();
+    document.getElementById('eventTitle').value = '';
+    document.getElementById('eventDesc').value = '';
+  }
+
+  function loadEvents() {
+    let events = JSON.parse(localStorage.getItem('eventData')) || [];
+    let list = document.getElementById('eventList');
+    list.innerHTML = '';
+    events.forEach((ev, index) => {
+      list.innerHTML += `<li><strong>${ev.title}</strong>: ${ev.desc} <button onclick="removeEvent(${index})">Remove</button></li>`;
+    });
+  }
+
+  function removeEvent(index) {
+    let events = JSON.parse(localStorage.getItem('eventData')) || [];
+    events.splice(index, 1);
+    localStorage.setItem('eventData', JSON.stringify(events));
+    loadEvents();
+  }
+
+  // Initialize Data
+  window.onload = () => {
+    const homepageData = JSON.parse(localStorage.getItem('homepageData'));
+    if (homepageData) {
+      document.getElementById('homeTitle').value = homepageData.title;
+      document.getElementById('homeSubtitle').value = homepageData.subtitle;
+      document.getElementById('homeBg').value = homepageData.bg;
+    }
+    loadGallery();
+    loadEvents();
+  };
 </script>
 </body>
 </html>
