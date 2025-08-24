@@ -15,12 +15,7 @@
       box-shadow: 0 0 10px rgba(0,0,0,0.2);
       text-align: center;
     }
-
-    .admin-container h2 {
-      margin-bottom: 15px;
-      color: #2b3d34;
-    }
-
+    .admin-container h2 { margin-bottom: 15px; color: #2b3d34; }
     .admin-container input {
       width: 100%;
       padding: 10px;
@@ -28,7 +23,6 @@
       border: 1px solid #ccc;
       border-radius: 5px;
     }
-
     .admin-container button {
       width: 100%;
       padding: 10px;
@@ -39,11 +33,7 @@
       font-weight: bold;
       cursor: pointer;
     }
-
-    .admin-container button:hover {
-      background: #1d7040;
-    }
-
+    .admin-container button:hover { background: #1d7040; }
     .switch-link {
       margin-top: 10px;
       display: block;
@@ -51,7 +41,6 @@
       cursor: pointer;
       font-weight: bold;
     }
-
     .hidden { display: none; }
   </style>
 </head>
@@ -104,83 +93,89 @@
   </footer>
 
   <script>
-    // Show forms dynamically
+    const API_BASE = "http://localhost:3000/api/admins";
+
     function showLogin() {
       document.getElementById('loginForm').classList.remove('hidden');
       document.getElementById('registerForm').classList.add('hidden');
       document.getElementById('resetForm').classList.add('hidden');
     }
-
     function showRegister() {
       document.getElementById('loginForm').classList.add('hidden');
       document.getElementById('registerForm').classList.remove('hidden');
       document.getElementById('resetForm').classList.add('hidden');
     }
-
     function showReset() {
       document.getElementById('loginForm').classList.add('hidden');
       document.getElementById('registerForm').classList.add('hidden');
       document.getElementById('resetForm').classList.remove('hidden');
     }
 
-    // Backend-ready Authentication
-    const API_URL = "data/admin.json"; // Simple JSON storage
-
-    async function fetchAdmins() {
-      const response = await fetch(API_URL);
-      return await response.json();
-    }
-
-    async function saveAdmins(data) {
-      // For now, just simulate saving (backend will handle this later)
-      console.log("Saving data to backend:", data);
-    }
-
     async function login() {
-      const username = document.getElementById('loginUsername').value;
-      const password = document.getElementById('loginPassword').value;
+      const username = document.getElementById('loginUsername').value.trim();
+      const password = document.getElementById('loginPassword').value.trim();
 
-      const admins = await fetchAdmins();
-      const match = admins.find(a => a.username === username && a.password === password);
+      if (!username || !password) return alert("Please fill in all fields.");
 
-      if (match) {
-        alert("Login successful! Redirecting to dashboard...");
-        window.location.href = "dashboard.html"; // Redirect to admin dashboard
-      } else {
-        alert("Invalid login credentials!");
+      try {
+        const res = await fetch(`${API_BASE}/login`, {
+          method: "POST",
+          headers: { "Content-Type": "application/json" },
+          body: JSON.stringify({ username, password })
+        });
+
+        const data = await res.json();
+        if (data.success) {
+          localStorage.setItem("adminUser", username);
+          alert("Login successful!");
+          window.location.href = "dashboard.html";
+        } else {
+          alert(data.message);
+        }
+      } catch (err) {
+        alert("Server error. Make sure server.js is running.");
       }
     }
 
     async function register() {
-      const username = document.getElementById('registerUsername').value;
-      const password = document.getElementById('registerPassword').value;
+      const username = document.getElementById('registerUsername').value.trim();
+      const password = document.getElementById('registerPassword').value.trim();
 
-      const admins = await fetchAdmins();
-      if (admins.some(a => a.username === username)) {
-        alert("Username already exists!");
-        return;
+      if (!username || !password) return alert("Please fill in all fields.");
+
+      try {
+        const res = await fetch(`${API_BASE}/register`, {
+          method: "POST",
+          headers: { "Content-Type": "application/json" },
+          body: JSON.stringify({ username, password })
+        });
+
+        const data = await res.json();
+        alert(data.message);
+        if (data.success) showLogin();
+      } catch (err) {
+        alert("Server error.");
       }
-
-      admins.push({ username, password });
-      await saveAdmins(admins);
-      alert("Admin account created successfully!");
-      showLogin();
     }
 
     async function resetPassword() {
-      const username = document.getElementById('resetUsername').value;
-      const newPassword = document.getElementById('newPassword').value;
+      const username = document.getElementById('resetUsername').value.trim();
+      const newPassword = document.getElementById('newPassword').value.trim();
 
-      const admins = await fetchAdmins();
-      const admin = admins.find(a => a.username === username);
+      if (!username || !newPassword) return alert("Please fill in all fields.");
 
-      if (admin) {
-        admin.password = newPassword;
-        await saveAdmins(admins);
-        alert("Password reset successfully!");
-        showLogin();
-      } else {
-        alert("Username not found!");
+      try {
+        const res = await fetch(`${API_BASE}/reset`, {
+          method: "POST",
+          headers: { "Content-Type": "application/json" },
+          body: JSON.stringify({ username, newPassword })
+        });
+
+        const data = await res.json();
+        alert(data.message);
+        if (data.success) showLogin();
+      } catch (err) {
+        alert("Server error.");
       }
     }
   </script>
