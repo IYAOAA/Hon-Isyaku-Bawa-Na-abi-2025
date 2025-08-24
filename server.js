@@ -1,92 +1,70 @@
 const express = require('express');
-const bodyParser = require('body-parser');
 const fs = require('fs');
-const cors = require('cors');
 const path = require('path');
+const bodyParser = require('body-parser');
+const cors = require('cors');
 
 const app = express();
 const PORT = 3000;
+const ADMIN_FILE = path.join(__dirname, 'admins.json');
 
 app.use(bodyParser.json());
 app.use(cors());
-app.use(express.static(path.join(__dirname))); // Serve frontend files
+app.use(express.static('.')); // serve your HTML/CSS/JS files
 
-const DATA_FILE = path.join(__dirname, 'data', 'admin.json');
-
-// Ensure data folder and file exist
-if (!fs.existsSync(path.join(__dirname, 'data'))) {
-  fs.mkdirSync(path.join(__dirname, 'data'));
-}
-if (!fs.existsSync(DATA_FILE)) {
-  fs.writeFileSync(DATA_FILE, '[]');
+// Helper: Load admins from file
+function loadAdmins() {
+  if (!fs.existsSync(ADMIN_FILE)) return [];
+  return JSON.parse(fs.readFileSync(ADMIN_FILE, 'utf8'));
 }
 
-// Read admins
-app.get('/admins', (req, res) => {
-  fs.readFile(DATA_FILE, 'utf8', (err, data) => {
-    if (err) return res.status(500).json({ error: 'Failed to read admin data' });
-    res.json(JSON.parse(data));
-  });
-});
+// Helper: Save admins to file
+function saveAdmins(admins) {
+  fs.writeFileSync(ADMIN_FILE, JSON.stringify(admins, null, 2));
+}
 
-// Register new admin
-app.post('/admins/register', (req, res) => {
+// Register Admin
+app.post('/register', (req, res) => {
   const { username, password } = req.body;
-  fs.readFile(DATA_FILE, 'utf8', (err, data) => {
-    if (err) return res.status(500).json({ error: 'Failed to read admin data' });
+  let admins = loadAdmins();
 
-    let admins = JSON.parse(data);
-    if (admins.find(a => a.username === username)) {
-      return res.status(400).json({ error: 'Username already exists' });
-    }
+  if (admins.find(a => a.username === username)) {
+    return res.status(400).json({ success: false, message: 'Username already exists' });
+  }
 
-    admins.push({ username, password });
-    fs.writeFile(DATA_FILE, JSON.stringify(admins, null, 2), (err) => {
-      if (err) return res.status(500).json({ error: 'Failed to save admin' });
-      res.json({ message: 'Admin registered successfully' });
-    });
-  });
+  admins.push({ username, password });
+  saveAdmins(admins);
+  res.json({ success: true, message: 'Registration successful!' });
 });
 
-// Login admin
-app.post('/admins/login', (req, res) => {
+// Login Admin
+app.post('/login', (req, res) => {
   const { username, password } = req.body;
-  fs.readFile(DATA_FILE, 'utf8', (err, data) => {
-    if (err) return res.status(500).json({ error: 'Failed to read admin data' });
+  let admins = loadAdmins();
 
-    let admins = JSON.parse(data);
-    const admin = admins.find(a => a.username === username && a.password === password);
-
-    if (admin) {
-      res.json({ message: 'Login successful' });
-    } else {
-      res.status(401).json({ error: 'Invalid credentials' });
-    }
-  });
+  const found = admins.find(a => a.username === username && a.password === password);
+  if (found) {
+    res.json({ success: true, message: 'Login successful!' });
+  } else {
+    res.status(401).json({ success: false, message: 'Invalid credentials' });
+  }
 });
 
-// Reset password
-app.post('/admins/reset', (req, res) => {
+// Reset Password
+app.post('/reset', (req, res) => {
   const { username, newPassword } = req.body;
-  fs.readFile(DATA_FILE, 'utf8', (err, data) => {
-    if (err) return res.status(500).json({ error: 'Failed to read admin data' });
+  let admins = loadAdmins();
 
-    let admins = JSON.parse(data);
-    const admin = admins.find(a => a.username === username);
+  let admin = admins.find(a => a.username === username);
+  if (!admin) {
+    return res.status(404).json({ success: false, message: 'User not found' });
+  }
 
-    if (!admin) {
-      return res.status(404).json({ error: 'Username not found' });
-    }
-
-    admin.password = newPassword;
-    fs.writeFile(DATA_FILE, JSON.stringify(admins, null, 2), (err) => {
-      if (err) return res.status(500).json({ error: 'Failed to reset password' });
-      res.json({ message: 'Password reset successfully' });
-    });
-  });
+  admin.password = newPassword;
+  saveAdmins(admins);
+  res.json({ success: true, message: 'Password reset successful!' });
 });
 
-// Start server
 app.listen(PORT, () => {
   console.log(`Server running on http://localhost:${PORT}`);
 });
