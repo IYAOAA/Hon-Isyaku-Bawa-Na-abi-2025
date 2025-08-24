@@ -16,6 +16,9 @@ app.use(express.static(path.join(__dirname))); // Serve all frontend files
 const DATA_DIR = path.join(__dirname, 'data');
 const ADMIN_FILE = path.join(DATA_DIR, 'admin.json');
 
+// Simple in-memory session (will reset when server restarts)
+let loggedInAdmins = new Set();
+
 // Ensure data folder and file exist
 if (!fs.existsSync(DATA_DIR)) fs.mkdirSync(DATA_DIR);
 if (!fs.existsSync(ADMIN_FILE)) fs.writeFileSync(ADMIN_FILE, '[]');
@@ -34,6 +37,9 @@ app.get('/login', (req, res) => {
 });
 app.get('/dashboard', (req, res) => {
   res.sendFile(path.join(__dirname, 'dashboard.html'));
+});
+app.get('/admindashboard', (req, res) => {
+  res.sendFile(path.join(__dirname, 'admindashboard.html'));
 });
 
 // Read admins
@@ -73,6 +79,7 @@ app.post('/api/admins/login', (req, res) => {
     const admin = admins.find(a => a.username === username && a.password === password);
 
     if (admin) {
+      loggedInAdmins.add(username);
       res.json({ message: 'Login successful', username });
     } else {
       res.status(401).json({ error: 'Invalid credentials' });
@@ -99,6 +106,19 @@ app.post('/api/admins/reset', (req, res) => {
       res.json({ message: 'Password reset successfully' });
     });
   });
+});
+
+// Logout route
+app.post('/api/admins/logout', (req, res) => {
+  const { username } = req.body;
+  loggedInAdmins.delete(username);
+  res.json({ message: 'Logged out successfully' });
+});
+
+// Check if logged in (for frontend to validate)
+app.get('/api/admins/check/:username', (req, res) => {
+  const { username } = req.params;
+  res.json({ loggedIn: loggedInAdmins.has(username) });
 });
 
 // Start server

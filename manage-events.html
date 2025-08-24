@@ -1,0 +1,141 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Manage Events - Admin Panel</title>
+  <link rel="stylesheet" href="styles.css">
+  <style>
+    .container {
+      max-width: 800px;
+      margin: 20px auto;
+      background: #fff;
+      padding: 20px;
+      border-radius: 8px;
+      box-shadow: 0 2px 5px rgba(0,0,0,0.1);
+    }
+    .add-form input {
+      padding: 8px;
+      margin: 5px;
+      width: 200px;
+    }
+    .add-form button {
+      padding: 8px 15px;
+      background: #248f52;
+      color: white;
+      border: none;
+      border-radius: 4px;
+      cursor: pointer;
+    }
+    .add-form button:hover {
+      background: #1a6f3b;
+    }
+    table {
+      width: 100%;
+      border-collapse: collapse;
+      margin-top: 20px;
+    }
+    th, td {
+      padding: 10px;
+      border-bottom: 1px solid #ddd;
+      text-align: left;
+    }
+    th {
+      background: #002147;
+      color: white;
+    }
+    .btn-delete {
+      background: #dc3545;
+      color: white;
+      border: none;
+      padding: 5px 10px;
+      border-radius: 4px;
+      cursor: pointer;
+    }
+    .btn-delete:hover {
+      background: #b02a37;
+    }
+  </style>
+</head>
+<body>
+
+<header class="header">
+  <div class="logo">Admin Panel<span></span></div>
+  <nav class="nav">
+    <a href="admindashboard.html">Dashboard</a>
+    <a href="manage-users.html">Manage Users</a>
+    <a href="#" id="logout">Logout</a>
+  </nav>
+</header>
+
+<div class="container">
+  <h2>Manage Events</h2>
+  <form class="add-form" id="addEventForm">
+    <input type="text" id="eventTitle" placeholder="Event Title" required>
+    <input type="date" id="eventDate" required>
+    <button type="submit">Add Event</button>
+  </form>
+  <table id="eventsTable">
+    <thead>
+      <tr><th>Title</th><th>Date</th><th>Action</th></tr>
+    </thead>
+    <tbody></tbody>
+  </table>
+</div>
+
+<script>
+  const admin = JSON.parse(localStorage.getItem('loggedInAdmin'));
+  if (!admin) window.location.href = "admin.html";
+
+  const eventsTable = document.querySelector('#eventsTable tbody');
+
+  async function loadEvents() {
+    const res = await fetch('/events.json');
+    const data = await res.json();
+    eventsTable.innerHTML = '';
+    data.events.forEach((ev, index) => {
+      eventsTable.innerHTML += `
+        <tr>
+          <td>${ev.title}</td>
+          <td>${ev.date}</td>
+          <td><button class="btn-delete" onclick="deleteEvent(${index})">Delete</button></td>
+        </tr>
+      `;
+    });
+  }
+
+  async function deleteEvent(index) {
+    await fetch('/delete-event', {
+      method: 'POST',
+      headers: {'Content-Type':'application/json'},
+      body: JSON.stringify({index})
+    });
+    loadEvents();
+  }
+
+  document.getElementById('addEventForm').addEventListener('submit', async e => {
+    e.preventDefault();
+    const title = document.getElementById('eventTitle').value.trim();
+    const date = document.getElementById('eventDate').value.trim();
+
+    await fetch('/add-event', {
+      method: 'POST',
+      headers: {'Content-Type':'application/json'},
+      body: JSON.stringify({title, date})
+    });
+
+    document.getElementById('eventTitle').value = '';
+    document.getElementById('eventDate').value = '';
+    loadEvents();
+  });
+
+  function logout() {
+    localStorage.removeItem('loggedInAdmin');
+    window.location.href = "admin.html";
+  }
+  document.getElementById('logout').addEventListener('click', logout);
+
+  loadEvents();
+</script>
+</body>
+</html>
