@@ -15,13 +15,36 @@ app.use(express.static(path.join(__dirname))); // Serve all frontend files
 // File paths
 const DATA_DIR = path.join(__dirname, 'data');
 const ADMIN_FILE = path.join(DATA_DIR, 'admin.json');
+const SITE_DATA_FILE = path.join(DATA_DIR, 'data.json');
 
 // Simple in-memory session (will reset when server restarts)
 let loggedInAdmins = new Set();
 
-// Ensure data folder and file exist
+// Ensure data folder and files exist
 if (!fs.existsSync(DATA_DIR)) fs.mkdirSync(DATA_DIR);
 if (!fs.existsSync(ADMIN_FILE)) fs.writeFileSync(ADMIN_FILE, '[]');
+if (!fs.existsSync(SITE_DATA_FILE)) {
+  fs.writeFileSync(SITE_DATA_FILE, JSON.stringify({
+    home: {
+      headline: "Welcome to Hon. Isyaku Bawa Na’abi 2025",
+      subheadline: "A Vision for Progress and Development",
+      heroImage: "assets/images/hero.jpg",
+      introText: "Together, we can build a better future for our community."
+    },
+    about: {
+      title: "About Hon. Isyaku Bawa Na’abi",
+      content: "Hon. Isyaku Bawa Na’abi is a visionary leader committed to transparency, accountability, and sustainable development. With years of experience in public service, he aims to bring progress to every corner of our society.",
+      profileImage: "assets/images/profile.jpg"
+    },
+    products: [],
+    events: [],
+    contact: {
+      email: "contact@naabi2025.org",
+      phone: "+234-800-123-4567",
+      address: "123 Campaign Street, Kaduna, Nigeria"
+    }
+  }, null, 2));
+}
 
 // ========== ROUTES ==========
 
@@ -41,6 +64,8 @@ app.get('/dashboard', (req, res) => {
 app.get('/admindashboard', (req, res) => {
   res.sendFile(path.join(__dirname, 'admindashboard.html'));
 });
+
+// ====== ADMIN MANAGEMENT API ======
 
 // Read admins
 app.get('/api/admins', (req, res) => {
@@ -119,6 +144,24 @@ app.post('/api/admins/logout', (req, res) => {
 app.get('/api/admins/check/:username', (req, res) => {
   const { username } = req.params;
   res.json({ loggedIn: loggedInAdmins.has(username) });
+});
+
+// ====== SITE CONTENT API ======
+
+// Get site data
+app.get('/api/site', (req, res) => {
+  fs.readFile(SITE_DATA_FILE, 'utf8', (err, data) => {
+    if (err) return res.status(500).json({ error: 'Failed to read site data' });
+    res.json(JSON.parse(data));
+  });
+});
+
+// Update site data (from admin panel)
+app.post('/api/site', (req, res) => {
+  fs.writeFile(SITE_DATA_FILE, JSON.stringify(req.body, null, 2), (err) => {
+    if (err) return res.status(500).json({ error: 'Failed to save site data' });
+    res.json({ message: 'Site data updated successfully' });
+  });
 });
 
 // Start server
