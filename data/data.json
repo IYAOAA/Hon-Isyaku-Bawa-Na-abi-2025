@@ -1,0 +1,20 @@
+{
+  "home": {
+    "headline": "Welcome to Hon. Isyaku Bawa Na’abi 2025",
+    "subheadline": "A Vision for Progress and Development",
+    "heroImage": "assets/images/hero.jpg",
+    "introText": "Together, we can build a better future for our community."
+  },
+  "about": {
+    "title": "About Hon. Isyaku Bawa Na’abi",
+    "content": "Hon. Isyaku Bawa Na’abi is a visionary leader committed to transparency, accountability, and sustainable development. With years of experience in public service, he aims to bring progress to every corner of our society.",
+    "profileImage": "assets/images/profile.jpg"
+  },
+  "products": [],
+  "events": [],
+  "contact": {
+    "email": "contact@naabi2025.org",
+    "phone": "+234-800-123-4567",
+    "address": "123 Campaign Street, Kaduna, Nigeria"
+  }
+}
