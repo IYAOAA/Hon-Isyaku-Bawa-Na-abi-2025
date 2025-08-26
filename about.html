@@ -100,26 +100,40 @@
   </header>
 
   <main class="about-section">
-    <h1>About Hon. Isyaku Bawa Na'abi</h1>
+    <h1 id="about-title">About Hon. Isyaku Bawa Na'abi</h1>
 
     <div class="about-card">
       <h2>Dream</h2>
-      <p>"To see a society where every citizen enjoys equal opportunity, justice, and prosperity—where no voice is too small to be heard and no community is left behind."</p>
+      <p id="about-dream">Loading...</p>
     </div>
 
     <div class="about-card">
       <h2>Mission</h2>
-      <p>"To serve with integrity, promote policies that uplift the common man, create platforms for youth empowerment, champion infrastructural development, and ensure transparent, accountable governance for all."</p>
+      <p id="about-mission">Loading...</p>
     </div>
 
     <div class="about-card">
       <h2>Vision</h2>
-      <p>"To build a united, progressive, and self-reliant constituency—transforming hopes into reality, dreams into development, and promises into lasting change."</p>
+      <p id="about-vision">Loading...</p>
     </div>
   </main>
 
   <footer class="footer">
     <p>&copy; 2025 Hon-Isyaku-Bawa-Na-abi | Built with purpose by Y. A. Ibrahim</p>
   </footer>
+
+  <script>
+    fetch('data.json')
+      .then(response => response.json())
+      .then(data => {
+        if (data.about) {
+          document.getElementById('about-title').textContent = data.about.title;
+          document.getElementById('about-dream').textContent = data.about.dream || "Dream not set yet.";
+          document.getElementById('about-mission').textContent = data.about.mission || "Mission not set yet.";
+          document.getElementById('about-vision').textContent = data.about.vision || "Vision not set yet.";
+        }
+      })
+      .catch(error => console.error('Error loading about data:', error));
+  </script>
 </body>
 </html>
