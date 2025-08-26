@@ -85,28 +85,38 @@
 
     .form-actions {
       display: flex;
-      gap: 10px;
       justify-content: center;
+      margin-top: 10px;
     }
 
-    .form-actions a,
     .form-actions button {
-      flex: 1;
       background: #006400;
       color: white;
       font-weight: bold;
-      padding: 12px;
+      padding: 12px 20px;
       border: none;
       border-radius: 8px;
-      text-align: center;
       cursor: pointer;
-      text-decoration: none;
       transition: background 0.3s ease;
     }
 
-    .form-actions a:hover,
     .form-actions button:hover {
       background: #004d00;
+    }
+
+    .login-link {
+      text-align: center;
+      margin-top: 8px;
+    }
+
+    .login-link a {
+      font-size: 14px;
+      color: #006400;
+      text-decoration: none;
+    }
+
+    .login-link a:hover {
+      text-decoration: underline;
     }
 
     .modal {
@@ -172,7 +182,7 @@
 </header>
 
 <main class="home">
-  <form class="registration-form" id="regForm">
+  <form class="registration-form" id="regForm" enctype="multipart/form-data">
     <h1>Registration</h1>
     <label>First Name:</label>
     <input type="text" name="first_name" required>
@@ -187,28 +197,28 @@
     <input type="date" name="dob" required>
 
     <label>Phone No.:</label>
-    <input type="tel" name="phone" pattern="^[0-9]{11}$" title="Enter valid 11-digit phone number" required>
+    <input type="tel" name="phone" required>
 
     <label>Email Address:</label>
     <input type="email" name="email" required>
 
     <label>Password:</label>
-    <input type="password" name="password" id="password" minlength="8" required>
+    <input type="password" name="password" id="password" required>
 
     <label>Confirm Password:</label>
     <input type="password" name="confirm_password" id="confirm_password" required>
 
     <label>NIN:</label>
-    <input type="text" name="nin" pattern="^[0-9]{11}$" title="NIN must be exactly 11 digits" required>
+    <input type="text" name="nin" id="nin" required>
 
     <label>Voter's Card No.:</label>
-    <input type="text" name="voter_card" pattern="^[A-Za-z0-9]{10,12}$" title="Enter valid Voter's Card Number" required>
+    <input type="text" name="voter_card" required>
 
     <label>Home Address:</label>
     <textarea name="address" rows="3" required></textarea>
 
     <label>Ward:</label>
-    <input type="text" name="ward" required>
+    <input type="text" name="ward" id="ward" required>
 
     <label>State of Origin:</label>
     <select id="state" name="state" required>
@@ -221,9 +231,26 @@
       <option value="">--Select L.G.A--</option>
     </select>
 
+    <label>Upload Passport Photo:</label>
+    <input type="file" name="passport" id="passport" accept="image/*" required>
+
+    <label>Upload L.G.A Certificate:</label>
+    <input type="file" name="lga_doc" accept="image/*,application/pdf" required>
+
+    <label>Upload Voter's Card:</label>
+    <input type="file" name="voter_doc" accept="image/*,application/pdf" required>
+
+    <label>Upload NIN Slip:</label>
+    <input type="file" name="nin_doc" accept="image/*,application/pdf" required>
+
+    <label>Upload Qualification Certificate:</label>
+    <input type="file" name="qualification_doc" accept="image/*,application/pdf" required>
+
     <div class="form-actions">
       <button type="submit">Register</button>
-      <a href="login.html">Login</a>
+    </div>
+    <div class="login-link">
+      <a href="login.html">Already have an account? Login</a>
     </div>
   </form>
 </main>
@@ -236,11 +263,12 @@
   <div class="modal-content">
     <div class="checkmark">✔</div>
     <h2>Registration Successful!</h2>
-    <p>Thank you for joining. Your details have been recorded successfully.</p>
-    <button class="close-btn" id="closeModal">Close</button>
+    <p>Your details have been recorded successfully.</p>
+    <button class="close-btn" id="downloadPDP">Download PDP</button>
   </div>
 </div>
 
+<script src="https://cdnjs.cloudflare.com/ajax/libs/jspdf/2.5.1/jspdf.umd.min.js"></script>
 <script>
   const stateSelect = document.getElementById("state");
   const lgaSelect = document.getElementById("lga");
@@ -259,32 +287,48 @@
 
   const regForm = document.getElementById("regForm");
   const modal = document.getElementById("successModal");
-  const closeModal = document.getElementById("closeModal");
+  const downloadPDP = document.getElementById("downloadPDP");
 
   regForm.addEventListener("submit", function(event) {
     event.preventDefault();
 
     const password = document.getElementById("password").value;
     const confirmPassword = document.getElementById("confirm_password").value;
-
     if (password !== confirmPassword) {
       alert("Passwords do not match!");
       return;
     }
 
     modal.style.display = "flex";
-    regForm.reset();
   });
 
-  closeModal.addEventListener("click", function() {
-    modal.style.display = "none";
+  downloadPDP.addEventListener("click", async function() {
+    const { jsPDF } = window.jspdf;
+    const doc = new jsPDF();
+
+    const firstName = regForm.first_name.value;
+    const lastName = regForm.last_name.value;
+    const state = regForm.state.value;
+    const lga = regForm.lga.value;
+    const ward = regForm.ward.value;
+    const nin = regForm.nin.value;
+    const uniqueId = "2353" + nin.slice(-4);
+
+    doc.setFontSize(18);
+    doc.text("Hon-Isyaku-Bawa-Na-abi-2025 Registration", 20, 20);
+    doc.setFontSize(14);
+    doc.text(`Name: ${firstName} ${lastName}`, 20, 40);
+    doc.text(`State: ${state}`, 20, 55);
+    doc.text(`L.G.A: ${lga}`, 20, 70);
+    doc.text(`Ward: ${ward}`, 20, 85);
+    doc.text(`Unique ID: ${uniqueId}`, 20, 100);
+
+    doc.save(`${firstName}_${uniqueId}.pdf`);
   });
 
   window.onclick = function(event) {
     if (event.target === modal) modal.style.display = "none";
   };
-
-  window.onload = () => modal.style.display = "none";
 </script>
 </body>
 </html>
