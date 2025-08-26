@@ -1,7 +1,7 @@
 // about.js
 const aboutSection = document.querySelector('.about-section');
 
-fetch('data.json')
+fetch('assets/js/data.json')
   .then(response => {
     if (!response.ok) {
       throw new Error(`Failed to load data.json (Status: ${response.status})`);
