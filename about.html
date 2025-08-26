@@ -50,12 +50,16 @@
       background: rgba(255, 255, 255, 0.85);
       border-radius: 15px;
       box-shadow: 0 4px 6px rgba(0, 0, 0, 0.2);
+      transition: opacity 0.5s ease-in-out;
+    }
+
+    .about-section.loaded .about-title {
+      color: #2b3d34;
     }
 
     .about-section h1 {
       font-size: 2.5rem;
       margin-bottom: 20px;
-      color: #2b3d34;
     }
 
     .about-card {
@@ -78,19 +82,19 @@
       line-height: 1.6;
     }
 
+    .about-image {
+      max-width: 200px;
+      border-radius: 10px;
+      display: block;
+      margin: 10px auto;
+    }
+
     .footer {
       text-align: center;
       padding: 10px;
       background: rgba(43, 61, 52, 0.9);
       color: #fff;
       font-size: 0.9rem;
-    }
-
-    .about-image {
-      max-width: 200px;
-      border-radius: 10px;
-      display: block;
-      margin: 10px auto;
     }
   </style>
 </head>
@@ -108,7 +112,7 @@
 
   <main class="about-section">
     <h1 class="about-title">Please wait, loading profile...</h1>
-    <img class="about-image" src="" alt="Profile Image">
+    <img class="about-image" src="" alt="Profile Image" onerror="this.src='images/default-profile.jpg';">
     <p class="about-content"></p>
 
     <div class="about-card">
@@ -131,6 +135,6 @@
     <p>&copy; 2025 Hon-Isyaku-Bawa-Na-abi | Built with purpose by Y. A. Ibrahim</p>
   </footer>
 
-<script src="assets/js/about.js"></script>
+  <script src="assets/js/about.js"></script>
 </body>
 </html>
