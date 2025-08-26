@@ -27,28 +27,12 @@
       padding: 15px;
     }
 
-    .header .logo {
-      font-size: 22px;
-      font-weight: bold;
-    }
+    .header .logo { font-size: 22px; font-weight: bold; }
 
-    .nav a {
-      color: white;
-      margin: 0 10px;
-      text-decoration: none;
-    }
+    .nav a { color: white; margin: 0 10px; text-decoration: none; }
+    .nav a:hover { text-decoration: underline; }
 
-    .nav a:hover {
-      text-decoration: underline;
-    }
-
-    main {
-      flex: 1;
-      display: flex;
-      justify-content: center;
-      align-items: center;
-      padding: 20px;
-    }
+    main { flex: 1; display: flex; justify-content: center; align-items: center; padding: 20px; }
 
     .registration-form {
       width: 95%;
@@ -59,115 +43,27 @@
       box-shadow: 0 4px 16px rgba(0,0,0,0.2);
     }
 
-    .registration-form h1 {
-      text-align: center;
-      margin-bottom: 20px;
-      color: #006400;
-    }
-
-    .registration-form label {
-      display: block;
-      font-weight: bold;
-      color: #000;
-      margin: 10px 0 5px;
-    }
-
+    .registration-form h1 { text-align: center; margin-bottom: 20px; color: #006400; }
+    .registration-form label { display: block; font-weight: bold; margin: 10px 0 5px; }
     .registration-form input,
     .registration-form select,
-    .registration-form textarea {
-      width: 100%;
-      padding: 12px;
-      margin-bottom: 15px;
-      border: 1px solid #ccc;
-      border-radius: 6px;
-      font-size: 15px;
-    }
+    .registration-form textarea { width: 100%; padding: 12px; margin-bottom: 15px; border: 1px solid #ccc; border-radius: 6px; font-size: 15px; }
 
-    .form-actions {
-      display: flex;
-      justify-content: center;
-      margin-top: 10px;
-    }
+    .form-actions { display: flex; justify-content: center; margin-top: 10px; }
+    .form-actions button { background: #006400; color: white; font-weight: bold; padding: 12px 20px; border: none; border-radius: 8px; cursor: pointer; transition: background 0.3s ease; }
+    .form-actions button:hover { background: #004d00; }
 
-    .form-actions button {
-      background: #006400;
-      color: white;
-      font-weight: bold;
-      padding: 12px 20px;
-      border: none;
-      border-radius: 8px;
-      cursor: pointer;
-      transition: background 0.3s ease;
-    }
+    .login-link { text-align: center; margin-top: 8px; }
+    .login-link a { font-size: 14px; color: #006400; text-decoration: none; }
+    .login-link a:hover { text-decoration: underline; }
 
-    .form-actions button:hover {
-      background: #004d00;
-    }
+    .modal { display: none; position: fixed; z-index: 1000; left: 0; top: 0; width: 100%; height: 100%; background: rgba(0,0,0,0.7); display: flex; align-items: center; justify-content: center; }
+    .modal-content { background: #fff; padding: 30px; border-radius: 12px; text-align: center; max-width: 400px; width: 90%; box-shadow: 0 4px 16px rgba(0,0,0,0.3); animation: fadeIn 0.3s ease-in-out; }
+    .checkmark { font-size: 60px; color: #28a745; margin-bottom: 15px; }
+    .close-btn { background: #006400; color: #fff; padding: 10px 20px; border: none; border-radius: 6px; cursor: pointer; font-weight: bold; }
+    .close-btn:hover { background: #004d00; }
 
-    .login-link {
-      text-align: center;
-      margin-top: 8px;
-    }
-
-    .login-link a {
-      font-size: 14px;
-      color: #006400;
-      text-decoration: none;
-    }
-
-    .login-link a:hover {
-      text-decoration: underline;
-    }
-
-    .modal {
-      display: none;
-      position: fixed;
-      z-index: 1000;
-      left: 0;
-      top: 0;
-      width: 100%;
-      height: 100%;
-      background: rgba(0,0,0,0.7);
-      display: flex;
-      align-items: center;
-      justify-content: center;
-    }
-
-    .modal-content {
-      background: #fff;
-      padding: 30px;
-      border-radius: 12px;
-      text-align: center;
-      max-width: 400px;
-      width: 90%;
-      box-shadow: 0 4px 16px rgba(0,0,0,0.3);
-      animation: fadeIn 0.3s ease-in-out;
-    }
-
-    .checkmark {
-      font-size: 60px;
-      color: #28a745;
-      margin-bottom: 15px;
-    }
-
-    .close-btn {
-      background: #006400;
-      color: #fff;
-      padding: 10px 20px;
-      border: none;
-      border-radius: 6px;
-      cursor: pointer;
-      font-weight: bold;
-    }
-
-    .close-btn:hover {
-      background: #004d00;
-    }
-
-    @keyframes fadeIn {
-      from {opacity: 0; transform: scale(0.9);}
-      to {opacity: 1; transform: scale(1);}
-    }
+    @keyframes fadeIn { from {opacity: 0; transform: scale(0.9);} to {opacity: 1; transform: scale(1);} }
   </style>
 </head>
 <body>
@@ -272,10 +168,13 @@
 <script>
   const stateSelect = document.getElementById("state");
   const lgaSelect = document.getElementById("lga");
+  const regForm = document.getElementById("regForm");
+  const modal = document.getElementById("successModal");
+  const downloadPDP = document.getElementById("downloadPDP");
 
-  stateSelect.addEventListener("change", function () {
+  stateSelect.addEventListener("change", () => {
     lgaSelect.innerHTML = '<option value="">--Select L.G.A--</option>';
-    if (this.value === "niger") {
+    if (stateSelect.value === "niger") {
       ["Gurara", "Suleja", "Tafa"].forEach(lga => {
         const opt = document.createElement("option");
         opt.value = lga.toLowerCase();
@@ -285,11 +184,7 @@
     }
   });
 
-  const regForm = document.getElementById("regForm");
-  const modal = document.getElementById("successModal");
-  const downloadPDP = document.getElementById("downloadPDP");
-
-  regForm.addEventListener("submit", function(event) {
+  regForm.addEventListener("submit", async function(event) {
     event.preventDefault();
 
     const password = document.getElementById("password").value;
@@ -314,16 +209,41 @@
     const nin = regForm.nin.value;
     const uniqueId = "2353" + nin.slice(-4);
 
-    doc.setFontSize(18);
-    doc.text("Hon-Isyaku-Bawa-Na-abi-2025 Registration", 20, 20);
-    doc.setFontSize(14);
-    doc.text(`Name: ${firstName} ${lastName}`, 20, 40);
-    doc.text(`State: ${state}`, 20, 55);
-    doc.text(`L.G.A: ${lga}`, 20, 70);
-    doc.text(`Ward: ${ward}`, 20, 85);
-    doc.text(`Unique ID: ${uniqueId}`, 20, 100);
+    const passportFile = regForm.passport.files[0];
+    let passportDataUrl = "";
+    if (passportFile) {
+      const reader = new FileReader();
+      reader.onload = function(e) {
+        passportDataUrl = e.target.result;
+        generatePDF(passportDataUrl);
+      }
+      reader.readAsDataURL(passportFile);
+    } else {
+      generatePDF();
+    }
 
-    doc.save(`${firstName}_${uniqueId}.pdf`);
+    function generatePDF(passportImg) {
+      // Watermark
+      doc.setFontSize(60);
+      doc.setTextColor(200, 200, 200);
+      doc.text("HON-ISYAKU-BAWA", 20, 150, { angle: 45 });
+
+      doc.setTextColor(0,0,0);
+      doc.setFontSize(16);
+      doc.text(`Name: ${firstName} ${lastName}`, 20, 30);
+      doc.text(`State: ${state}`, 20, 45);
+      doc.text(`L.G.A: ${lga}`, 20, 60);
+      doc.text(`Ward: ${ward}`, 20, 75);
+      doc.text(`Unique ID: ${uniqueId}`, 20, 90);
+
+      if(passportImg) {
+        doc.addImage(passportImg, "JPEG", 140, 20, 50, 50);
+      }
+
+      doc.save(`${firstName}_${uniqueId}.pdf`);
+      modal.style.display = "none";
+      regForm.reset();
+    }
   });
 
   window.onclick = function(event) {
