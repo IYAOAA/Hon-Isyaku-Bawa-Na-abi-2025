@@ -1,36 +1,33 @@
-// about.js
-const aboutSection = document.querySelector('.about-section');
-const titleElement = document.querySelector('.about-title');
-const contentElement = document.querySelector('.about-content');
-const imageElement = document.querySelector('.about-image');
+// assets/js/about.js
+document.addEventListener('DOMContentLoaded', () => {
+  const aboutSection = document.querySelector('.about-section');
+  const titleElement = document.querySelector('.about-title');
+  const contentElement = document.querySelector('.about-content');
+  const imageElement = document.querySelector('.about-image');
 
-fetch('data/data.json')
-  .then(response => {
-    if (!response.ok) {
-      throw new Error(`Failed to load data.json (Status: ${response.status})`);
-    }
-    return response.json();
-  })
-  .then(data => {
-    if (data.about) {
-      if (titleElement) titleElement.textContent = data.about.title;
-      if (contentElement) contentElement.textContent = data.about.content;
-      if (imageElement) imageElement.setAttribute('src', data.about.profileImage);
+  fetch('data/data.json')
+    .then(response => {
+      if (!response.ok) throw new Error(`Failed to load data.json (Status: ${response.status})`);
+      return response.json();
+    })
+    .then(data => {
+      if (data.about) {
+        titleElement.textContent = data.about.title;
+        contentElement.textContent = data.about.content;
+        imageElement.src = data.about.profileImage;
 
-      aboutSection.classList.add('loaded');
-    } else {
-      throw new Error('About data not found in data.json');
-    }
-  })
-  .catch(error => {
-    console.error('Error loading about data:', error);
-    if (aboutSection) {
+        // Remove "loading..." once loaded
+        aboutSection.classList.add('loaded');
+      } else {
+        throw new Error('Missing "about" object in data.json');
+      }
+    })
+    .catch(error => {
+      console.error('Error loading about data:', error);
       aboutSection.innerHTML = `
-        <div style="background: #ffe6e6; color: darkred; padding: 15px; border-radius: 10px;">
-          <h2>Unable to load profile</h2>
-          <p>${error.message}</p>
-          <p>Ensure <strong>data/data.json</strong> and <strong>images/profile.jpg</strong> exist.</p>
-        </div>
+        <h1 style="color: darkred;">Unable to load profile</h1>
+        <p>${error.message}</p>
+        <p>Ensure <strong>data/data.json</strong> exists and contains valid JSON.</p>
       `;
-    }
-  });
+    });
+});
