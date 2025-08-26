@@ -187,22 +187,22 @@
     <input type="date" name="dob" required>
 
     <label>Phone No.:</label>
-    <input type="tel" name="phone" required>
+    <input type="tel" name="phone" pattern="^[0-9]{11}$" title="Enter valid 11-digit phone number" required>
 
     <label>Email Address:</label>
     <input type="email" name="email" required>
 
     <label>Password:</label>
-    <input type="password" name="password" id="password" required>
+    <input type="password" name="password" id="password" minlength="8" required>
 
     <label>Confirm Password:</label>
     <input type="password" name="confirm_password" id="confirm_password" required>
 
     <label>NIN:</label>
-    <input type="text" name="nin" required>
+    <input type="text" name="nin" pattern="^[0-9]{11}$" title="NIN must be exactly 11 digits" required>
 
     <label>Voter's Card No.:</label>
-    <input type="text" name="voter_card" required>
+    <input type="text" name="voter_card" pattern="^[A-Za-z0-9]{10,12}$" title="Enter valid Voter's Card Number" required>
 
     <label>Home Address:</label>
     <textarea name="address" rows="3" required></textarea>
