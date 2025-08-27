@@ -86,15 +86,15 @@ document.getElementById('registerForm').addEventListener('submit', async functio
         bctx.fillStyle = "#fff";
         bctx.fillRect(0, 0, cardWidth, cardHeight);
 
-        // Barcode
-        bctx.drawImage(barcodeCanvas, 20, 20, 200, 60);
-
         // Disclaimer
         bctx.fillStyle = "#000";
         bctx.font = "8pt Arial";
         bctx.fillText("Always verify the credentials whenever this ID is presented,", 10, 110);
         bctx.fillText("ensuring the details on the front of the card perfectly", 10, 125);
         bctx.fillText("match the verification results.", 10, 140);
+
+         // Barcode
+        bctx.drawImage(barcodeCanvas, 20, 20, 200, 60);
 
         // Add back card to PDF
         pdf.text("BACK", marginX + cardWidth + 60, 30);
