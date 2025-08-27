@@ -4,163 +4,155 @@
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <title>Register</title>
-  <link rel="stylesheet" href="assets/css/styles.css">
   <style>
-    body, html {
+    body {
+      font-family: Arial, sans-serif;
+      background: #f4f4f9;
       margin: 0;
       padding: 0;
-      height: 100%;
-      font-family: 'Segoe UI', sans-serif;
     }
 
-    .home {
-      background: url('images/Chairman.jpg') no-repeat center center/cover;
-      min-height: 100vh;
-      display: flex;
-      flex-direction: column;
+    .container {
+      max-width: 600px;
+      margin: 40px auto;
+      background: white;
+      padding: 20px;
+      border-radius: 10px;
+      box-shadow: 0 0 10px rgba(0,0,0,0.1);
     }
 
-    .header, .footer {
-      background: rgba(0,0,0,0.7);
-      color: white;
+    h2 {
       text-align: center;
-      padding: 15px;
+      color: #333;
     }
 
-    .header .logo { font-size: 22px; font-weight: bold; }
-
-    .nav a { color: white; margin: 0 10px; text-decoration: none; }
-    .nav a:hover { text-decoration: underline; }
-
-    main { flex: 1; display: flex; justify-content: center; align-items: center; padding: 20px; }
-
-    .registration-form {
-      width: 95%;
-      max-width: 800px;
-      background: rgba(255,255,255,0.95);
-      padding: 30px;
-      border-radius: 12px;
-      box-shadow: 0 4px 16px rgba(0,0,0,0.2);
+    label {
+      display: block;
+      margin-top: 15px;
+      color: #000;
+      font-weight: bold;
     }
 
-    .registration-form h1 { text-align: center; margin-bottom: 20px; color: #006400; }
-    .registration-form label { display: block; font-weight: bold; margin: 10px 0 5px; }
-    .registration-form input,
-    .registration-form select,
-    .registration-form textarea { width: 100%; padding: 12px; margin-bottom: 15px; border: 1px solid #ccc; border-radius: 6px; font-size: 15px; }
+    input, select, button {
+      width: 100%;
+      padding: 10px;
+      margin-top: 5px;
+      border: 1px solid #ccc;
+      border-radius: 5px;
+    }
 
-    .form-actions { display: flex; justify-content: center; margin-top: 10px; }
-    .form-actions button { background: #006400; color: white; font-weight: bold; padding: 12px 20px; border: none; border-radius: 8px; cursor: pointer; transition: background 0.3s ease; }
-    .form-actions button:hover { background: #004d00; }
+    .btn-register {
+      background: green;
+      color: white;
+      font-size: 16px;
+      margin-top: 20px;
+      cursor: pointer;
+    }
 
-    .login-link { text-align: center; margin-top: 8px; }
-    .login-link a { font-size: 14px; color: #006400; text-decoration: none; }
-    .login-link a:hover { text-decoration: underline; }
+    .btn-register:hover {
+      background: darkgreen;
+    }
 
-    .modal { display: none; position: fixed; z-index: 1000; left: 0; top: 0; width: 100%; height: 100%; background: rgba(0,0,0,0.7); display: flex; align-items: center; justify-content: center; }
-    .modal-content { background: #fff; padding: 30px; border-radius: 12px; text-align: center; max-width: 400px; width: 90%; box-shadow: 0 4px 16px rgba(0,0,0,0.3); animation: fadeIn 0.3s ease-in-out; }
-    .checkmark { font-size: 60px; color: #28a745; margin-bottom: 15px; }
-    .close-btn { background: #006400; color: #fff; padding: 10px 20px; border: none; border-radius: 6px; cursor: pointer; font-weight: bold; }
-    .close-btn:hover { background: #004d00; }
+    .btn-login {
+      display: block;
+      text-align: center;
+      margin-top: 10px;
+      font-size: 14px;
+      color: blue;
+      text-decoration: underline;
+      cursor: pointer;
+    }
 
-    @keyframes fadeIn { from {opacity: 0; transform: scale(0.9);} to {opacity: 1; transform: scale(1);} }
+    .modal {
+      display: none;
+      position: fixed;
+      z-index: 999;
+      left: 0;
+      top: 0;
+      width: 100%;
+      height: 100%;
+      background: rgba(0,0,0,0.6);
+      justify-content: center;
+      align-items: center;
+    }
+
+    .modal-content {
+      background: white;
+      padding: 20px;
+      border-radius: 10px;
+      text-align: center;
+      max-width: 400px;
+    }
+
+    .btn-download {
+      background: green;
+      color: white;
+      padding: 10px;
+      margin-top: 10px;
+      border: none;
+      cursor: pointer;
+      border-radius: 5px;
+    }
   </style>
 </head>
 <body>
-<header class="header">
-  <div class="logo">Hon-Isyaku-Bawa-Na-abi-2025<span>.com</span></div>
-  <nav class="nav">
-    <a href="index.html">Home</a>
-    <a href="login.html">Login</a>
-    <a href="about.html">About</a>
-    <a href="contact.html">Contact</a>
-  </nav>
-</header>
 
-<main class="home">
-  <form class="registration-form" id="regForm" enctype="multipart/form-data">
-    <h1>Registration</h1>
-    <label>First Name:</label>
+<div class="container">
+  <h2>Register</h2>
+  <form id="regForm">
+    <label>First Name</label>
     <input type="text" name="first_name" required>
 
-    <label>Middle Name (Optional):</label>
-    <input type="text" name="middle_name">
-
-    <label>Last Name:</label>
+    <label>Last Name</label>
     <input type="text" name="last_name" required>
 
-    <label>Date of Birth:</label>
-    <input type="date" name="dob" required>
-
-    <label>Phone No.:</label>
-    <input type="tel" name="phone" required>
-
-    <label>Email Address:</label>
-    <input type="email" name="email" required>
-
-    <label>Password:</label>
-    <input type="password" name="password" id="password" required>
-
-    <label>Confirm Password:</label>
-    <input type="password" name="confirm_password" id="confirm_password" required>
-
-    <label>NIN:</label>
-    <input type="text" name="nin" id="nin" required>
-
-    <label>Voter's Card No.:</label>
-    <input type="text" name="voter_card" required>
-
-    <label>Home Address:</label>
-    <textarea name="address" rows="3" required></textarea>
-
-    <label>Ward:</label>
-    <input type="text" name="ward" id="ward" required>
-
-    <label>State of Origin:</label>
-    <select id="state" name="state" required>
+    <label>State</label>
+    <select name="state" id="state" required>
       <option value="">--Select State--</option>
-      <option value="niger">Niger State</option>
+      <option value="niger">Niger</option>
+      <option value="kaduna">Kaduna</option>
     </select>
 
-    <label>L.G.A:</label>
-    <select id="lga" name="lga" required>
+    <label>L.G.A</label>
+    <select name="lga" id="lga" required>
       <option value="">--Select L.G.A--</option>
     </select>
 
-    <label>Upload Passport Photo:</label>
-    <input type="file" name="passport" id="passport" accept="image/*" required>
+    <label>Ward</label>
+    <input type="text" name="ward" required>
 
-    <label>Upload L.G.A Certificate:</label>
-    <input type="file" name="lga_doc" accept="image/*,application/pdf" required>
+    <label>NIN</label>
+    <input type="text" name="nin" id="nin" required>
 
-    <label>Upload Voter's Card:</label>
-    <input type="file" name="voter_doc" accept="image/*,application/pdf" required>
+    <label>Passport Photo</label>
+    <input type="file" name="passport" accept="image/*" required>
 
-    <label>Upload NIN Slip:</label>
-    <input type="file" name="nin_doc" accept="image/*,application/pdf" required>
+    <label>L.G.A Certificate</label>
+    <input type="file" name="lga_cert" accept="image/*,application/pdf" required>
 
-    <label>Upload Qualification Certificate:</label>
-    <input type="file" name="qualification_doc" accept="image/*,application/pdf" required>
+    <label>Voter's Card</label>
+    <input type="file" name="voters_card" accept="image/*,application/pdf" required>
 
-    <div class="form-actions">
-      <button type="submit">Register</button>
-    </div>
-    <div class="login-link">
-      <a href="login.html">Already have an account? Login</a>
-    </div>
+    <label>Qualification Certificate</label>
+    <input type="file" name="qualification" accept="image/*,application/pdf" required>
+
+    <label>Password</label>
+    <input type="password" id="password" required>
+
+    <label>Confirm Password</label>
+    <input type="password" id="confirm_password" required>
+
+    <button type="submit" class="btn-register">Register</button>
+    <span class="btn-login">Login</span>
   </form>
-</main>
+</div>
 
-<footer class="footer">
-  <p>&copy; 2025</p>
-</footer>
-
+<!-- Success Modal -->
 <div id="successModal" class="modal">
   <div class="modal-content">
-    <div class="checkmark">✔</div>
-    <h2>Registration Successful!</h2>
-    <p>Your details have been recorded successfully.</p>
-    <button class="close-btn" id="downloadPDP">Download PDP</button>
+    <h3>Registration Successful!</h3>
+    <p>Your registration has been saved.</p>
+    <button id="downloadPDP" class="btn-download">Download PDP</button>
   </div>
 </div>
 
@@ -172,6 +164,7 @@
   const modal = document.getElementById("successModal");
   const downloadPDP = document.getElementById("downloadPDP");
 
+  // Populate LGA dynamically
   stateSelect.addEventListener("change", () => {
     lgaSelect.innerHTML = '<option value="">--Select L.G.A--</option>';
     if (stateSelect.value === "niger") {
@@ -184,7 +177,13 @@
     }
   });
 
-  regForm.addEventListener("submit", async function(event) {
+  // Prevent auto-submit on refresh
+  if (window.history.replaceState) {
+    window.history.replaceState(null, null, window.location.href);
+  }
+
+  // Handle form submission
+  regForm.addEventListener("submit", function(event) {
     event.preventDefault();
 
     const password = document.getElementById("password").value;
@@ -197,6 +196,7 @@
     modal.style.display = "flex";
   });
 
+  // Generate styled PDF with watermark & layout
   downloadPDP.addEventListener("click", async function() {
     const { jsPDF } = window.jspdf;
     const doc = new jsPDF();
@@ -210,43 +210,58 @@
     const uniqueId = "2353" + nin.slice(-4);
 
     const passportFile = regForm.passport.files[0];
-    let passportDataUrl = "";
     if (passportFile) {
       const reader = new FileReader();
-      reader.onload = function(e) {
-        passportDataUrl = e.target.result;
-        generatePDF(passportDataUrl);
-      }
+      reader.onload = e => generatePDF(e.target.result);
       reader.readAsDataURL(passportFile);
     } else {
       generatePDF();
     }
 
     function generatePDF(passportImg) {
-      // Watermark
+      // Background watermark
       doc.setFontSize(60);
-      doc.setTextColor(200, 200, 200);
-      doc.text("HON-ISYAKU-BAWA", 20, 150, { angle: 45 });
+      doc.setTextColor(230, 230, 230);
+      doc.text("HON-ISYAKU-BAWA", 30, 150, { angle: 45 });
 
-      doc.setTextColor(0,0,0);
-      doc.setFontSize(16);
-      doc.text(`Name: ${firstName} ${lastName}`, 20, 30);
-      doc.text(`State: ${state}`, 20, 45);
-      doc.text(`L.G.A: ${lga}`, 20, 60);
-      doc.text(`Ward: ${ward}`, 20, 75);
-      doc.text(`Unique ID: ${uniqueId}`, 20, 90);
+      // Header
+      doc.setFillColor(0, 100, 0);
+      doc.rect(0, 0, 210, 20, "F");
+      doc.setTextColor(255, 255, 255);
+      doc.setFontSize(18);
+      doc.text("REGISTRATION CONFIRMATION", 105, 13, { align: "center" });
 
-      if(passportImg) {
-        doc.addImage(passportImg, "JPEG", 140, 20, 50, 50);
+      // Profile Box
+      if (passportImg) {
+        doc.addImage(passportImg, "JPEG", 160, 30, 30, 30);
       }
 
+      // Details Section
+      doc.setTextColor(0, 0, 0);
+      doc.setFontSize(14);
+      doc.setDrawColor(0);
+      doc.rect(15, 30, 130, 70);
+      doc.text(`Full Name: ${firstName} ${lastName}`, 20, 45);
+      doc.text(`State: ${state}`, 20, 55);
+      doc.text(`L.G.A: ${lga}`, 20, 65);
+      doc.text(`Ward: ${ward}`, 20, 75);
+      doc.text(`Unique ID: ${uniqueId}`, 20, 85);
+
+      // Footer
+      doc.setFontSize(12);
+      doc.text("This certificate confirms successful registration.", 105, 115, { align: "center" });
+
+      // Save PDF
       doc.save(`${firstName}_${uniqueId}.pdf`);
+
+      // Close modal and reset form
       modal.style.display = "none";
       regForm.reset();
     }
   });
 
-  window.onclick = function(event) {
+  // Close modal on background click
+  window.onclick = event => {
     if (event.target === modal) modal.style.display = "none";
   };
 </script>
