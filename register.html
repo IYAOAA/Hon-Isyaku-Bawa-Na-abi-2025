@@ -15,6 +15,7 @@
       flex-direction: column;
       color: #222;
     }
+
     .header {
       background: rgba(43, 61, 52, 0.95);
       display: flex;
@@ -25,6 +26,7 @@
       font-size: 1.2rem;
       font-weight: bold;
     }
+
     .header nav a {
       color: #fff;
       text-decoration: none;
@@ -32,32 +34,81 @@
       font-size: 1rem;
       transition: color 0.3s ease;
     }
-    .header nav a:hover { color: #ffd700; }
+
+    .header nav a:hover {
+      color: #ffd700;
+    }
+
     .form-container {
-      flex: 1; max-width: 550px; margin: 40px auto; padding: 25px;
+      flex: 1;
+      max-width: 550px;
+      margin: 40px auto;
+      padding: 25px;
       background: rgba(255, 255, 255, 0.97);
-      border-radius: 15px; box-shadow: 0 5px 12px rgba(0, 0, 0, 0.3);
+      border-radius: 15px;
+      box-shadow: 0 5px 12px rgba(0, 0, 0, 0.3);
     }
+
     .form-container h1 {
-      text-align: center; margin-bottom: 20px; color: #2b3d34; font-size: 1.8rem;
+      text-align: center;
+      margin-bottom: 20px;
+      color: #2b3d34;
+      font-size: 1.8rem;
     }
+
     form label {
-      font-size: 1rem; font-weight: bold; margin-top: 10px; display: block; color: #111;
+      font-size: 1rem;
+      font-weight: bold;
+      margin-top: 10px;
+      display: block;
+      color: #111;
     }
+
     form input, form select, form button {
-      width: 100%; padding: 12px; margin-top: 5px; font-size: 1rem;
-      border: 1px solid #999; border-radius: 8px; background-color: #f8f8f8;
+      width: 100%;
+      padding: 12px;
+      margin-top: 5px;
+      font-size: 1rem;
+      border: 1px solid #999;
+      border-radius: 8px;
+      background-color: #f8f8f8;
     }
-    form input:focus, form select:focus { outline: none; border-color: #2b3d34; background-color: #fff; }
+
+    form input:focus, form select:focus {
+      outline: none;
+      border-color: #2b3d34;
+      background-color: #fff;
+    }
+
     form button {
-      margin-top: 15px; background: #2b3d34; color: #fff; font-weight: bold;
-      cursor: pointer; border: none; transition: background 0.3s ease; font-size: 1.1rem;
+      margin-top: 15px;
+      background: #2b3d34;
+      color: #fff;
+      font-weight: bold;
+      cursor: pointer;
+      border: none;
+      transition: background 0.3s ease;
+      font-size: 1.1rem;
     }
-    form button:hover { background: #1e2a23; }
-    #status { text-align: center; font-weight: bold; margin-top: 15px; font-size: 1.1rem; color: green; }
+
+    form button:hover {
+      background: #1e2a23;
+    }
+
+    #status {
+      text-align: center;
+      font-weight: bold;
+      margin-top: 15px;
+      font-size: 1.1rem;
+      color: green;
+    }
+
     .footer {
-      text-align: center; padding: 10px; background: rgba(43, 61, 52, 0.95);
-      color: #fff; font-size: 0.9rem;
+      text-align: center;
+      padding: 10px;
+      background: rgba(43, 61, 52, 0.95);
+      color: #fff;
+      font-size: 0.9rem;
     }
   </style>
 </head>
@@ -99,18 +150,6 @@
       <label>Upload Passport Photo</label>
       <input type="file" name="passport" id="passport" accept="image/*" required>
 
-      <label>Upload L.G.A Certificate</label>
-      <input type="file" name="lga_cert" accept="image/*,application/pdf" required>
-
-      <label>Upload Voter's Card</label>
-      <input type="file" name="voter_card" accept="image/*,application/pdf" required>
-
-      <label>Upload NIN Slip</label>
-      <input type="file" name="nin_slip" accept="image/*,application/pdf" required>
-
-      <label>Upload Qualification Certificate</label>
-      <input type="file" name="qualification" accept="image/*,application/pdf" required>
-
       <button type="submit">Register</button>
     </form>
     <div id="status"></div>
@@ -120,11 +159,8 @@
     <p>&copy; 2025 Hon-Isyaku-Bawa-Na-abi | Built with purpose by Y. A. Ibrahim</p>
   </footer>
 
-  <!-- libs (order matters) -->
   <script src="https://cdnjs.cloudflare.com/ajax/libs/jspdf/2.5.1/jspdf.umd.min.js"></script>
-  <script src="https://cdn.jsdelivr.net/npm/jsbarcode@3.11.6/dist/JsBarcode.all.min.js"></script>
-
-  <!-- your logic -->
+  <script src="https://cdn.jsdelivr.net/npm/bwip-js@3.0.9/dist/bwip-js.min.js"></script>
   <script src="assets/js/register.js"></script>
 </body>
 </html>
