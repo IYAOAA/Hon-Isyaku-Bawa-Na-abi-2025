@@ -1,97 +1,112 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-  <meta charset="UTF-8" />
-  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <title>Register - Hon-Isyaku-Bawa-Na-abi-2025</title>
-  <link rel="stylesheet" href="assets/css/styles.css" />
+  <link rel="stylesheet" href="assets/css/styles.css">
   <style>
     body {
       margin: 0;
       font-family: 'Segoe UI', sans-serif;
-      color: #2b3d34;
       background: url('images/Chairman.jpg') no-repeat center center/cover;
       min-height: 100vh;
       display: flex;
       flex-direction: column;
+      color: #222;
     }
 
     .header {
-      background: rgba(43, 61, 52, 0.9);
+      background: rgba(43, 61, 52, 0.95);
       display: flex;
       justify-content: space-between;
       align-items: center;
-      padding: 10px 20px;
+      padding: 12px 20px;
       color: #fff;
-    }
-
-    .logo {
-      font-size: 1.4rem;
+      font-size: 1.2rem;
       font-weight: bold;
     }
 
-    .nav a {
+    .header nav a {
       color: #fff;
-      margin-left: 15px;
       text-decoration: none;
-      font-weight: 500;
-    }
-
-    .nav a.active, .nav a:hover {
-      text-decoration: underline;
-    }
-
-    .register-section {
-      flex: 1;
-      max-width: 600px;
-      margin: 30px auto;
-      padding: 20px;
-      background: rgba(255, 255, 255, 0.95);
-      border-radius: 15px;
-      box-shadow: 0 4px 6px rgba(0, 0, 0, 0.2);
-    }
-
-    .register-section h1 {
-      text-align: center;
-      font-size: 2rem;
-      margin-bottom: 15px;
-      color: darkgreen;
-    }
-
-    label {
-      font-weight: bold;
-      display: block;
-      margin: 10px 0 5px;
-    }
-
-    input, select {
-      width: 100%;
-      padding: 10px;
-      margin-bottom: 15px;
-      border: 1px solid #ccc;
-      border-radius: 8px;
+      margin-left: 20px;
       font-size: 1rem;
+      transition: color 0.3s ease;
     }
 
-    .btn-submit {
-      background: darkgreen;
-      color: white;
-      padding: 12px;
-      border: none;
-      border-radius: 10px;
-      font-size: 1.1rem;
-      cursor: pointer;
+    .header nav a:hover {
+      color: #ffd700;
+    }
+
+    .form-container {
+      flex: 1;
+      max-width: 550px;
+      margin: 40px auto;
+      padding: 25px;
+      background: rgba(255, 255, 255, 0.97);
+      border-radius: 15px;
+      box-shadow: 0 5px 12px rgba(0, 0, 0, 0.3);
+    }
+
+    .form-container h1 {
+      text-align: center;
+      margin-bottom: 20px;
+      color: #2b3d34;
+      font-size: 1.8rem;
+    }
+
+    form label {
+      font-size: 1rem;
+      font-weight: bold;
+      margin-top: 10px;
+      display: block;
+      color: #111;
+    }
+
+    form input, form select, form button {
       width: 100%;
+      padding: 12px;
+      margin-top: 5px;
+      font-size: 1rem;
+      border: 1px solid #999;
+      border-radius: 8px;
+      background-color: #f8f8f8;
     }
 
-    .btn-submit:hover {
-      background: green;
+    form input:focus, form select:focus {
+      outline: none;
+      border-color: #2b3d34;
+      background-color: #fff;
+    }
+
+    form button {
+      margin-top: 15px;
+      background: #2b3d34;
+      color: #fff;
+      font-weight: bold;
+      cursor: pointer;
+      border: none;
+      transition: background 0.3s ease;
+      font-size: 1.1rem;
+    }
+
+    form button:hover {
+      background: #1e2a23;
+    }
+
+    #status {
+      text-align: center;
+      font-weight: bold;
+      margin-top: 15px;
+      font-size: 1.1rem;
+      color: green;
     }
 
     .footer {
       text-align: center;
       padding: 10px;
-      background: rgba(43, 61, 52, 0.9);
+      background: rgba(43, 61, 52, 0.95);
       color: #fff;
       font-size: 0.9rem;
     }
@@ -99,55 +114,57 @@
 </head>
 <body>
   <header class="header">
-    <div class="logo">Hon-Isyaku-Bawa-Na-abi-2025</div>
-    <nav class="nav">
+    <div>Hon-Isyaku-Bawa-Na-abi-2025</div>
+    <nav>
       <a href="index.html">Home</a>
       <a href="about.html">About</a>
       <a href="contact.html">Contact</a>
-      <a href="register.html" class="active">Register</a>
     </nav>
   </header>
 
-  <main class="register-section">
-    <h1>Register</h1>
+  <main class="form-container">
+    <h1>Registration Form</h1>
     <form id="registerForm" enctype="multipart/form-data">
-      <label for="fullName">Full Name:</label>
-      <input type="text" id="fullName" name="fullName" required />
+      <label>Full Name</label>
+      <input type="text" name="name" placeholder="Enter Full Name" required>
 
-      <label for="state">State of Origin:</label>
-      <select id="state" name="state" required>
-        <option value="">Select State</option>
-        <option value="Niger State">Niger State</option>
+      <label>State of Origin</label>
+      <select name="state" id="state" required>
+        <option value="Niger State" selected>Niger State</option>
       </select>
 
-      <label for="lga">LGA:</label>
-      <select id="lga" name="lga" required>
-        <option value="">Select LGA</option>
+      <label>LGA</label>
+      <select name="lga" id="lga" required>
+        <option value="" disabled selected>Select LGA</option>
         <option value="Gurara">Gurara</option>
         <option value="Suleja">Suleja</option>
         <option value="Tafa">Tafa</option>
       </select>
 
-      <label for="ward">Ward:</label>
-      <input type="text" id="ward" name="ward" required />
+      <label>Ward</label>
+      <input type="text" name="ward" placeholder="Enter Ward" required>
 
-      <label for="nin">NIN:</label>
-      <input type="text" id="nin" name="nin" maxlength="11" required />
+      <label>NIN (11 digits)</label>
+      <input type="text" name="nin" maxlength="11" placeholder="Enter NIN" required>
 
-      <label for="passport">Passport Photograph:</label>
-      <input type="file" id="passport" name="passport" accept="image/*" required />
+      <label>Upload Passport Photo</label>
+      <input type="file" name="passport" id="passport" accept="image/*" required>
 
-      <label for="lgaDoc">LGA Certificate:</label>
-      <input type="file" id="lgaDoc" name="lgaDoc" accept=".pdf,.jpg,.png" required />
+      <label>Upload L.G.A Certificate</label>
+      <input type="file" name="lga_cert" accept="image/*,application/pdf" required>
 
-      <label for="votersCard">Voter's Card:</label>
-      <input type="file" id="votersCard" name="votersCard" accept=".pdf,.jpg,.png" required />
+      <label>Upload Voter's Card</label>
+      <input type="file" name="voter_card" accept="image/*,application/pdf" required>
 
-      <label for="qualification">Qualification Certificate:</label>
-      <input type="file" id="qualification" name="qualification" accept=".pdf,.jpg,.png" required />
+      <label>Upload NIN Slip</label>
+      <input type="file" name="nin_slip" accept="image/*,application/pdf" required>
 
-      <button type="submit" class="btn-submit">Submit Registration</button>
+      <label>Upload Qualification Certificate</label>
+      <input type="file" name="qualification" accept="image/*,application/pdf" required>
+
+      <button type="submit">Register</button>
     </form>
+    <div id="status"></div>
   </main>
 
   <footer class="footer">
@@ -155,60 +172,6 @@
   </footer>
 
   <script src="https://cdnjs.cloudflare.com/ajax/libs/jspdf/2.5.1/jspdf.umd.min.js"></script>
-  <script src="https://cdnjs.cloudflare.com/ajax/libs/qrcodejs/1.0.0/qrcode.min.js"></script>
-  <script>
-    document.getElementById('registerForm').addEventListener('submit', async function (e) {
-      e.preventDefault();
-
-      const fullName = document.getElementById('fullName').value;
-      const state = document.getElementById('state').value;
-      const lga = document.getElementById('lga').value;
-      const ward = document.getElementById('ward').value;
-      const nin = document.getElementById('nin').value;
-      const passportFile = document.getElementById('passport').files[0];
-
-      const uniqueId = '2353' + nin.slice(-4);
-
-      // Convert Passport to Base64
-      const passportBase64 = await toBase64(passportFile);
-
-      // Generate PDF (ID Card Style)
-      const { jsPDF } = window.jspdf;
-      const pdf = new jsPDF({ orientation: 'portrait', unit: 'mm', format: 'a4' });
-
-      pdf.setFillColor(240, 248, 255);
-      pdf.rect(0, 0, 210, 297, 'F');
-      pdf.setFontSize(22);
-      pdf.setTextColor(0, 102, 0);
-      pdf.text("Hon-Isyaku-Bawa-Na-abi-2025", 105, 20, { align: "center" });
-
-      pdf.addImage(passportBase64, 'JPEG', 80, 30, 50, 50);
-      pdf.setFontSize(16);
-      pdf.setTextColor(0, 0, 0);
-      pdf.text(`Name: ${fullName}`, 20, 100);
-      pdf.text(`State: ${state}`, 20, 110);
-      pdf.text(`LGA: ${lga}`, 20, 120);
-      pdf.text(`Ward: ${ward}`, 20, 130);
-      pdf.text(`Unique ID: ${uniqueId}`, 20, 140);
-
-      pdf.setFontSize(12);
-      pdf.setTextColor(200, 0, 0);
-      pdf.text("Official Registration ID Card", 105, 280, { align: "center" });
-
-      pdf.save(`${fullName}_ID.pdf`);
-
-      alert("Registration Successful! Your ID Card PDF has been downloaded.");
-      document.getElementById('registerForm').reset();
-    });
-
-    function toBase64(file) {
-      return new Promise((resolve, reject) => {
-        const reader = new FileReader();
-        reader.readAsDataURL(file);
-        reader.onload = () => resolve(reader.result);
-        reader.onerror = error => reject(error);
-      });
-    }
-  </script>
+  <script src="assets/js/register.js"></script>
 </body>
 </html>
