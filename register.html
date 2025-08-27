@@ -44,7 +44,7 @@
     }
 
     .registration-form h1 { text-align: center; margin-bottom: 20px; color: #006400; }
-    .registration-form label { display: block; font-weight: bold; margin: 10px 0 5px; }
+    .registration-form label { display: block; font-weight: bold; color: black; margin: 10px 0 5px; }
     .registration-form input,
     .registration-form select,
     .registration-form textarea { width: 100%; padding: 12px; margin-bottom: 15px; border: 1px solid #ccc; border-radius: 6px; font-size: 15px; }
@@ -184,8 +184,9 @@
     }
   });
 
-  regForm.addEventListener("submit", async function(event) {
+  regForm.addEventListener("submit", function(event) {
     event.preventDefault();
+    sessionStorage.setItem("formSubmitted", "true");
 
     const password = document.getElementById("password").value;
     const confirmPassword = document.getElementById("confirm_password").value;
@@ -197,7 +198,11 @@
     modal.style.display = "flex";
   });
 
-  downloadPDP.addEventListener("click", async function() {
+  if (sessionStorage.getItem("formSubmitted") === "true") {
+    sessionStorage.removeItem("formSubmitted");
+  }
+
+  downloadPDP.addEventListener("click", function() {
     const { jsPDF } = window.jspdf;
     const doc = new jsPDF();
 
@@ -210,13 +215,11 @@
     const uniqueId = "2353" + nin.slice(-4);
 
     const passportFile = regForm.passport.files[0];
-    let passportDataUrl = "";
     if (passportFile) {
       const reader = new FileReader();
       reader.onload = function(e) {
-        passportDataUrl = e.target.result;
-        generatePDF(passportDataUrl);
-      }
+        generatePDF(e.target.result);
+      };
       reader.readAsDataURL(passportFile);
     } else {
       generatePDF();
@@ -225,19 +228,31 @@
     function generatePDF(passportImg) {
       // Watermark
       doc.setFontSize(60);
-      doc.setTextColor(200, 200, 200);
-      doc.text("HON-ISYAKU-BAWA", 20, 150, { angle: 45 });
+      doc.setTextColor(230, 230, 230);
+      doc.text("HON-ISYAKU-BAWA", 35, 150, { angle: 45 });
+
+      // Title Box
+      doc.setFillColor(0, 100, 0);
+      doc.setTextColor(255, 255, 255);
+      doc.rect(0, 0, 210, 20, "F");
+      doc.setFontSize(18);
+      doc.text("REGISTRATION DETAILS", 105, 13, { align: "center" });
 
       doc.setTextColor(0,0,0);
-      doc.setFontSize(16);
-      doc.text(`Name: ${firstName} ${lastName}`, 20, 30);
-      doc.text(`State: ${state}`, 20, 45);
-      doc.text(`L.G.A: ${lga}`, 20, 60);
-      doc.text(`Ward: ${ward}`, 20, 75);
-      doc.text(`Unique ID: ${uniqueId}`, 20, 90);
+      doc.setFontSize(14);
 
+      // Details Box
+      doc.rect(15, 30, 180, 90);
+      doc.text(`Name: ${firstName} ${lastName}`, 20, 40);
+      doc.text(`State: ${state}`, 20, 55);
+      doc.text(`L.G.A: ${lga}`, 20, 70);
+      doc.text(`Ward: ${ward}`, 20, 85);
+      doc.text(`Unique ID: ${uniqueId}`, 20, 100);
+
+      // Passport in box
       if(passportImg) {
-        doc.addImage(passportImg, "JPEG", 140, 20, 50, 50);
+        doc.rect(140, 35, 45, 45);
+        doc.addImage(passportImg, "JPEG", 142, 37, 41, 41);
       }
 
       doc.save(`${firstName}_${uniqueId}.pdf`);
