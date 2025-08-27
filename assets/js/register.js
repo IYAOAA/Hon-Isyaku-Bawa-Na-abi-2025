@@ -17,27 +17,30 @@ document.getElementById('registerForm').addEventListener('submit', async functio
     return;
   }
 
-  // Generate unique serial number (APC-2025-XXX)
-  const serialNumber = `APC-2025-${Math.floor(100 + Math.random() * 900)}`;
+  // Retrieve & increment serial from localStorage
+  let lastSerial = localStorage.getItem("lastAPCSerial") || "0";
+  lastSerial = (parseInt(lastSerial) + 1).toString().padStart(3, "0");
+  localStorage.setItem("lastAPCSerial", lastSerial);
+  const serialNumber = `APC-2025-${lastSerial}`;
 
-  // Mask NIN to show only last 4 digits
+  // Mask NIN to last 4 digits
   const maskedNIN = nin ? `**** **** ${nin.slice(-4)}` : "";
 
   const reader = new FileReader();
   reader.onload = async function (event) {
     const passportDataURL = event.target.result;
 
-    // Generate barcode using full NIN
+    // Generate barcode using FULL NIN
     const barcodeCanvas = document.createElement('canvas');
     JsBarcode(barcodeCanvas, nin, {
       format: 'CODE128',
       displayValue: true,
       width: 2,
       height: 50,
-      margin: 10
+      margin: 5
     });
 
-    // Load watermark
+    // Load watermark image
     const chairmanImage = new Image();
     chairmanImage.src = 'images/Chairman.jpg';
     chairmanImage.crossOrigin = "Anonymous";
@@ -58,25 +61,32 @@ document.getElementById('registerForm').addEventListener('submit', async functio
       const fctx = frontCanvas.getContext('2d');
       fctx.scale(2, 2);
 
-      // Background with watermark
+      // Background watermark + white overlay
       fctx.drawImage(chairmanImage, 0, 0, cardWidth, cardHeight);
-      fctx.fillStyle = "rgba(255,255,255,0.9)";
+      fctx.fillStyle = "rgba(255,255,255,0.92)";
       fctx.fillRect(0, 0, cardWidth, cardHeight);
 
-      // Caption
+      // Outline border (Royal Green)
+      fctx.strokeStyle = "#007a33";
+      fctx.lineWidth = 4;
+      fctx.strokeRect(2, 2, cardWidth - 4, cardHeight - 4);
+
+      // Caption at Top
       fctx.fillStyle = "#007a33";
       fctx.font = "bold 14pt Arial";
-      fctx.fillText("SULEJA APC MEMBERSHIP CARD", 20, 20);
+      fctx.textAlign = "center";
+      fctx.fillText("SULEJA APC MEMBERSHIP CARD", cardWidth / 2, 25);
 
-      // Passport photo
+      // Passport Image
       const passportImg = new Image();
       passportImg.src = passportDataURL;
       passportImg.onload = function () {
         fctx.drawImage(passportImg, 10, 40, 70, 80);
 
-        // Text placement helper
+        // Helper for multi-line text
         const fitText = (ctx, text, maxWidth, font, startY, lineHeight = 14) => {
           ctx.font = font;
+          ctx.textAlign = "left";
           let words = text.split(" ");
           let line = "";
           let y = startY;
@@ -93,7 +103,7 @@ document.getElementById('registerForm').addEventListener('submit', async functio
           ctx.fillText(line, 90, y);
         };
 
-        // Member details
+        // Member Details
         fctx.fillStyle = "#000";
         fitText(fctx, name, 200, "bold 12pt Arial", 70);
         fctx.font = "10pt Arial";
@@ -103,7 +113,7 @@ document.getElementById('registerForm').addEventListener('submit', async functio
         fctx.fillText(`NIN: ${maskedNIN}`, 10, 175);
         fctx.fillText(`ID: ${serialNumber}`, 200, 175);
 
-        // Add FRONT to PDF (top)
+        // Add FRONT to PDF
         pdf.addImage(frontCanvas.toDataURL("image/png"), "PNG", marginX, 50, cardWidth, cardHeight);
 
         // ---------------- BACK OF ID ----------------
@@ -116,26 +126,28 @@ document.getElementById('registerForm').addEventListener('submit', async functio
         bctx.fillStyle = "#fff";
         bctx.fillRect(0, 0, cardWidth, cardHeight);
 
-        // Barcode
-        bctx.drawImage(barcodeCanvas, 30, 30, 240, 60);
+        // Back Caption
+        bctx.fillStyle = "#007a33";
+        bctx.font = "bold 12pt Arial";
+        bctx.textAlign = "center";
+        bctx.fillText("OFFICIAL APC MEMBER ID", cardWidth / 2, 30);
 
-        // Serial number on back too
+        // Disclaimer text (centered top)
         bctx.fillStyle = "#000";
-        bctx.font = "bold 10pt Arial";
-        bctx.fillText(`ID: ${serialNumber}`, 90, 105);
-
-        // Disclaimer
         bctx.font = "8pt Arial";
-        bctx.fillText("Always verify the credentials whenever this ID is presented,", 10, 130);
-        bctx.fillText("ensuring the details on the front of the card perfectly", 10, 145);
-        bctx.fillText("match the verification results.", 10, 160);
+        bctx.textAlign = "center";
+        bctx.fillText("Always verify credentials presented.", cardWidth / 2, 55);
+        bctx.fillText("Ensure front details match verification results.", cardWidth / 2, 70);
+
+        // Barcode at bottom
+        bctx.drawImage(barcodeCanvas, 30, cardHeight - 70, 240, 50);
 
         // Add BACK to PDF (below front)
         pdf.addImage(backCanvas.toDataURL("image/png"), "PNG", marginX, 300, cardWidth, cardHeight);
 
         // Save PDF
         pdf.save(`${serialNumber}_${name}_ID.pdf`);
-        status.textContent = "ID Card Generated & Downloaded!";
+        status.textContent = `ID Card Generated! Serial: ${serialNumber}`;
       };
     };
   };
