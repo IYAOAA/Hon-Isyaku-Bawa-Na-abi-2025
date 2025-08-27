@@ -1,89 +1,97 @@
-document.getElementById('registerForm').addEventListener('submit', async function(e) {
-  e.preventDefault();
+document.getElementById('registerForm').addEventListener('submit', async function (e) {
+    e.preventDefault();
 
-  const formData = new FormData(this);
-  const name = formData.get('name');
-  const state = formData.get('state');
-  const lga = formData.get('lga');
-  const ward = formData.get('ward');
-  const nin = formData.get('nin');
-  const passportFile = formData.get('passport');
+    const statusDiv = document.getElementById('status');
+    statusDiv.style.color = 'green';
+    statusDiv.innerText = 'Registration Successful! Generating ID...';
 
-  const uniqueId = Math.floor(1000 + Math.random() * 9000) + '-' + nin.slice(-4);
+    const name = this.name.value;
+    const nin = this.nin.value;
+    const lga = this.lga.value;
+    const ward = this.ward.value;
 
-  // Display success message
-  document.getElementById('status').innerText = "Registration Successful! Generating ID...";
+    const passportFile = document.getElementById('passport').files[0];
+    const passportBase64 = await fileToBase64(passportFile);
 
-  // Load jsPDF and barcode library
-  const { jsPDF } = window.jspdf;
+    // Load Chairman background
+    const chairmanImg = await loadImage('images/Chairman.jpg');
 
-  // Convert passport to Base64
-  const passportBase64 = await fileToBase64(passportFile);
+    // Create Barcode as Base64
+    const barcodeCanvas = document.createElement('canvas');
+    bwipjs.toCanvas(barcodeCanvas, {
+        bcid: 'code128',
+        text: nin,
+        scale: 3,
+        height: 10,
+        includetext: true,
+        textxalign: 'center',
+    });
+    const barcodeBase64 = barcodeCanvas.toDataURL('image/png');
 
-  // Create PDF
-  const pdf = new jsPDF({ orientation: 'portrait', unit: 'mm', format: 'a4' });
+    // Generate PDF (A4)
+    const { jsPDF } = window.jspdf;
+    const pdf = new jsPDF({ orientation: 'portrait', unit: 'mm', format: 'a4' });
 
-  // Add watermark background (Chairman.jpg)
-  const backgroundImg = 'images/Chairman.jpg';
-  const backgroundBase64 = await imageToBase64(backgroundImg);
-  pdf.addImage(backgroundBase64, 'JPEG', 0, 0, 210, 297); // full A4 background
+    const pageWidth = pdf.internal.pageSize.getWidth();
+    const pageHeight = pdf.internal.pageSize.getHeight();
 
-  // Draw ID card box (centered)
-  pdf.setFillColor(255, 255, 255);
-  pdf.roundedRect(40, 60, 130, 80, 5, 5, 'F');
+    // Draw background full page
+    pdf.addImage(chairmanImg, 'JPEG', 0, 0, pageWidth, pageHeight);
 
-  // Applicant passport photo
-  pdf.addImage(passportBase64, 'JPEG', 45, 65, 30, 30);
+    // ID Card Container on A4 (Centered)
+    const cardX = 35, cardY = 50, cardW = 140, cardH = 85;
+    pdf.setFillColor(255, 255, 255);
+    pdf.roundedRect(cardX, cardY, cardW, cardH, 5, 5, 'F');
 
-  // Applicant details
-  pdf.setFontSize(14);
-  pdf.setTextColor(0, 0, 0);
-  pdf.text(`Name: ${name}`, 80, 75);
-  pdf.text(`State: ${state}`, 80, 85);
-  pdf.text(`LGA: ${lga}`, 80, 95);
-  pdf.text(`Ward: ${ward}`, 80, 105);
-  pdf.text(`NIN: ****${nin.slice(-4)}`, 80, 115);
-  pdf.text(`ID: ${uniqueId}`, 80, 125);
+    // Header Title
+    pdf.setFontSize(16);
+    pdf.setTextColor(0, 102, 204);
+    pdf.text('Hon-Isyaku-Bawa-Na-abi-2025', pageWidth / 2, cardY + 10, { align: 'center' });
 
-  // Generate barcode
-  const barcodeBase64 = await generateBarcode(uniqueId);
-  pdf.addImage(barcodeBase64, 'PNG', 70, 135, 70, 20);
+    // Passport Image on Card
+    if (passportBase64) pdf.addImage(passportBase64, 'JPEG', cardX + 5, cardY + 20, 30, 30);
 
-  // Save PDF
-  pdf.save(`${name}_ID_Card.pdf`);
+    // Details on Card
+    pdf.setFontSize(12);
+    pdf.setTextColor(0, 0, 0);
+    pdf.text(`Name: ${name}`, cardX + 45, cardY + 25);
+    pdf.text(`NIN: ${nin}`, cardX + 45, cardY + 35);
+    pdf.text(`LGA: ${lga}`, cardX + 45, cardY + 45);
+    pdf.text(`Ward: ${ward}`, cardX + 45, cardY + 55);
 
-  document.getElementById('status').innerText = "Your ID Card is ready!";
+    // Barcode
+    pdf.addImage(barcodeBase64, 'PNG', cardX + 45, cardY + 60, 80, 15);
+
+    // Download File
+    pdf.save(`${name}_ID.pdf`);
+
+    statusDiv.innerText = 'ID Generated and Downloaded!';
 });
 
-// Convert file to Base64
+// Convert File to Base64
 function fileToBase64(file) {
-  return new Promise((resolve, reject) => {
-    const reader = new FileReader();
-    reader.readAsDataURL(file);
-    reader.onload = () => resolve(reader.result);
-    reader.onerror = error => reject(error);
-  });
-}
-
-// Convert image to Base64 (for watermark)
-async function imageToBase64(url) {
-  const response = await fetch(url);
-  const blob = await response.blob();
-  return await fileToBase64(blob);
-}
-
-// Generate barcode using bwip-js
-async function generateBarcode(data) {
-  return new Promise((resolve) => {
-    const canvas = document.createElement('canvas');
-    const bwipjs = window.bwipjs;
-    bwipjs.toCanvas(canvas, {
-      bcid: 'code128',
-      text: data,
-      scale: 3,
-      height: 10,
-      includetext: true
+    return new Promise((resolve, reject) => {
+        const reader = new FileReader();
+        reader.onload = () => resolve(reader.result);
+        reader.onerror = reject;
+        reader.readAsDataURL(file);
     });
-    resolve(canvas.toDataURL('image/png'));
-  });
+}
+
+// Load Image As Base64
+function loadImage(url) {
+    return new Promise((resolve, reject) => {
+        const img = new Image();
+        img.crossOrigin = 'anonymous';
+        img.src = url;
+        img.onload = () => {
+            const canvas = document.createElement('canvas');
+            canvas.width = img.width;
+            canvas.height = img.height;
+            const ctx = canvas.getContext('2d');
+            ctx.drawImage(img, 0, 0);
+            resolve(canvas.toDataURL('image/jpeg'));
+        };
+        img.onerror = reject;
+    });
 }
