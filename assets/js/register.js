@@ -60,7 +60,7 @@ document.getElementById('registerForm').addEventListener('submit', async functio
       // Caption
       fctx.fillStyle = "#007a33";
       fctx.font = "bold 14pt Arial";
-      fctx.fillText("SULEJA APC MEMBERSHIP CARD", 20, 20);
+      fctx.fillText("SULEJA MEMBERSHIP CARD", 20, 20);
 
       // Passport
       const passportImg = new Image();
