@@ -17,12 +17,11 @@ document.getElementById('registerForm').addEventListener('submit', async functio
     return;
   }
 
-  // Read passport image
   const reader = new FileReader();
   reader.onload = async function (event) {
     const passportDataURL = event.target.result;
 
-    // Prepare canvas for barcode
+    // Generate barcode
     const barcodeCanvas = document.createElement('canvas');
     JsBarcode(barcodeCanvas, nin, {
       format: 'CODE128',
@@ -32,7 +31,7 @@ document.getElementById('registerForm').addEventListener('submit', async functio
       margin: 10
     });
 
-    // Load Chairman.jpg as watermark for front
+    // Load Chairman watermark
     const chairmanImage = new Image();
     chairmanImage.src = 'images/Chairman.jpg';
     chairmanImage.crossOrigin = "Anonymous";
@@ -42,63 +41,85 @@ document.getElementById('registerForm').addEventListener('submit', async functio
       const pdf = new jsPDF({ orientation: "portrait", unit: "pt", format: "a4" });
 
       const pageWidth = pdf.internal.pageSize.getWidth();
-      const marginX = 40;
-      const cardWidth = 250;
-      const cardHeight = 160;
+      const marginX = 100;
+      const cardWidth = 300;
+      const cardHeight = 190;
 
-      // ------------------ FRONT OF ID CARD ------------------
+      // ---------------- FRONT OF ID ----------------
       const frontCanvas = document.createElement('canvas');
-      frontCanvas.width = cardWidth;
-      frontCanvas.height = cardHeight;
+      frontCanvas.width = cardWidth * 2; // Higher resolution
+      frontCanvas.height = cardHeight * 2;
       const fctx = frontCanvas.getContext('2d');
+      fctx.scale(2, 2);
 
-      // Background with Chairman.jpg watermark
+      // Background with watermark
       fctx.drawImage(chairmanImage, 0, 0, cardWidth, cardHeight);
-      fctx.fillStyle = "rgba(255,255,255,0.85)";
+      fctx.fillStyle = "rgba(255,255,255,0.9)";
       fctx.fillRect(0, 0, cardWidth, cardHeight);
 
-      // Passport photo
+      // Caption
+      fctx.fillStyle = "#007a33";
+      fctx.font = "bold 14pt Arial";
+      fctx.fillText("SULEJA APC MEMBERSHIP CARD", 20, 20);
+
+      // Passport
       const passportImg = new Image();
       passportImg.src = passportDataURL;
       passportImg.onload = function () {
-        fctx.drawImage(passportImg, 10, 10, 60, 70);
+        fctx.drawImage(passportImg, 10, 40, 70, 80);
+
+        // Fit text dynamically
+        const fitText = (ctx, text, maxWidth, font, startY, lineHeight = 14) => {
+          ctx.font = font;
+          let words = text.split(" ");
+          let line = "";
+          let y = startY;
+          for (let n = 0; n < words.length; n++) {
+            let testLine = line + words[n] + " ";
+            if (ctx.measureText(testLine).width > maxWidth && n > 0) {
+              ctx.fillText(line, 90, y);
+              line = words[n] + " ";
+              y += lineHeight;
+            } else {
+              line = testLine;
+            }
+          }
+          ctx.fillText(line, 90, y);
+        };
 
         fctx.fillStyle = "#000";
-        fctx.font = "bold 12pt Arial";
-        fctx.fillText(name, 80, 30);
+        fitText(fctx, name, 200, "bold 12pt Arial", 70);
         fctx.font = "10pt Arial";
-        fctx.fillText(`State: ${state}`, 80, 50);
-        fctx.fillText(`LGA: ${lga}`, 80, 70);
-        fctx.fillText(`Ward: ${ward}`, 80, 90);
-        fctx.fillText(`NIN: ${nin}`, 10, 140);
+        fctx.fillText(`State: ${state}`, 90, 110);
+        fctx.fillText(`LGA: ${lga}`, 90, 130);
+        fctx.fillText(`Ward: ${ward}`, 90, 150);
+        fctx.fillText(`NIN: ${nin}`, 10, 175);
 
-        // Add front card to PDF
-        pdf.text("FRONT", marginX, 30);
+        // Add FRONT to PDF (top)
         pdf.addImage(frontCanvas.toDataURL("image/png"), "PNG", marginX, 50, cardWidth, cardHeight);
 
-        // ------------------ BACK OF ID CARD ------------------
+        // ---------------- BACK OF ID ----------------
         const backCanvas = document.createElement('canvas');
-        backCanvas.width = cardWidth;
-        backCanvas.height = cardHeight;
+        backCanvas.width = cardWidth * 2;
+        backCanvas.height = cardHeight * 2;
         const bctx = backCanvas.getContext('2d');
+        bctx.scale(2, 2);
 
-        // White background
         bctx.fillStyle = "#fff";
         bctx.fillRect(0, 0, cardWidth, cardHeight);
+
+        // Barcode
+        bctx.drawImage(barcodeCanvas, 30, 30, 240, 60);
 
         // Disclaimer
         bctx.fillStyle = "#000";
         bctx.font = "8pt Arial";
-        bctx.fillText("Always verify the credentials whenever this ID is presented,", 10, 110);
-        bctx.fillText("ensuring the details on the front of the card perfectly", 10, 125);
-        bctx.fillText("match the verification results.", 10, 140);
+        bctx.fillText("Always verify the credentials whenever this ID is presented,", 10, 120);
+        bctx.fillText("ensuring the details on the front of the card perfectly", 10, 135);
+        bctx.fillText("match the verification results.", 10, 150);
 
-         // Barcode
-        bctx.drawImage(barcodeCanvas, 20, 20, 200, 60);
-
-        // Add back card to PDF
-        pdf.text("BACK", marginX + cardWidth + 60, 30);
-        pdf.addImage(backCanvas.toDataURL("image/png"), "PNG", marginX + cardWidth + 60, 50, cardWidth, cardHeight);
+        // Add BACK to PDF (below)
+        pdf.addImage(backCanvas.toDataURL("image/png"), "PNG", marginX, 300, cardWidth, cardHeight);
 
         // Save PDF
         pdf.save(`${name}_ID.pdf`);
