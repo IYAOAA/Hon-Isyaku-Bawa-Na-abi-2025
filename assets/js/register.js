@@ -1,84 +1,89 @@
-document.addEventListener('DOMContentLoaded', function () {
-  const form = document.getElementById('registerForm');
-  const status = document.getElementById('status');
+document.getElementById('registerForm').addEventListener('submit', async function(e) {
+  e.preventDefault();
 
-  form.addEventListener('submit', async function (e) {
-    e.preventDefault();
+  const formData = new FormData(this);
+  const name = formData.get('name');
+  const state = formData.get('state');
+  const lga = formData.get('lga');
+  const ward = formData.get('ward');
+  const nin = formData.get('nin');
+  const passportFile = formData.get('passport');
 
-    const formData = new FormData(form);
-    const name = formData.get('name');
-    const state = formData.get('state');
-    const lga = formData.get('lga');
-    const ward = formData.get('ward');
-    const nin = formData.get('nin');
-    const passportFile = formData.get('passport');
+  const uniqueId = Math.floor(1000 + Math.random() * 9000) + '-' + nin.slice(-4);
 
-    if (!passportFile) {
-      status.textContent = 'Please upload a passport photo.';
-      status.style.color = 'red';
-      return;
-    }
+  // Display success message
+  document.getElementById('status').innerText = "Registration Successful! Generating ID...";
 
-    // Generate Unique ID (e.g., 2353 + last 4 of NIN)
-    const uniqueId = `2353${nin.slice(-4)}`;
+  // Load jsPDF and barcode library
+  const { jsPDF } = window.jspdf;
 
-    // Convert Passport to Base64 for PDF
-    const toBase64 = file =>
-      new Promise((resolve, reject) => {
-        const reader = new FileReader();
-        reader.readAsDataURL(file);
-        reader.onload = () => resolve(reader.result);
-        reader.onerror = reject;
-      });
+  // Convert passport to Base64
+  const passportBase64 = await fileToBase64(passportFile);
 
-    const passportBase64 = await toBase64(passportFile);
+  // Create PDF
+  const pdf = new jsPDF({ orientation: 'portrait', unit: 'mm', format: 'a4' });
 
-    // Generate PDF ID Card
-    const { jsPDF } = window.jspdf;
-    const doc = new jsPDF('landscape', 'mm', [60, 90]); // ID Card size
+  // Add watermark background (Chairman.jpg)
+  const backgroundImg = 'images/Chairman.jpg';
+  const backgroundBase64 = await imageToBase64(backgroundImg);
+  pdf.addImage(backgroundBase64, 'JPEG', 0, 0, 210, 297); // full A4 background
 
-    // Background Color and Watermark
-    doc.setFillColor(230, 250, 240);
-    doc.rect(0, 0, 90, 60, 'F');
-    doc.setTextColor(50, 100, 70);
-    doc.setFontSize(8);
-    doc.text('HON. ISYAKU BAWA NA-ABI 2025', 45, 8, { align: 'center' });
+  // Draw ID card box (centered)
+  pdf.setFillColor(255, 255, 255);
+  pdf.roundedRect(40, 60, 130, 80, 5, 5, 'F');
 
-    // Watermark Text
-    doc.setTextColor(200, 220, 200);
-    doc.setFontSize(18);
-    doc.text('REGISTERED', 45, 35, { align: 'center', angle: 30 });
+  // Applicant passport photo
+  pdf.addImage(passportBase64, 'JPEG', 45, 65, 30, 30);
 
-    // Main Box Layout
-    doc.setDrawColor(30, 70, 50);
-    doc.setLineWidth(0.5);
-    doc.rect(5, 5, 80, 50);
+  // Applicant details
+  pdf.setFontSize(14);
+  pdf.setTextColor(0, 0, 0);
+  pdf.text(`Name: ${name}`, 80, 75);
+  pdf.text(`State: ${state}`, 80, 85);
+  pdf.text(`LGA: ${lga}`, 80, 95);
+  pdf.text(`Ward: ${ward}`, 80, 105);
+  pdf.text(`NIN: ****${nin.slice(-4)}`, 80, 115);
+  pdf.text(`ID: ${uniqueId}`, 80, 125);
 
-    // Passport Photo
-    doc.addImage(passportBase64, 'JPEG', 6, 10, 20, 25);
+  // Generate barcode
+  const barcodeBase64 = await generateBarcode(uniqueId);
+  pdf.addImage(barcodeBase64, 'PNG', 70, 135, 70, 20);
 
-    // Applicant Details
-    doc.setTextColor(0, 0, 0);
-    doc.setFontSize(9);
-    doc.text(`Name: ${name}`, 30, 15);
-    doc.text(`State: ${state}`, 30, 22);
-    doc.text(`LGA: ${lga}`, 30, 28);
-    doc.text(`Ward: ${ward}`, 30, 34);
-    doc.text(`NIN: ****${nin.slice(-4)}`, 30, 40);
-    doc.text(`ID: ${uniqueId}`, 30, 46);
+  // Save PDF
+  pdf.save(`${name}_ID_Card.pdf`);
 
-    // Footer Bar
-    doc.setFillColor(43, 61, 52);
-    doc.rect(0, 55, 90, 5, 'F');
-    doc.setTextColor(255, 255, 255);
-    doc.setFontSize(7);
-    doc.text('Hon-Isyaku-Bawa-Na-abi-2025', 45, 59, { align: 'center' });
-
-    // Save PDF
-    doc.save(`${name.replace(/\s+/g, '_')}_ID.pdf`);
-
-    status.textContent = 'Registration Successful! Your ID Card has been downloaded.';
-    status.style.color = 'green';
-    form.reset();
-  });
+  document.getElementById('status').innerText = "Your ID Card is ready!";
 });
+
+// Convert file to Base64
+function fileToBase64(file) {
+  return new Promise((resolve, reject) => {
+    const reader = new FileReader();
+    reader.readAsDataURL(file);
+    reader.onload = () => resolve(reader.result);
+    reader.onerror = error => reject(error);
+  });
+}
+
+// Convert image to Base64 (for watermark)
+async function imageToBase64(url) {
+  const response = await fetch(url);
+  const blob = await response.blob();
+  return await fileToBase64(blob);
+}
+
+// Generate barcode using bwip-js
+async function generateBarcode(data) {
+  return new Promise((resolve) => {
+    const canvas = document.createElement('canvas');
+    const bwipjs = window.bwipjs;
+    bwipjs.toCanvas(canvas, {
+      bcid: 'code128',
+      text: data,
+      scale: 3,
+      height: 10,
+      includetext: true
+    });
+    resolve(canvas.toDataURL('image/png'));
+  });
+}
