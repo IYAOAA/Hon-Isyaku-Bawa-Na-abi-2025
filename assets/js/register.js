@@ -76,7 +76,6 @@ document.getElementById('registerForm').addEventListener('submit', async functio
       fctx.font = "bold 14pt Arial";
       fctx.textAlign = "center";
       fctx.fillText("SULEJA APC MEMBERSHIP CARD", cardWidth / 2, 25);
-       fctx.fillText("SULEJA NIGER STATE", cardWidth / 2, 25);
 
       // Passport Image
       const passportImg = new Image();
