@@ -95,7 +95,7 @@ document.getElementById('registerForm').addEventListener('submit', async functio
 
       // Caption
       fctx.fillStyle = "#007a33";
-      fctx.font = "bold 14pt Arial";
+      fctx.font = "bold 12pt Arial";
       fctx.textAlign = "center";
       fctx.fillText("SULEJA APC MEMBERSHIP CARD", cardWidth / 2, 25);
 
