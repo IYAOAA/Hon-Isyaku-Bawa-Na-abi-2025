@@ -134,7 +134,7 @@ document.getElementById('registerForm').addEventListener('submit', async functio
         fctx.fillText(`Ward: ${ward}`, 90, 140);
         fctx.fillText(`DOB: ${dob}`, 90, 155);
         fctx.fillText(`NIN: ${maskedNIN}`, 10, 175);
-        fctx.fillText(`ID: ${serialNumber}`, 100, 175);
+        fctx.fillText(`ID: ${serialNumber}`, 175, 175);
 
         pdf.addImage(frontCanvas.toDataURL("image/png"), "PNG", marginX, 50, cardWidth, cardHeight);
 
