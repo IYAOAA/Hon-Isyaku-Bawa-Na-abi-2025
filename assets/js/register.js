@@ -2,7 +2,7 @@ document.getElementById('registerForm').addEventListener('submit', async functio
   e.preventDefault();
 
   const status = document.getElementById('status');
-  status.textContent = "Registration Successful! Generating ID…";
+  status.textContent = "Processing registration…";
 
   const formData = new FormData(this);
   const name = formData.get('name');
@@ -10,29 +10,51 @@ document.getElementById('registerForm').addEventListener('submit', async functio
   const lga = formData.get('lga');
   const ward = formData.get('ward');
   const nin = formData.get('nin');
+  const dob = formData.get('dob');
   const passportFile = formData.get('passport');
+  const docFile = formData.get('document');
 
+  // ===== Validation =====
   if (!passportFile) {
     status.textContent = "Passport photo is required!";
     return;
   }
 
-  // Retrieve & increment serial from localStorage
+  if (passportFile.type.startsWith("image/") && passportFile.size > 100 * 1024) {
+    status.textContent = "Passport photo must be ≤ 100KB!";
+    return;
+  }
+
+  if (docFile && docFile.type === "application/pdf" && docFile.size > 500 * 1024) {
+    status.textContent = "Uploaded PDF must be ≤ 500KB!";
+    return;
+  }
+
+  // Prevent duplicate NIN
+  let usedNINs = JSON.parse(localStorage.getItem("usedAPCNINs") || "[]");
+  if (usedNINs.includes(nin)) {
+    status.textContent = "This NIN has already been registered!";
+    return;
+  }
+  usedNINs.push(nin);
+  localStorage.setItem("usedAPCNINs", JSON.stringify(usedNINs));
+
+  // ===== Generate Serial =====
   let lastSerial = localStorage.getItem("lastAPCSerial") || "0";
   lastSerial = (parseInt(lastSerial) + 1).toString().padStart(3, "0");
   localStorage.setItem("lastAPCSerial", lastSerial);
   const serialNumber = `APC-2025-${lastSerial}`;
 
-  // Mask NIN to last 4 digits
+  // Mask NIN
   const maskedNIN = nin ? `**** **** ${nin.slice(-4)}` : "";
 
   const reader = new FileReader();
   reader.onload = async function (event) {
     const passportDataURL = event.target.result;
 
-    // Generate barcode using FULL NIN
+    // Generate barcode with SERIAL instead of NIN
     const barcodeCanvas = document.createElement('canvas');
-    JsBarcode(barcodeCanvas, nin, {
+    JsBarcode(barcodeCanvas, serialNumber, {
       format: 'CODE128',
       displayValue: true,
       width: 2,
@@ -54,36 +76,36 @@ document.getElementById('registerForm').addEventListener('submit', async functio
       const cardWidth = 300;
       const cardHeight = 190;
 
-      // ---------------- FRONT OF ID ----------------
+      // ---------------- FRONT ----------------
       const frontCanvas = document.createElement('canvas');
       frontCanvas.width = cardWidth * 2;
       frontCanvas.height = cardHeight * 2;
       const fctx = frontCanvas.getContext('2d');
       fctx.scale(2, 2);
 
-      // Background watermark + white overlay
+      // Watermark + white overlay
       fctx.drawImage(chairmanImage, 0, 0, cardWidth, cardHeight);
       fctx.fillStyle = "rgba(255,255,255,0.92)";
       fctx.fillRect(0, 0, cardWidth, cardHeight);
 
-      // Outline border (Royal Green)
+      // Border
       fctx.strokeStyle = "#007a33";
       fctx.lineWidth = 4;
       fctx.strokeRect(2, 2, cardWidth - 4, cardHeight - 4);
 
-      // Caption at Top
+      // Caption
       fctx.fillStyle = "#007a33";
       fctx.font = "bold 14pt Arial";
       fctx.textAlign = "center";
       fctx.fillText("SULEJA APC MEMBERSHIP CARD", cardWidth / 2, 25);
 
-      // Passport Image
+      // Passport
       const passportImg = new Image();
       passportImg.src = passportDataURL;
       passportImg.onload = function () {
         fctx.drawImage(passportImg, 10, 40, 70, 80);
 
-        // Helper for multi-line text
+        // Multi-line helper
         const fitText = (ctx, text, maxWidth, font, startY, lineHeight = 14) => {
           ctx.font = font;
           ctx.textAlign = "left";
@@ -103,20 +125,20 @@ document.getElementById('registerForm').addEventListener('submit', async functio
           ctx.fillText(line, 90, y);
         };
 
-        // Member Details
+        // Member details
         fctx.fillStyle = "#000";
         fitText(fctx, name, 200, "bold 12pt Arial", 70);
         fctx.font = "10pt Arial";
         fctx.fillText(`State: ${state}`, 90, 110);
-        fctx.fillText(`LGA: ${lga}`, 90, 130);
-        fctx.fillText(`Ward: ${ward}`, 90, 150);
+        fctx.fillText(`LGA: ${lga}`, 90, 125);
+        fctx.fillText(`Ward: ${ward}`, 90, 140);
+        fctx.fillText(`DOB: ${dob}`, 90, 155);
         fctx.fillText(`NIN: ${maskedNIN}`, 10, 175);
         fctx.fillText(`ID: ${serialNumber}`, 200, 175);
 
-        // Add FRONT to PDF
         pdf.addImage(frontCanvas.toDataURL("image/png"), "PNG", marginX, 50, cardWidth, cardHeight);
 
-        // ---------------- BACK OF ID ----------------
+        // ---------------- BACK ----------------
         const backCanvas = document.createElement('canvas');
         backCanvas.width = cardWidth * 2;
         backCanvas.height = cardHeight * 2;
@@ -126,28 +148,26 @@ document.getElementById('registerForm').addEventListener('submit', async functio
         bctx.fillStyle = "#fff";
         bctx.fillRect(0, 0, cardWidth, cardHeight);
 
-        // Back Caption
+        // Caption
         bctx.fillStyle = "#007a33";
         bctx.font = "bold 12pt Arial";
         bctx.textAlign = "center";
         bctx.fillText("OFFICIAL APC MEMBER ID", cardWidth / 2, 30);
 
-        // Disclaimer text (centered top)
+        // Disclaimer
         bctx.fillStyle = "#000";
         bctx.font = "8pt Arial";
-        bctx.textAlign = "center";
-        bctx.fillText("Always verify credentials presented.", cardWidth / 2, 55);
-        bctx.fillText("Ensure front details match verification results.", cardWidth / 2, 70);
+        bctx.fillText("Always verify credentials whenever this ID is presented.", cardWidth / 2, 55);
+        bctx.fillText("Ensure details on front match verification results.", cardWidth / 2, 70);
 
-        // Barcode at bottom
+        // Barcode (serial-based)
         bctx.drawImage(barcodeCanvas, 30, cardHeight - 70, 240, 50);
 
-        // Add BACK to PDF (below front)
         pdf.addImage(backCanvas.toDataURL("image/png"), "PNG", marginX, 300, cardWidth, cardHeight);
 
-        // Save PDF
+        // Save
         pdf.save(`${serialNumber}_${name}_ID.pdf`);
-        status.textContent = `ID Card Generated! Serial: ${serialNumber}`;
+        status.textContent = `Registration successful! ID: ${serialNumber}`;
       };
     };
   };
