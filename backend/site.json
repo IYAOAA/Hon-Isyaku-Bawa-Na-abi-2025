@@ -1,0 +1,11 @@
+{
+  "homepage": {
+    "title": "APC Suleja",
+    "slogan": "Progress, Unity, Service",
+    "intro": "Welcome to the official APC Suleja platform."
+  },
+  "pages": [
+    { "name": "About Us" }
+  ],
+  "gallery": []
+}

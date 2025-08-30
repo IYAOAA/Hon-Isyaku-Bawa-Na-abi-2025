@@ -57,13 +57,12 @@
       <p><span class="switch-link" onclick="showLogin()">Back to Login</span></p>
     </div>
 
-    <!-- RESET FORM -->
+    <!-- RESET PASSWORD FORM -->
     <div id="resetFormContainer" class="form-container" style="display:none;">
       <h2>Reset Password</h2>
       <form id="resetForm">
         <input type="email" id="resetEmail" placeholder="Enter your Email" required>
-        <input type="password" id="newPassword" placeholder="New Password" required>
-        <button type="submit">Reset</button>
+        <button type="submit">Send Reset Link</button>
       </form>
       <p><span class="switch-link" onclick="showLogin()">Back to Login</span></p>
     </div>
@@ -132,16 +131,15 @@ document.getElementById('createForm').addEventListener('submit', async function(
 // RESET PASSWORD
 document.getElementById('resetForm').addEventListener('submit', async function(e) {
   e.preventDefault();
-  const email = document.getElementById('resetEmail').value;
-  const newPassword = document.getElementById('newPassword').value;
+  const email = document.getElementById('resetEmail').value.trim();
 
   const response = await fetch(apiURL);
   const data = await response.json();
   const admin = data.admins.find(a => a.email === email);
+
   if (admin) {
-    admin.password = newPassword;
-    await fetch(apiURL, { method: 'POST', body: JSON.stringify(data) });
-    alert('Password Updated!');
+    // Placeholder - in real setup, send actual email
+    alert('A reset link has been sent to ' + email);
     showLogin();
   } else {
     alert('Email not found');
