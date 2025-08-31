@@ -49,7 +49,7 @@
     <div id="createFormContainer" class="form-container" style="display:none;">
       <h2>Create Admin</h2>
       <form id="createForm">
-        <input type="text" id="createName" placeholder="Name" required>
+        <input type="text" id="createUsername" placeholder="Username" required>
         <input type="email" id="createEmail" placeholder="Email" required>
         <input type="password" id="createPassword" placeholder="Password" required>
         <button type="submit">Create</button>
@@ -62,7 +62,8 @@
       <h2>Reset Password</h2>
       <form id="resetForm">
         <input type="email" id="resetEmail" placeholder="Enter your Email" required>
-        <button type="submit">Send Reset Link</button>
+        <input type="password" id="resetNewPassword" placeholder="New Password" required>
+        <button type="submit">Reset Password</button>
       </form>
       <p><span class="switch-link" onclick="showLogin()">Back to Login</span></p>
     </div>
@@ -87,22 +88,24 @@ function showReset() {
   document.getElementById('resetFormContainer').style.display = 'block';
 }
 
-const apiURL = '/.netlify/functions/admin';
-
 // LOGIN
 document.getElementById('loginForm').addEventListener('submit', async function(e) {
   e.preventDefault();
   const email = document.getElementById('loginEmail').value;
   const password = document.getElementById('loginPassword').value;
 
-  const response = await fetch(apiURL);
-  const data = await response.json();
+  const response = await fetch('/api/admins/login', {
+    method: 'POST',
+    headers: { 'Content-Type': 'application/json' },
+    body: JSON.stringify({ email, password })
+  });
 
-  const admin = data.admins.find(a => a.email === email && a.password === password);
-  if (admin) {
-    alert('Welcome ' + admin.name);
-    sessionStorage.setItem('adminName', admin.name);
-    window.location.href = "dashboard.html";
+  if (response.ok) {
+    const data = await response.json();
+    alert('Welcome ' + data.username);
+    sessionStorage.setItem('adminEmail', data.email);
+    sessionStorage.setItem('adminUsername', data.username);
+    window.location.href = "admindashboard.html";
   } else {
     alert('Invalid credentials');
   }
@@ -111,38 +114,43 @@ document.getElementById('loginForm').addEventListener('submit', async function(e
 // CREATE ACCOUNT
 document.getElementById('createForm').addEventListener('submit', async function(e) {
   e.preventDefault();
-  const name = document.getElementById('createName').value;
+  const username = document.getElementById('createUsername').value;
   const email = document.getElementById('createEmail').value;
   const password = document.getElementById('createPassword').value;
 
-  const response = await fetch(apiURL);
-  const data = await response.json();
-  data.admins.push({ name, email, password });
-
-  await fetch(apiURL, {
+  const response = await fetch('/api/admins/register', {
     method: 'POST',
-    body: JSON.stringify(data)
+    headers: { 'Content-Type': 'application/json' },
+    body: JSON.stringify({ username, email, password })
   });
 
-  alert('Admin Created!');
-  showLogin();
+  if (response.ok) {
+    alert('Admin Created!');
+    showLogin();
+  } else {
+    const err = await response.json();
+    alert(err.error || 'Failed to create admin');
+  }
 });
 
 // RESET PASSWORD
 document.getElementById('resetForm').addEventListener('submit', async function(e) {
   e.preventDefault();
   const email = document.getElementById('resetEmail').value.trim();
+  const newPassword = document.getElementById('resetNewPassword').value;
 
-  const response = await fetch(apiURL);
-  const data = await response.json();
-  const admin = data.admins.find(a => a.email === email);
+  const response = await fetch('/api/admins/reset', {
+    method: 'POST',
+    headers: { 'Content-Type': 'application/json' },
+    body: JSON.stringify({ username: email, newPassword }) // backend expects username, we’ll align by using email as username
+  });
 
-  if (admin) {
-    // Placeholder - in real setup, send actual email
-    alert('A reset link has been sent to ' + email);
+  if (response.ok) {
+    alert('Password reset successfully! Please login with your new password.');
     showLogin();
   } else {
-    alert('Email not found');
+    const err = await response.json();
+    alert(err.error || 'Failed to reset password');
   }
 });
 </script>

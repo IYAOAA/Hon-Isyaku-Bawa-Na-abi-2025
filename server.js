@@ -77,16 +77,16 @@ app.get('/api/admins', (req, res) => {
 
 // Register new admin
 app.post('/api/admins/register', (req, res) => {
-  const { username, password } = req.body;
+  const { username, email, password } = req.body;
   fs.readFile(ADMIN_FILE, 'utf8', (err, data) => {
     if (err) return res.status(500).json({ error: 'Failed to read admin data' });
 
     let admins = JSON.parse(data);
-    if (admins.find(a => a.username === username)) {
-      return res.status(400).json({ error: 'Username already exists' });
+    if (admins.find(a => a.username === username || a.email === email)) {
+      return res.status(400).json({ error: 'Username or Email already exists' });
     }
 
-    admins.push({ username, password });
+    admins.push({ username, email, password });
     fs.writeFile(ADMIN_FILE, JSON.stringify(admins, null, 2), (err) => {
       if (err) return res.status(500).json({ error: 'Failed to save admin' });
       res.json({ message: 'Admin registered successfully' });
@@ -96,33 +96,33 @@ app.post('/api/admins/register', (req, res) => {
 
 // Admin login
 app.post('/api/admins/login', (req, res) => {
-  const { username, password } = req.body;
+  const { email, password } = req.body;
   fs.readFile(ADMIN_FILE, 'utf8', (err, data) => {
     if (err) return res.status(500).json({ error: 'Failed to read admin data' });
 
     let admins = JSON.parse(data);
-    const admin = admins.find(a => a.username === username && a.password === password);
+    const admin = admins.find(a => a.email === email && a.password === password);
 
     if (admin) {
-      loggedInAdmins.add(username);
-      res.json({ message: 'Login successful', username });
+      loggedInAdmins.add(email);
+      res.json({ message: 'Login successful', email });
     } else {
       res.status(401).json({ error: 'Invalid credentials' });
     }
   });
 });
 
-// Reset password
+// Reset password (by email instead of username)
 app.post('/api/admins/reset', (req, res) => {
-  const { username, newPassword } = req.body;
+  const { email, newPassword } = req.body;
   fs.readFile(ADMIN_FILE, 'utf8', (err, data) => {
     if (err) return res.status(500).json({ error: 'Failed to read admin data' });
 
     let admins = JSON.parse(data);
-    const admin = admins.find(a => a.username === username);
+    const admin = admins.find(a => a.email === email);
 
     if (!admin) {
-      return res.status(404).json({ error: 'Username not found' });
+      return res.status(404).json({ error: 'Email not found' });
     }
 
     admin.password = newPassword;
@@ -135,15 +135,15 @@ app.post('/api/admins/reset', (req, res) => {
 
 // Logout route
 app.post('/api/admins/logout', (req, res) => {
-  const { username } = req.body;
-  loggedInAdmins.delete(username);
+  const { email } = req.body;
+  loggedInAdmins.delete(email);
   res.json({ message: 'Logged out successfully' });
 });
 
 // Check if logged in (for frontend to validate)
-app.get('/api/admins/check/:username', (req, res) => {
-  const { username } = req.params;
-  res.json({ loggedIn: loggedInAdmins.has(username) });
+app.get('/api/admins/check/:email', (req, res) => {
+  const { email } = req.params;
+  res.json({ loggedIn: loggedInAdmins.has(email) });
 });
 
 // ====== SITE CONTENT API ======
