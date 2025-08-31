@@ -3,22 +3,36 @@ const bodyParser = require('body-parser');
 const fs = require('fs');
 const cors = require('cors');
 const path = require('path');
+const session = require('express-session');
 
 const app = express();
-const PORT = 3000;
+const PORT = process.env.PORT || 3000;
 
 // Middleware
 app.use(bodyParser.json());
-app.use(cors());
-app.use(express.static(path.join(__dirname))); // Serve all frontend files
+app.use(cors({
+  origin: true,           // Allow your frontend domain (Netlify, etc.)
+  credentials: true       // Allow cookies
+}));
+
+// Session middleware (keeps user logged in)
+app.use(session({
+  secret: 'super-secret-key', // Change to a strong secret in production
+  resave: false,
+  saveUninitialized: false,
+  cookie: {
+    secure: false, // ❌ Set to true if you have HTTPS on Render
+    httpOnly: true,
+    maxAge: 1000 * 60 * 60 // 1 hour session
+  }
+}));
+
+app.use(express.static(path.join(__dirname))); // Serve frontend files
 
 // File paths
 const DATA_DIR = path.join(__dirname, 'data');
 const ADMIN_FILE = path.join(DATA_DIR, 'admin.json');
 const SITE_DATA_FILE = path.join(DATA_DIR, 'data.json');
-
-// Simple in-memory session (will reset when server restarts)
-let loggedInAdmins = new Set();
 
 // Ensure data folder and files exist
 if (!fs.existsSync(DATA_DIR)) fs.mkdirSync(DATA_DIR);
@@ -52,28 +66,15 @@ if (!fs.existsSync(SITE_DATA_FILE)) {
 app.get('/', (req, res) => {
   res.sendFile(path.join(__dirname, 'index.html'));
 });
-app.get('/admin', (req, res) => {
-  res.sendFile(path.join(__dirname, 'admin.html'));
-});
-app.get('/login', (req, res) => {
-  res.sendFile(path.join(__dirname, 'login.html'));
-});
-app.get('/dashboard', (req, res) => {
-  res.sendFile(path.join(__dirname, 'dashboard.html'));
-});
 app.get('/admindashboard', (req, res) => {
-  res.sendFile(path.join(__dirname, 'admindashboard.html'));
+  if (req.session.admin) {
+    res.sendFile(path.join(__dirname, 'admindashboard.html'));
+  } else {
+    res.redirect('/admin-login.html'); // force login
+  }
 });
 
 // ====== ADMIN MANAGEMENT API ======
-
-// Read admins
-app.get('/api/admins', (req, res) => {
-  fs.readFile(ADMIN_FILE, 'utf8', (err, data) => {
-    if (err) return res.status(500).json({ error: 'Failed to read admin data' });
-    res.json(JSON.parse(data));
-  });
-});
 
 // Register new admin
 app.post('/api/admins/register', (req, res) => {
@@ -104,46 +105,28 @@ app.post('/api/admins/login', (req, res) => {
     const admin = admins.find(a => a.email === email && a.password === password);
 
     if (admin) {
-      loggedInAdmins.add(email);
-      res.json({ message: 'Login successful', email });
+      req.session.admin = { email: admin.email, username: admin.username };
+      res.json({ message: 'Login successful', email: admin.email });
     } else {
       res.status(401).json({ error: 'Invalid credentials' });
     }
   });
 });
 
-// Reset password (by email instead of username)
-app.post('/api/admins/reset', (req, res) => {
-  const { email, newPassword } = req.body;
-  fs.readFile(ADMIN_FILE, 'utf8', (err, data) => {
-    if (err) return res.status(500).json({ error: 'Failed to read admin data' });
-
-    let admins = JSON.parse(data);
-    const admin = admins.find(a => a.email === email);
-
-    if (!admin) {
-      return res.status(404).json({ error: 'Email not found' });
-    }
-
-    admin.password = newPassword;
-    fs.writeFile(ADMIN_FILE, JSON.stringify(admins, null, 2), (err) => {
-      if (err) return res.status(500).json({ error: 'Failed to reset password' });
-      res.json({ message: 'Password reset successfully' });
-    });
-  });
+// Check if logged in
+app.get('/api/admins/check', (req, res) => {
+  if (req.session.admin) {
+    res.json({ loggedIn: true, admin: req.session.admin });
+  } else {
+    res.json({ loggedIn: false });
+  }
 });
 
-// Logout route
+// Logout
 app.post('/api/admins/logout', (req, res) => {
-  const { email } = req.body;
-  loggedInAdmins.delete(email);
-  res.json({ message: 'Logged out successfully' });
-});
-
-// Check if logged in (for frontend to validate)
-app.get('/api/admins/check/:email', (req, res) => {
-  const { email } = req.params;
-  res.json({ loggedIn: loggedInAdmins.has(email) });
+  req.session.destroy(() => {
+    res.json({ message: 'Logged out successfully' });
+  });
 });
 
 // ====== SITE CONTENT API ======
@@ -156,8 +139,11 @@ app.get('/api/site', (req, res) => {
   });
 });
 
-// Update site data (from admin panel)
+// Update site data (only if logged in)
 app.post('/api/site', (req, res) => {
+  if (!req.session.admin) {
+    return res.status(401).json({ error: 'Unauthorized' });
+  }
   fs.writeFile(SITE_DATA_FILE, JSON.stringify(req.body, null, 2), (err) => {
     if (err) return res.status(500).json({ error: 'Failed to save site data' });
     res.json({ message: 'Site data updated successfully' });
