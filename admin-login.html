@@ -95,18 +95,6 @@ const resetForm = document.getElementById("resetForm");
 const formTitle = document.getElementById("formTitle");
 const messageBox = document.getElementById("message");
 
-// Redirect if already logged in
-async function checkLoggedIn() {
-  try {
-    const res = await fetch(`${API_URL}/api/admins/check`, { credentials: 'include' });
-    const data = await res.json();
-    if (data.loggedIn) {
-      window.location.href = "admindash.html";
-    }
-  } catch {}
-}
-checkLoggedIn();
-
 function showMessage(msg, isError = true) {
   messageBox.textContent = msg;
   messageBox.style.color = isError ? "red" : "green";
@@ -124,6 +112,18 @@ function showForm(form) {
   messageBox.textContent = "";
 }
 
+// ✅ Check if admin is already logged in
+async function checkLoggedIn() {
+  try {
+    const res = await fetch(`${API_URL}/api/admins/check`, { credentials: 'include' });
+    const data = await res.json();
+    if (data.loggedIn) window.location.href = "admindash.html";
+  } catch (err) {
+    console.error(err);
+  }
+}
+checkLoggedIn();
+
 // ✅ Login
 loginForm.addEventListener("submit", async (e) => {
   e.preventDefault();
@@ -134,14 +134,13 @@ loginForm.addEventListener("submit", async (e) => {
     const res = await fetch(`${API_URL}/api/admins/login`, {
       method: "POST",
       headers: { "Content-Type": "application/json" },
-      credentials: 'include', // Include session cookie
+      credentials: 'include',
       body: JSON.stringify({ email, password })
     });
     const data = await res.json();
-
     if (res.ok) {
       showMessage("Login successful!", false);
-      setTimeout(() => window.location.href = "admindash.html", 300); // short delay to ensure cookie
+      setTimeout(() => window.location.href = "admindash.html", 200); // Ensure session is saved
     } else {
       showMessage(data.error || "Invalid email or password");
     }
@@ -164,7 +163,6 @@ registerForm.addEventListener("submit", async (e) => {
       body: JSON.stringify({ username, email, password })
     });
     const data = await res.json();
-
     if (res.ok) {
       showMessage("Account created successfully!", false);
       showForm("login");
@@ -189,7 +187,6 @@ resetForm.addEventListener("submit", async (e) => {
       body: JSON.stringify({ email, newPassword })
     });
     const data = await res.json();
-
     if (res.ok) {
       showMessage("Password reset successfully!", false);
       showForm("login");
