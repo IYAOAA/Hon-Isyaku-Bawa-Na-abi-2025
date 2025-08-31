@@ -71,37 +71,26 @@
 
   <!-- Main Content -->
   <div class="main">
-    <!-- Dashboard Section -->
     <div id="dashboard" class="section active">
       <h1>Welcome to the Magic Room ✨</h1>
       <p>Select a section from the left menu to begin controlling your website.</p>
     </div>
-
-    <!-- Index Control Section -->
     <div id="indexControl" class="section">
       <h1>Index Control</h1>
       <p>Manage homepage content: Add/Remove pages, update gallery, edit texts.</p>
     </div>
-
-    <!-- Register Control Section -->
     <div id="registerControl" class="section">
       <h1>Register Control</h1>
       <p>Switch between Membership, Scholarship, Empowerment, Grant, Loan forms.</p>
     </div>
-
-    <!-- Applicants Section -->
     <div id="applicants" class="section">
       <h1>Applicants</h1>
       <p>View and export applicants' data here.</p>
     </div>
-
-    <!-- Admin Management Section -->
     <div id="adminManagement" class="section">
       <h1>Admin Management</h1>
       <p>Add or remove admins, reset passwords.</p>
     </div>
-
-    <!-- Settings Section -->
     <div id="settings" class="section">
       <h1>Settings</h1>
       <p>Update site-wide settings like colors, contact info, and footer text.</p>
@@ -109,25 +98,38 @@
   </div>
 
   <script>
-    // ✅ Check if admin is logged in
-    document.addEventListener("DOMContentLoaded", () => {
-      const isLoggedIn = sessionStorage.getItem("isAdminLoggedIn");
-      if (!isLoggedIn) {
-        // If not logged in, redirect to login
+    const API_URL = "https://hon-isyaku-bawa-na-abi-2025.onrender.com";
+
+    // ✅ Check if admin is logged in on page load
+    document.addEventListener("DOMContentLoaded", async () => {
+      try {
+        const res = await fetch(`${API_URL}/api/admins/check`, { credentials: 'include' });
+        const data = await res.json();
+        if (!data.loggedIn) {
+          window.location.href = "admin-login.html"; // Redirect if not logged in
+        }
+      } catch (err) {
+        console.error(err);
         window.location.href = "admin-login.html";
       }
     });
 
     function showSection(id) {
-      document.querySelectorAll('.section').forEach(section => {
-        section.classList.remove('active');
-      });
+      document.querySelectorAll('.section').forEach(section => section.classList.remove('active'));
       document.getElementById(id).classList.add('active');
     }
 
-    function logout() {
-      sessionStorage.clear();
-      window.location.href = "admin-login.html";
+    async function logout() {
+      try {
+        await fetch(`${API_URL}/api/admins/logout`, {
+          method: 'POST',
+          credentials: 'include'
+        });
+      } catch (err) {
+        console.error(err);
+      } finally {
+        window.location.href = "admin-login.html";
+      }
     }
   </script>
 </body>

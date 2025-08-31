@@ -11,19 +11,19 @@ const PORT = process.env.PORT || 3000;
 // Middleware
 app.use(bodyParser.json());
 app.use(cors({
-  origin: true,           // Allow your frontend domain (Netlify, etc.)
-  credentials: true       // Allow cookies
+  origin: true,       // Allow frontend domain
+  credentials: true   // Allow cookies
 }));
 
-// Session middleware (keeps user logged in)
+// Session middleware (keeps admin logged in)
 app.use(session({
-  secret: 'super-secret-key', // Change to a strong secret in production
+  secret: 'super-secret-key', // Change for production
   resave: false,
   saveUninitialized: false,
   cookie: {
-    secure: false, // ❌ Set to true if you have HTTPS on Render
+    secure: false,  // true if using HTTPS
     httpOnly: true,
-    maxAge: 1000 * 60 * 60 // 1 hour session
+    maxAge: 1000 * 60 * 60 // 1 hour
   }
 }));
 
@@ -62,31 +62,27 @@ if (!fs.existsSync(SITE_DATA_FILE)) {
 
 // ========== ROUTES ==========
 
-// Serve frontend pages
-app.get('/', (req, res) => {
-  res.sendFile(path.join(__dirname, 'index.html'));
-});
+// Frontend pages
+app.get('/', (req, res) => res.sendFile(path.join(__dirname, 'index.html')));
 app.get('/admindash', (req, res) => {
   if (req.session.admin) {
     res.sendFile(path.join(__dirname, 'admindashboard.html'));
   } else {
-    res.redirect('/admin-login.html'); // force login
+    res.redirect('/admin-login.html'); // redirect if not logged in
   }
 });
 
 // ====== ADMIN MANAGEMENT API ======
 
-// Register new admin
+// Register admin
 app.post('/api/admins/register', (req, res) => {
   const { username, email, password } = req.body;
   fs.readFile(ADMIN_FILE, 'utf8', (err, data) => {
     if (err) return res.status(500).json({ error: 'Failed to read admin data' });
-
     let admins = JSON.parse(data);
     if (admins.find(a => a.username === username || a.email === email)) {
       return res.status(400).json({ error: 'Username or Email already exists' });
     }
-
     admins.push({ username, email, password });
     fs.writeFile(ADMIN_FILE, JSON.stringify(admins, null, 2), (err) => {
       if (err) return res.status(500).json({ error: 'Failed to save admin' });
@@ -100,20 +96,18 @@ app.post('/api/admins/login', (req, res) => {
   const { email, password } = req.body;
   fs.readFile(ADMIN_FILE, 'utf8', (err, data) => {
     if (err) return res.status(500).json({ error: 'Failed to read admin data' });
-
     let admins = JSON.parse(data);
     const admin = admins.find(a => a.email === email && a.password === password);
-
     if (admin) {
       req.session.admin = { email: admin.email, username: admin.username };
-      res.json({ message: 'Login successful', email: admin.email });
+      res.json({ message: 'Login successful', admin: req.session.admin });
     } else {
       res.status(401).json({ error: 'Invalid credentials' });
     }
   });
 });
 
-// Check if logged in
+// Check login
 app.get('/api/admins/check', (req, res) => {
   if (req.session.admin) {
     res.json({ loggedIn: true, admin: req.session.admin });
@@ -124,9 +118,7 @@ app.get('/api/admins/check', (req, res) => {
 
 // Logout
 app.post('/api/admins/logout', (req, res) => {
-  req.session.destroy(() => {
-    res.json({ message: 'Logged out successfully' });
-  });
+  req.session.destroy(() => res.json({ message: 'Logged out successfully' }));
 });
 
 // ====== SITE CONTENT API ======
@@ -139,11 +131,9 @@ app.get('/api/site', (req, res) => {
   });
 });
 
-// Update site data (only if logged in)
+// Update site data (only logged-in admins)
 app.post('/api/site', (req, res) => {
-  if (!req.session.admin) {
-    return res.status(401).json({ error: 'Unauthorized' });
-  }
+  if (!req.session.admin) return res.status(401).json({ error: 'Unauthorized' });
   fs.writeFile(SITE_DATA_FILE, JSON.stringify(req.body, null, 2), (err) => {
     if (err) return res.status(500).json({ error: 'Failed to save site data' });
     res.json({ message: 'Site data updated successfully' });

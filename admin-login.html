@@ -21,17 +21,9 @@
       width: 300px;
       box-shadow: 0 4px 10px rgba(0,0,0,0.1);
     }
-    h2 {
-      text-align: center;
-      margin-bottom: 20px;
-    }
-    form {
-      display: none;
-      flex-direction: column;
-    }
-    form.active {
-      display: flex;
-    }
+    h2 { text-align: center; margin-bottom: 20px; }
+    form { display: none; flex-direction: column; }
+    form.active { display: flex; }
     input {
       margin-bottom: 10px;
       padding: 8px;
@@ -46,9 +38,7 @@
       border-radius: 4px;
       cursor: pointer;
     }
-    button:hover {
-      background: #0056b3;
-    }
+    button:hover { background: #0056b3; }
     .toggle {
       margin-top: 10px;
       text-align: center;
@@ -64,146 +54,152 @@
   </style>
 </head>
 <body>
-  <div class="container">
-    <h2 id="formTitle">Admin Login</h2>
+<div class="container">
+  <h2 id="formTitle">Admin Login</h2>
 
-    <!-- Login Form -->
-    <form id="loginForm" class="active">
-      <input type="text" id="loginUsername" placeholder="Username" required>
-      <input type="password" id="loginPassword" placeholder="Password" required>
-      <button type="submit">Login</button>
-      <div class="toggle" onclick="showForm('register')">Create Account</div>
-      <div class="toggle" onclick="showForm('reset')">Forgot Password?</div>
-    </form>
+  <!-- Login Form -->
+  <form id="loginForm" class="active">
+    <input type="text" id="loginUsername" placeholder="Username" required>
+    <input type="password" id="loginPassword" placeholder="Password" required>
+    <button type="submit">Login</button>
+    <div class="toggle" onclick="showForm('register')">Create Account</div>
+    <div class="toggle" onclick="showForm('reset')">Forgot Password?</div>
+  </form>
 
-    <!-- Register Form -->
-    <form id="registerForm">
-      <input type="text" id="registerUsername" placeholder="Username" required>
-      <input type="email" id="registerEmail" placeholder="Email" required>
-      <input type="password" id="registerPassword" placeholder="Password" required>
-      <button type="submit">Create Account</button>
-      <div class="toggle" onclick="showForm('login')">Back to Login</div>
-    </form>
+  <!-- Register Form -->
+  <form id="registerForm">
+    <input type="text" id="registerUsername" placeholder="Username" required>
+    <input type="email" id="registerEmail" placeholder="Email" required>
+    <input type="password" id="registerPassword" placeholder="Password" required>
+    <button type="submit">Create Account</button>
+    <div class="toggle" onclick="showForm('login')">Back to Login</div>
+  </form>
 
-    <!-- Reset Password Form -->
-    <form id="resetForm">
-      <input type="email" id="resetEmail" placeholder="Enter your email" required>
-      <input type="password" id="resetPassword" placeholder="New Password" required>
-      <button type="submit">Reset Password</button>
-      <div class="toggle" onclick="showForm('login')">Back to Login</div>
-    </form>
+  <!-- Reset Password Form -->
+  <form id="resetForm">
+    <input type="email" id="resetEmail" placeholder="Enter your email" required>
+    <input type="password" id="resetPassword" placeholder="New Password" required>
+    <button type="submit">Reset Password</button>
+    <div class="toggle" onclick="showForm('login')">Back to Login</div>
+  </form>
 
-    <div class="message" id="message"></div>
-  </div>
+  <div class="message" id="message"></div>
+</div>
 
-  <script>
-    const API_URL = "https://hon-isyaku-bawa-na-abi-2025.onrender.com";
+<script>
+const API_URL = "https://hon-isyaku-bawa-na-abi-2025.onrender.com";
 
-    const loginForm = document.getElementById("loginForm");
-    const registerForm = document.getElementById("registerForm");
-    const resetForm = document.getElementById("resetForm");
-    const formTitle = document.getElementById("formTitle");
-    const messageBox = document.getElementById("message");
+const loginForm = document.getElementById("loginForm");
+const registerForm = document.getElementById("registerForm");
+const resetForm = document.getElementById("resetForm");
+const formTitle = document.getElementById("formTitle");
+const messageBox = document.getElementById("message");
 
-    function showMessage(msg, isError = true) {
-      messageBox.textContent = msg;
-      messageBox.style.color = isError ? "red" : "green";
+// Redirect if already logged in
+async function checkLoggedIn() {
+  try {
+    const res = await fetch(`${API_URL}/api/admins/check`, { credentials: 'include' });
+    const data = await res.json();
+    if (data.loggedIn) {
+      window.location.href = "admindash.html";
     }
+  } catch {}
+}
+checkLoggedIn();
 
-    function showForm(form) {
-      loginForm.classList.remove("active");
-      registerForm.classList.remove("active");
-      resetForm.classList.remove("active");
+function showMessage(msg, isError = true) {
+  messageBox.textContent = msg;
+  messageBox.style.color = isError ? "red" : "green";
+}
 
-      if (form === "login") {
-        loginForm.classList.add("active");
-        formTitle.textContent = "Admin Login";
-      } else if (form === "register") {
-        registerForm.classList.add("active");
-        formTitle.textContent = "Create Account";
-      } else if (form === "reset") {
-        resetForm.classList.add("active");
-        formTitle.textContent = "Reset Password";
-      }
-      messageBox.textContent = "";
+function showForm(form) {
+  loginForm.classList.remove("active");
+  registerForm.classList.remove("active");
+  resetForm.classList.remove("active");
+
+  if (form === "login") formTitle.textContent = "Admin Login", loginForm.classList.add("active");
+  else if (form === "register") formTitle.textContent = "Create Account", registerForm.classList.add("active");
+  else if (form === "reset") formTitle.textContent = "Reset Password", resetForm.classList.add("active");
+
+  messageBox.textContent = "";
+}
+
+// ✅ Login
+loginForm.addEventListener("submit", async (e) => {
+  e.preventDefault();
+  const username = document.getElementById("loginUsername").value;
+  const password = document.getElementById("loginPassword").value;
+
+  try {
+    const res = await fetch(`${API_URL}/api/admins/login`, {
+      method: "POST",
+      headers: { "Content-Type": "application/json" },
+      credentials: 'include', // ✅ Include session cookie
+      body: JSON.stringify({ email: username, password })
+    });
+    const data = await res.json();
+
+    if (res.ok) {
+      showMessage("Login successful!", false);
+      window.location.href = "admindash.html";
+    } else {
+      showMessage(data.error || "Login failed");
     }
+  } catch {
+    showMessage("Server error");
+  }
+});
 
-    // ✅ Login
-    loginForm.addEventListener("submit", async (e) => {
-      e.preventDefault();
-      const username = document.getElementById("loginUsername").value;
-      const password = document.getElementById("loginPassword").value;
+// ✅ Register
+registerForm.addEventListener("submit", async (e) => {
+  e.preventDefault();
+  const username = document.getElementById("registerUsername").value;
+  const email = document.getElementById("registerEmail").value;
+  const password = document.getElementById("registerPassword").value;
 
-      try {
-        const res = await fetch(`${API_URL}/api/admins/login`, {
-          method: "POST",
-          headers: { "Content-Type": "application/json" },
-          body: JSON.stringify({ username, password }),
-        });
-        const data = await res.json();
-
-        if (res.ok) {
-          localStorage.setItem("adminUser", username);
-          showMessage("Login successful!", false);
-          window.location.href = "admindash.html"; // ✅ Fixed redirect
-        } else {
-          showMessage(data.error || "Login failed");
-        }
-      } catch {
-        showMessage("Server error");
-      }
+  try {
+    const res = await fetch(`${API_URL}/api/admins/register`, {
+      method: "POST",
+      headers: { "Content-Type": "application/json" },
+      body: JSON.stringify({ username, email, password })
     });
+    const data = await res.json();
 
-    // ✅ Register
-    registerForm.addEventListener("submit", async (e) => {
-      e.preventDefault();
-      const username = document.getElementById("registerUsername").value;
-      const email = document.getElementById("registerEmail").value;
-      const password = document.getElementById("registerPassword").value;
+    if (res.ok) {
+      showMessage("Account created successfully!", false);
+      showForm("login");
+    } else {
+      showMessage(data.error || "Registration failed");
+    }
+  } catch {
+    showMessage("Server error");
+  }
+});
 
-      try {
-        const res = await fetch(`${API_URL}/api/admins/register`, {
-          method: "POST",
-          headers: { "Content-Type": "application/json" },
-          body: JSON.stringify({ username, email, password }),
-        });
-        const data = await res.json();
+// ✅ Reset Password
+resetForm.addEventListener("submit", async (e) => {
+  e.preventDefault();
+  const email = document.getElementById("resetEmail").value;
+  const newPassword = document.getElementById("resetPassword").value;
 
-        if (res.ok) {
-          showMessage("Account created successfully!", false);
-          showForm("login");
-        } else {
-          showMessage(data.error || "Registration failed");
-        }
-      } catch {
-        showMessage("Server error");
-      }
+  try {
+    const res = await fetch(`${API_URL}/api/admins/reset`, {
+      method: "POST",
+      headers: { "Content-Type": "application/json" },
+      body: JSON.stringify({ email, newPassword })
     });
+    const data = await res.json();
 
-    // ✅ Reset Password (by email)
-    resetForm.addEventListener("submit", async (e) => {
-      e.preventDefault();
-      const email = document.getElementById("resetEmail").value;
-      const newPassword = document.getElementById("resetPassword").value;
-
-      try {
-        const res = await fetch(`${API_URL}/api/admins/reset`, {
-          method: "POST",
-          headers: { "Content-Type": "application/json" },
-          body: JSON.stringify({ email, newPassword }),
-        });
-        const data = await res.json();
-
-        if (res.ok) {
-          showMessage("Password reset successfully!", false);
-          showForm("login");
-        } else {
-          showMessage(data.error || "Reset failed");
-        }
-      } catch {
-        showMessage("Server error");
-      }
-    });
-  </script>
+    if (res.ok) {
+      showMessage("Password reset successfully!", false);
+      showForm("login");
+    } else {
+      showMessage(data.error || "Reset failed");
+    }
+  } catch {
+    showMessage("Server error");
+  }
+});
+</script>
 </body>
 </html>
