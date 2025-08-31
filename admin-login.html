@@ -97,6 +97,8 @@
   </div>
 
   <script>
+    const API_URL = "https://hon-isyaku-bawa-na-abi-2025.onrender.com";
+
     const loginForm = document.getElementById("loginForm");
     const registerForm = document.getElementById("registerForm");
     const resetForm = document.getElementById("resetForm");
@@ -133,7 +135,7 @@
       const password = document.getElementById("loginPassword").value;
 
       try {
-        const res = await fetch("/api/admins/login", {
+        const res = await fetch(`${API_URL}/api/admins/login`, {
           method: "POST",
           headers: { "Content-Type": "application/json" },
           body: JSON.stringify({ username, password }),
@@ -160,7 +162,7 @@
       const password = document.getElementById("registerPassword").value;
 
       try {
-        const res = await fetch("/api/admins/register", {
+        const res = await fetch(`${API_URL}/api/admins/register`, {
           method: "POST",
           headers: { "Content-Type": "application/json" },
           body: JSON.stringify({ username, email, password }),
@@ -185,7 +187,7 @@
       const newPassword = document.getElementById("resetPassword").value;
 
       try {
-        const res = await fetch("/api/admins/reset", {
+        const res = await fetch(`${API_URL}/api/admins/reset`, {
           method: "POST",
           headers: { "Content-Type": "application/json" },
           body: JSON.stringify({ email, newPassword }),
