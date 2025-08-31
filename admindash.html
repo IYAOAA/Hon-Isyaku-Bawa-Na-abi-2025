@@ -101,18 +101,20 @@
     const API_URL = "https://hon-isyaku-bawa-na-abi-2025.onrender.com";
 
     // ✅ Check if admin is logged in on page load
-    document.addEventListener("DOMContentLoaded", async () => {
+    async function checkAdminSession() {
       try {
         const res = await fetch(`${API_URL}/api/admins/check`, { credentials: 'include' });
         const data = await res.json();
         if (!data.loggedIn) {
-          window.location.href = "admin-login.html"; // Redirect if not logged in
+          window.location.href = "admin-login.html";
         }
       } catch (err) {
-        console.error(err);
+        console.error("Error checking admin session:", err);
         window.location.href = "admin-login.html";
       }
-    });
+    }
+
+    document.addEventListener("DOMContentLoaded", checkAdminSession);
 
     function showSection(id) {
       document.querySelectorAll('.section').forEach(section => section.classList.remove('active'));

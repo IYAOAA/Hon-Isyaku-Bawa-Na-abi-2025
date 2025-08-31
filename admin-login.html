@@ -127,23 +127,23 @@ function showForm(form) {
 // ✅ Login
 loginForm.addEventListener("submit", async (e) => {
   e.preventDefault();
-  const email = document.getElementById("loginEmail").value; // ✅ Send email
+  const email = document.getElementById("loginEmail").value;
   const password = document.getElementById("loginPassword").value;
 
   try {
     const res = await fetch(`${API_URL}/api/admins/login`, {
       method: "POST",
       headers: { "Content-Type": "application/json" },
-      credentials: 'include', // ✅ Include session cookie
+      credentials: 'include', // Include session cookie
       body: JSON.stringify({ email, password })
     });
     const data = await res.json();
 
     if (res.ok) {
       showMessage("Login successful!", false);
-      window.location.href = "admindash.html";
+      setTimeout(() => window.location.href = "admindash.html", 300); // short delay to ensure cookie
     } else {
-      showMessage(data.error || "Login failed");
+      showMessage(data.error || "Invalid email or password");
     }
   } catch {
     showMessage("Server error");
