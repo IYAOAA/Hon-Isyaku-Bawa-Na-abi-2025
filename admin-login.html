@@ -186,7 +186,7 @@ resetForm.addEventListener("submit", async (e) => {
     const res = await fetch(`${API_URL}/api/admins/reset`, {
       method: "POST",
       headers: { "Content-Type": "application/json" },
-      body: JSON.stringify({ email })
+      body: JSON.stringify({ email, newPassword })
     });
     const data = await res.json();
 
