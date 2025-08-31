@@ -36,24 +36,16 @@
       transition: background 0.3s;
       cursor: pointer;
     }
-    .sidebar a:hover {
-      background: #248f52;
-    }
+    .sidebar a:hover { background: #248f52; }
     /* Main content */
     .main {
       flex: 1;
       padding: 20px;
       overflow-y: auto;
     }
-    .section {
-      display: none;
-    }
-    .section.active {
-      display: block;
-    }
-    h1 {
-      margin-bottom: 1rem;
-    }
+    .section { display: none; }
+    .section.active { display: block; }
+    h1 { margin-bottom: 1rem; }
   </style>
 </head>
 <body>
@@ -100,20 +92,19 @@
   <script>
     const API_URL = "https://hon-isyaku-bawa-na-abi-2025.onrender.com";
 
-    // ✅ Check if admin is logged in on page load
+    // ✅ Check admin session on page load
     async function checkAdminSession() {
       try {
         const res = await fetch(`${API_URL}/api/admins/check`, { credentials: 'include' });
         const data = await res.json();
         if (!data.loggedIn) {
-          window.location.href = "admin-login.html";
+          window.location.href = "admin-login.html"; // redirect if not logged in
         }
       } catch (err) {
         console.error("Error checking admin session:", err);
         window.location.href = "admin-login.html";
       }
     }
-
     document.addEventListener("DOMContentLoaded", checkAdminSession);
 
     function showSection(id) {
