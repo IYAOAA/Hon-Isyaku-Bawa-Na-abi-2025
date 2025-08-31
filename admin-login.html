@@ -154,5 +154,79 @@ document.getElementById('resetForm').addEventListener('submit', async function(e
   }
 });
 </script>
+<script>
+document.addEventListener("DOMContentLoaded", () => {
+  // --- Register (Create Account) ---
+  const registerForm = document.getElementById("registerForm");
+  if (registerForm) {
+    registerForm.addEventListener("submit", async (e) => {
+      e.preventDefault();
+      const email = document.getElementById("registerEmail").value;
+      const password = document.getElementById("registerPassword").value;
+
+      const res = await fetch("/api/admins/register", {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify({ email, password })
+      });
+
+      const data = await res.json();
+      if (res.ok) {
+        alert("Account created successfully! You can login now.");
+      } else {
+        alert(data.error || "Error creating account");
+      }
+    });
+  }
+
+  // --- Login ---
+  const loginForm = document.getElementById("loginForm");
+  if (loginForm) {
+    loginForm.addEventListener("submit", async (e) => {
+      e.preventDefault();
+      const email = document.getElementById("loginEmail").value;
+      const password = document.getElementById("loginPassword").value;
+
+      const res = await fetch("/api/admins/login", {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify({ email, password })
+      });
+
+      const data = await res.json();
+      if (res.ok) {
+        alert("Login successful!");
+        localStorage.setItem("adminEmail", email); // Save session client-side
+        window.location.href = "admindashboard.html";
+      } else {
+        alert(data.error || "Login failed");
+      }
+    });
+  }
+
+  // --- Reset Password ---
+  const resetForm = document.getElementById("resetForm");
+  if (resetForm) {
+    resetForm.addEventListener("submit", async (e) => {
+      e.preventDefault();
+      const email = document.getElementById("resetEmail").value;
+      const newPassword = document.getElementById("resetPassword").value;
+
+      const res = await fetch("/api/admins/reset", {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify({ email, newPassword })
+      });
+
+      const data = await res.json();
+      if (res.ok) {
+        alert("Password reset successfully!");
+      } else {
+        alert(data.error || "Reset failed");
+      }
+    });
+  }
+});
+</script>
 </body>
 </html>
