@@ -112,10 +112,17 @@ function showForm(form) {
   messageBox.textContent = "";
 }
 
-// ✅ Check token in localStorage
-if (localStorage.getItem("adminToken")) {
-  window.location.href = "admindash.html";
+// ✅ Check if admin is already logged in
+async function checkLoggedIn() {
+  try {
+    const res = await fetch(`${API_URL}/api/admins/check`, { credentials: 'include' });
+    const data = await res.json();
+    if (data.loggedIn) window.location.href = "admindash.html";
+  } catch (err) {
+    console.error(err);
+  }
 }
+checkLoggedIn();
 
 // ✅ Login
 loginForm.addEventListener("submit", async (e) => {
@@ -127,13 +134,13 @@ loginForm.addEventListener("submit", async (e) => {
     const res = await fetch(`${API_URL}/api/admins/login`, {
       method: "POST",
       headers: { "Content-Type": "application/json" },
+      credentials: 'include',
       body: JSON.stringify({ email, password })
     });
     const data = await res.json();
-    if (res.ok && data.token) {
-      localStorage.setItem("adminToken", data.token); // save token
+    if (res.ok) {
       showMessage("Login successful!", false);
-      setTimeout(() => window.location.href = "admindash.html", 200);
+      setTimeout(() => window.location.href = "admindash.html", 200); // Ensure session is saved
     } else {
       showMessage(data.error || "Invalid email or password");
     }
