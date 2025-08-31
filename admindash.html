@@ -92,20 +92,13 @@
   <script>
     const API_URL = "https://hon-isyaku-bawa-na-abi-2025.onrender.com";
 
-    // ✅ Check admin session on page load
-    async function checkAdminSession() {
-      try {
-        const res = await fetch(`${API_URL}/api/admins/check`, { credentials: 'include' });
-        const data = await res.json();
-        if (!data.loggedIn) {
-          window.location.href = "admin-login.html"; // redirect if not logged in
-        }
-      } catch (err) {
-        console.error("Error checking admin session:", err);
+    // ✅ Check token in localStorage
+    document.addEventListener("DOMContentLoaded", () => {
+      const token = localStorage.getItem("adminToken");
+      if (!token) {
         window.location.href = "admin-login.html";
       }
-    }
-    document.addEventListener("DOMContentLoaded", checkAdminSession);
+    });
 
     function showSection(id) {
       document.querySelectorAll('.section').forEach(section => section.classList.remove('active'));
@@ -113,11 +106,9 @@
     }
 
     async function logout() {
+      localStorage.removeItem("adminToken"); // remove token on logout
       try {
-        await fetch(`${API_URL}/api/admins/logout`, {
-          method: 'POST',
-          credentials: 'include'
-        });
+        await fetch(`${API_URL}/api/admins/logout`, { method: 'POST' });
       } catch (err) {
         console.error(err);
       } finally {
