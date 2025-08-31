@@ -145,7 +145,7 @@
         if (res.ok) {
           localStorage.setItem("adminUser", username);
           showMessage("Login successful!", false);
-          window.location.href = "/admindashboard"; // Redirect
+          window.location.href = "admindashboard.html"; // ✅ Fixed redirect
         } else {
           showMessage(data.error || "Login failed");
         }
