@@ -66,7 +66,7 @@ if (!fs.existsSync(SITE_DATA_FILE)) {
 app.get('/', (req, res) => {
   res.sendFile(path.join(__dirname, 'index.html'));
 });
-app.get('/admindashboard', (req, res) => {
+app.get('/admindash', (req, res) => {
   if (req.session.admin) {
     res.sendFile(path.join(__dirname, 'admindashboard.html'));
   } else {
