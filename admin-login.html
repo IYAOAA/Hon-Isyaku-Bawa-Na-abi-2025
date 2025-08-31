@@ -59,7 +59,7 @@
 
   <!-- Login Form -->
   <form id="loginForm" class="active">
-    <input type="text" id="loginUsername" placeholder="Username" required>
+    <input type="email" id="loginEmail" placeholder="Email" required>
     <input type="password" id="loginPassword" placeholder="Password" required>
     <button type="submit">Login</button>
     <div class="toggle" onclick="showForm('register')">Create Account</div>
@@ -127,7 +127,7 @@ function showForm(form) {
 // ✅ Login
 loginForm.addEventListener("submit", async (e) => {
   e.preventDefault();
-  const username = document.getElementById("loginUsername").value;
+  const email = document.getElementById("loginEmail").value; // ✅ Send email
   const password = document.getElementById("loginPassword").value;
 
   try {
