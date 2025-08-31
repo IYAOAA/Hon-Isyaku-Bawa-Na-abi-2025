@@ -135,7 +135,7 @@ loginForm.addEventListener("submit", async (e) => {
       method: "POST",
       headers: { "Content-Type": "application/json" },
       credentials: 'include', // ✅ Include session cookie
-      body: JSON.stringify({ email: username, password })
+      body: JSON.stringify({ email, password })
     });
     const data = await res.json();
 
@@ -186,7 +186,7 @@ resetForm.addEventListener("submit", async (e) => {
     const res = await fetch(`${API_URL}/api/admins/reset`, {
       method: "POST",
       headers: { "Content-Type": "application/json" },
-      body: JSON.stringify({ email, newPassword })
+      body: JSON.stringify({ email })
     });
     const data = await res.json();
 
