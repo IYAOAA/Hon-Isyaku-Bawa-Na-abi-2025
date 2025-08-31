@@ -81,39 +81,43 @@
     <div id="indexControl" class="section">
       <h1>Index Control</h1>
       <p>Manage homepage content: Add/Remove pages, update gallery, edit texts.</p>
-      <!-- Placeholder -->
     </div>
 
     <!-- Register Control Section -->
     <div id="registerControl" class="section">
       <h1>Register Control</h1>
       <p>Switch between Membership, Scholarship, Empowerment, Grant, Loan forms.</p>
-      <!-- Placeholder -->
     </div>
 
     <!-- Applicants Section -->
     <div id="applicants" class="section">
       <h1>Applicants</h1>
       <p>View and export applicants' data here.</p>
-      <!-- Placeholder -->
     </div>
 
     <!-- Admin Management Section -->
     <div id="adminManagement" class="section">
       <h1>Admin Management</h1>
       <p>Add or remove admins, reset passwords.</p>
-      <!-- Placeholder -->
     </div>
 
     <!-- Settings Section -->
     <div id="settings" class="section">
       <h1>Settings</h1>
       <p>Update site-wide settings like colors, contact info, and footer text.</p>
-      <!-- Placeholder -->
     </div>
   </div>
 
   <script>
+    // ✅ Check if admin is logged in
+    document.addEventListener("DOMContentLoaded", () => {
+      const isLoggedIn = sessionStorage.getItem("isAdminLoggedIn");
+      if (!isLoggedIn) {
+        // If not logged in, redirect to login
+        window.location.href = "admin-login.html";
+      }
+    });
+
     function showSection(id) {
       document.querySelectorAll('.section').forEach(section => {
         section.classList.remove('active');
@@ -123,7 +127,7 @@
 
     function logout() {
       sessionStorage.clear();
-      window.location.href = "adminlogin.html";
+      window.location.href = "admin-login.html";
     }
   </script>
 </body>
