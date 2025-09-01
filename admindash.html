@@ -1,129 +1,76 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-  <meta charset="UTF-8">
-  <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>Admin Dashboard - Magic Room</title>
-  <link rel="stylesheet" href="assets/css/styles.css">
-  <style>
-    body {
-      margin: 0;
-      font-family: Arial, sans-serif;
-      display: flex;
-      height: 100vh;
-    }
-    /* Sidebar */
-    .sidebar {
-      width: 220px;
-      background: #2b3d34;
-      color: #fff;
-      display: flex;
-      flex-direction: column;
-      padding: 20px;
-    }
-    .sidebar h2 {
-      margin-bottom: 20px;
-      font-size: 1.2rem;
-      text-align: center;
-    }
-    .sidebar a {
-      color: #fff;
-      text-decoration: none;
-      padding: 10px;
-      display: block;
-      border-radius: 5px;
-      margin-bottom: 8px;
-      transition: background 0.3s;
-      cursor: pointer;
-    }
-    .sidebar a:hover { background: #248f52; }
-    /* Main content */
-    .main {
-      flex: 1;
-      padding: 20px;
-      overflow-y: auto;
-    }
-    .section { display: none; }
-    .section.active { display: block; }
-    h1 { margin-bottom: 1rem; }
-  </style>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Admin Dashboard - Magic Room</title>
+<link rel="stylesheet" href="assets/css/styles.css">
+<style>
+body { margin:0; font-family:Arial,sans-serif; display:flex; height:100vh; }
+.sidebar { width:220px; background:#2b3d34; color:#fff; display:flex; flex-direction:column; padding:20px; }
+.sidebar h2 { margin-bottom:20px; font-size:1.2rem; text-align:center; }
+.sidebar a { color:#fff; text-decoration:none; padding:10px; display:block; border-radius:5px; margin-bottom:8px; transition:background 0.3s; cursor:pointer; }
+.sidebar a:hover { background:#248f52; }
+.main { flex:1; padding:20px; overflow-y:auto; }
+.section { display:none; }
+.section.active { display:block; }
+h1 { margin-bottom:1rem; }
+</style>
 </head>
 <body>
-  <!-- Sidebar -->
-  <div class="sidebar">
-    <h2>Magic Room</h2>
-    <a onclick="showSection('dashboard')">Dashboard</a>
-    <a onclick="showSection('indexControl')">Index Control</a>
-    <a onclick="showSection('registerControl')">Register Control</a>
-    <a onclick="showSection('applicants')">Applicants</a>
-    <a onclick="showSection('adminManagement')">Admin Management</a>
-    <a onclick="showSection('settings')">Settings</a>
-    <a onclick="logout()">Logout</a>
-  </div>
+<div class="sidebar">
+<h2>Magic Room</h2>
+<a onclick="showSection('dashboard')">Dashboard</a>
+<a onclick="showSection('indexControl')">Index Control</a>
+<a onclick="showSection('registerControl')">Register Control</a>
+<a onclick="showSection('applicants')">Applicants</a>
+<a onclick="showSection('adminManagement')">Admin Management</a>
+<a onclick="showSection('settings')">Settings</a>
+<a onclick="logout()">Logout</a>
+</div>
 
-  <!-- Main Content -->
-  <div class="main">
-    <div id="dashboard" class="section active">
-      <h1>Welcome to the Magic Room ✨</h1>
-      <p>Select a section from the left menu to begin controlling your website.</p>
-    </div>
-    <div id="indexControl" class="section">
-      <h1>Index Control</h1>
-      <p>Manage homepage content: Add/Remove pages, update gallery, edit texts.</p>
-    </div>
-    <div id="registerControl" class="section">
-      <h1>Register Control</h1>
-      <p>Switch between Membership, Scholarship, Empowerment, Grant, Loan forms.</p>
-    </div>
-    <div id="applicants" class="section">
-      <h1>Applicants</h1>
-      <p>View and export applicants' data here.</p>
-    </div>
-    <div id="adminManagement" class="section">
-      <h1>Admin Management</h1>
-      <p>Add or remove admins, reset passwords.</p>
-    </div>
-    <div id="settings" class="section">
-      <h1>Settings</h1>
-      <p>Update site-wide settings like colors, contact info, and footer text.</p>
-    </div>
-  </div>
+<div class="main">
+<div id="dashboard" class="section active">
+<h1>Welcome to the Magic Room ✨</h1>
+<p>Select a section from the left menu to begin controlling your website.</p>
+</div>
+<div id="indexControl" class="section">
+<h1>Index Control</h1>
+<p>Manage homepage content: Add/Remove pages, update gallery, edit texts.</p>
+</div>
+<div id="registerControl" class="section">
+<h1>Register Control</h1>
+<p>Switch between Membership, Scholarship, Empowerment, Grant, Loan forms.</p>
+</div>
+<div id="applicants" class="section">
+<h1>Applicants</h1>
+<p>View and export applicants' data here.</p>
+</div>
+<div id="adminManagement" class="section">
+<h1>Admin Management</h1>
+<p>Add or remove admins, reset passwords.</p>
+</div>
+<div id="settings" class="section">
+<h1>Settings</h1>
+<p>Update site-wide settings like colors, contact info, and footer text.</p>
+</div>
+</div>
 
-  <script>
-    const API_URL = "https://hon-isyaku-bawa-na-abi-2025.onrender.com";
+<script>
+function showSection(id) {
+  document.querySelectorAll('.section').forEach(s=>s.classList.remove('active'));
+  document.getElementById(id).classList.add('active');
+}
 
-    // ✅ Check admin session on page load
-    async function checkAdminSession() {
-      try {
-        const res = await fetch(`${API_URL}/api/admins/check`, { credentials: 'include' });
-        const data = await res.json();
-        if (!data.loggedIn) {
-          window.location.href = "admin-login.html"; // redirect if not logged in
-        }
-      } catch (err) {
-        console.error("Error checking admin session:", err);
-        window.location.href = "admin-login.html";
-      }
-    }
-    document.addEventListener("DOMContentLoaded", checkAdminSession);
+// ✅ Check localStorage session
+if(!localStorage.getItem("adminLoggedIn")) {
+  window.location.href="admin-login.html";
+}
 
-    function showSection(id) {
-      document.querySelectorAll('.section').forEach(section => section.classList.remove('active'));
-      document.getElementById(id).classList.add('active');
-    }
-
-    async function logout() {
-      try {
-        await fetch(`${API_URL}/api/admins/logout`, {
-          method: 'POST',
-          credentials: 'include'
-        });
-      } catch (err) {
-        console.error(err);
-      } finally {
-        window.location.href = "admin-login.html";
-      }
-    }
-  </script>
+function logout() {
+  localStorage.removeItem("adminLoggedIn");
+  window.location.href="admin-login.html";
+}
+</script>
 </body>
 </html>
