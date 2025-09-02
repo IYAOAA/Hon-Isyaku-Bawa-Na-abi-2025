@@ -1,0 +1,368 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <title>SolarAxis — Certificate of Completion</title>
+  <style>
+    :root{
+      --accent:#FFB400; /* warm solar */
+      --dark:#12323A;
+      --muted:#6B7D7A;
+      --paper:#fdfefe;
+      --border: #DDE9E7;
+      --pad: 36px;
+      --max-width: 1000px;
+      --signature-height: 58px;
+      font-family: "Segoe UI", Roboto, "Helvetica Neue", Arial, sans-serif;
+    }
+
+    html,body{height:100%;}
+    body{
+      display:flex;
+      align-items:center;
+      justify-content:center;
+      background: linear-gradient(180deg, #F7FBFA 0%, #EAF3F2 100%);
+      padding:40px;
+      margin:0;
+      -webkit-font-smoothing:antialiased;
+      -moz-osx-font-smoothing:grayscale;
+    }
+
+    .certificate{
+      width:100%;
+      max-width:var(--max-width);
+      background:var(--paper);
+      border: 8px solid rgb(12, 167, 7);
+      box-shadow: 0 10px 30px rgba(2, 59, 73, 0.918);
+      position:relative;
+      padding:calc(var(--pad) + 10px);
+      box-sizing:border-box;
+    }
+
+    /* outer decorative border */
+    .certificate::before{
+      content:"";
+      position:absolute;
+      inset:8px;
+      border:4px solid var(--border);
+      pointer-events:none;
+    }
+
+    .header{
+      display:flex;
+      align-items:center;
+      gap:20px;
+      margin-bottom:14px;
+    }
+
+    .logo{
+      width:84px;
+      height:84px;
+      border-radius:12px;
+      background: linear-gradient(135deg, var(--accent), #FF6B00);
+      display:flex;
+      align-items:center;
+      justify-content:center;
+      color:rgb(143, 4, 4);
+      font-weight:700;
+      font-size:20px;
+      box-shadow: 0 6px 18px rgba(4, 102, 41, 0.18);
+      flex:0 0 84px;
+    }
+
+    .issuer{
+      color:var(--dark);
+    }
+
+    .issuer h1{
+      margin:0;
+      font-size:22px;
+      letter-spacing:0.4px;
+    }
+
+    .issuer p{
+      margin:2px 0 0 0;
+      color:var(--muted);
+      font-size:13px;
+    }
+
+    .title{
+      text-align:center;
+      margin:20px 0 8px 0;
+    }
+
+    .title h2{
+      margin:0;
+      font-size:28px;
+      color:var(--dark);
+      letter-spacing:0.6px;
+    }
+
+    .subtitle{
+      text-align:center;
+      color:var(--muted);
+      margin-top:6px;
+      font-size:14px;
+    }
+
+    .body{
+      padding:28px 48px;
+      display:flex;
+      gap:28px;
+      align-items:center;
+      justify-content:space-between;
+    }
+
+    .main{
+      flex:1 1 65%;
+    }
+
+    .recipient{
+      text-align:center;
+      padding:22px 18px;
+      border-radius:12px;
+      background: linear-gradient(180deg, rgba(255,180,0,0.04), transparent 60%);
+      box-shadow: inset 0 1px 0 rgba(10, 212, 37, 0.6);
+    }
+
+    .recipient .label{
+      font-size:12px;
+      color:var(--muted);
+      margin-bottom:6px;
+    }
+
+    .recipient .name{
+      font-size:26px;
+      color:var(--dark);
+      font-weight:700;
+      margin:0 0 6px 0;
+    }
+
+    .recipient .achievement{
+      font-size:14px;
+      color:var(--dark);
+      margin:0;
+    }
+
+    .details{
+      margin-top:18px;
+      color:var(--muted);
+      font-size:13px;
+      display:flex;
+      gap:12px;
+      flex-wrap:wrap;
+      justify-content:center;
+    }
+
+    .meta{
+      flex:1 1 30%;
+      display:flex;
+      flex-direction:column;
+      gap:8px;
+      align-items:flex-end;
+      min-width:220px;
+    }
+
+    .meta .cert-no{
+      font-size:12px;
+      color:var(--muted);
+    }
+
+    .meta .date{
+      font-size:13px;
+      color:var(--dark);
+      font-weight:600;
+    }
+
+    .signatures{
+      margin-top:26px;
+      display:flex;
+      gap:36px;
+      align-items:center;
+      justify-content:center;
+    }
+
+    .sig{
+      text-align:center;
+      width:220px;
+    }
+
+    .sig .sig-line{
+      height:var(--signature-height);
+      border-bottom:1px solid var(--border);
+      margin-bottom:8px;
+    }
+
+    .sig .sig-name{
+      font-weight:700;
+      color:var(--dark);
+      font-size:13px;
+    }
+
+    .sig .sig-role{
+      font-size:12px;
+      color:var(--muted);
+    }
+
+    /* watermark sun SVG */
+    .watermark{
+      position:absolute;
+      right:40px;
+      top:40px;
+      opacity:0.06;
+      width:300px;
+      height:300px;
+      pointer-events:none;
+      transform:rotate(12deg);
+    }
+
+    /* footer small print */
+    .footer{
+      border-top:1px dashed var(--border);
+      margin-top:18px;
+      padding-top:12px;
+      color:var(--muted);
+      font-size:12px;
+      display:flex;
+      justify-content:space-between;
+      align-items:center;
+    }
+
+    .qr{
+      width:72px;
+      height:72px;
+      border-radius:8px;
+      background:#041a04;
+      display:flex;
+      align-items:center;
+      justify-content:center;
+      font-size:10px;
+      color:var(--muted);
+    }
+
+    @media (max-width:880px){
+      .body{flex-direction:column;padding:18px}
+      .meta{align-items:flex-start;width:100%;order:3}
+      .recipient{order:2}
+      .signatures{flex-direction:column;gap:18px}
+      .watermark{display:none}
+    }
+
+    /* print tweaks */
+    @media print{
+      body{background:white}
+      .certificate{box-shadow:none;border:none;padding:18mm}
+      .certificate::before{border-width:2px}
+    }
+
+    /* helper classes for editing */
+    .placeholder{
+      color: #9aa7a4;
+    }
+
+  </style>
+</head>
+<body>
+  <div class="certificate" role="document" aria-label="Certificate of Completion">
+
+    <div class="header">
+      <div class="logo" aria-hidden="true">SA</div>
+      <div class="issuer">
+        <h1>SolarAxis</h1>
+        <p>Training Centre — Solar PV Installation &amp; Maintenance</p>
+      </div>
+    </div>
+
+    <div class="title">
+      <h2>Certificate of Training</h2>
+      <div class="subtitle">This certificate is awarded to participants who have completed the Solar PV practical and theoretical training program.</div>
+    </div>
+
+    <div class="body">
+
+      <div class="main">
+        <div class="recipient">
+          <div class="label">Presented to</div>
+          <div class="name" id="student-name">[BOLARINWA OLAYINKA OLAOLU]</div>
+          <p class="achievement">for successfully completing the <strong>Solar PV Installation &amp; Maintenance</strong> training program.</p>
+
+          <div class="details">
+            <div class="hours">Duration: <strong>1 Month</strong></div>
+            <div class="dates">Training: <strong>[04-11-2024] — [04-12-2024]</strong></div>
+            <div class="location">Location: <strong>[Lagos / No 5 Oyopio street, Odonguyan Ikorodu Lagos]</strong></div>
+          </div>
+
+          <div class="signatures">
+            <div class="sig">
+              <div class="sig-line"></div>
+              <div class="sig-name">[Ibrahim Yahaya]</div>
+              <div class="sig-role">Director, SolarAxis</div>
+            </div>
+
+            <div class="sig">
+              <div class="sig-line"></div>
+              <div class="sig-name">[Abdumuiz Olaoluwa]</div>
+              <div class="sig-role">Lead Instructor</div>
+            </div>
+          </div>
+
+        </div>
+      </div>
+
+      <div class="meta" aria-hidden="true">
+        <div class="cert-no">Certificate No: <strong id="cert-number">SA-2025-0571</strong></div>
+        <div class="date">Awarded: <strong id="award-date">[06-01 2025]</strong></div>
+
+        <div style="height:14px"></div>
+
+        <div class="qr" title="QR code placeholder">QR</div>
+      </div>
+
+    </div>
+
+    <svg class="watermark" viewBox="0 0 200 200" xmlns="http://www.w3.org/2000/svg" aria-hidden="true">
+      <defs>
+        <radialGradient id="g" cx="50%" cy="30%">
+          <stop offset="0%" stop-color="#FFB400"/>
+          <stop offset="100%" stop-color="#FF6B00"/>
+        </radialGradient>
+      </defs>
+      <g transform="translate(100,100)">
+        <circle r="48" fill="url(#g)" />
+        <g opacity="0.85">
+          <!-- rays -->
+          <g stroke="#FFF" stroke-width="2" stroke-opacity="0.6">
+            <line x1="0" y1="-68" x2="0" y2="-92"/>
+            <line x1="48" y1="-48" x2="68" y2="-68"/>
+            <line x1="68" y1="0" x2="92" y2="0"/>
+            <line x1="48" y1="48" x2="68" y2="68"/>
+            <line x1="0" y1="68" x2="0" y2="92"/>
+            <line x1="-48" y1="48" x2="-68" y2="68"/>
+            <line x1="-68" y1="0" x2="-92" y2="0"/>
+            <line x1="-48" y1="-48" x2="-68" y2="-68"/>
+          </g>
+        </g>
+      </g>
+    </svg>
+
+    <div class="footer">
+      <div>SolarAxis • Solar PV Installation &amp; Maintenance</div>
+      <div style="display:flex;gap:12px;align-items:center;color:var(--muted);font-size:12px;">
+        <div>www.solaraxis.com</div>
+        <div>|</div>
+        <div>Contact: +234 813 199 9966</div>
+      </div>
+    </div>
+
+  </div>
+
+  <!-- Simple script to allow quick editing in-browser (not required) -->
+  <script>
+    // Example: change the name quickly from JS console
+    // document.getElementById('student-name').textContent = 'Ibrahim Example';
+    // document.getElementById('cert-number').textContent = 'SA-2025-0123';
+    // document.getElementById('award-date').textContent = '2 September 2025';
+  </script>
+</body>
+</html>
