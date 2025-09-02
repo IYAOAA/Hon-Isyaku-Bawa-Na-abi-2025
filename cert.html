@@ -27,6 +27,7 @@
       margin:0;
       -webkit-font-smoothing:antialiased;
       -moz-osx-font-smoothing:grayscale;
+      flex-direction:column; /* allow button below */
     }
 
     .certificate{
@@ -261,10 +262,27 @@
       color: #9aa7a4;
     }
 
+    /* download button */
+    .download-btn {
+      margin-top:20px;
+      padding:10px 22px;
+      background:var(--accent);
+      border:none;
+      border-radius:6px;
+      color:#fff;
+      font-size:15px;
+      cursor:pointer;
+      box-shadow:0 4px 10px rgba(0,0,0,0.15);
+      transition:background 0.2s ease;
+    }
+    .download-btn:hover {
+      background:#ff9900;
+    }
+
   </style>
 </head>
 <body>
-  <div class="certificate" role="document" aria-label="Certificate of Completion">
+  <div id="certificate" class="certificate" role="document" aria-label="Certificate of Completion">
 
     <div class="header">
       <div class="logo" aria-hidden="true">SA</div>
@@ -290,7 +308,7 @@
           <div class="details">
             <div class="hours">Duration: <strong>1 Month</strong></div>
             <div class="dates">Training: <strong>[04-11-2024] — [04-12-2024]</strong></div>
-            <div class="location">Location: <strong>[Lagos / No 5 Oyopio street, Odonguyan Ikorodu Lagos]</strong></div>
+            <div class="location">Location: <strong>[Lagos / No 5 Oyopio street, Odonguyan Ikorodu Lagos]</strong></div>
           </div>
 
           <div class="signatures">
@@ -357,12 +375,22 @@
 
   </div>
 
-  <!-- Simple script to allow quick editing in-browser (not required) -->
+  <!-- Download button -->
+  <button class="download-btn" onclick="downloadPDF()">Download as PDF</button>
+
+  <!-- Scripts -->
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/html2canvas/1.4.1/html2canvas.min.js"></script>
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/jspdf/2.5.1/jspdf.umd.min.js"></script>
   <script>
-    // Example: change the name quickly from JS console
-    // document.getElementById('student-name').textContent = 'Ibrahim Example';
-    // document.getElementById('cert-number').textContent = 'SA-2025-0123';
-    // document.getElementById('award-date').textContent = '2 September 2025';
+    async function downloadPDF(){
+      const { jsPDF } = window.jspdf;
+      const cert = document.getElementById("certificate");
+      const canvas = await html2canvas(cert, { scale: 2 });
+      const imgData = canvas.toDataURL("image/png");
+      const pdf = new jsPDF("landscape", "pt", [cert.offsetWidth, cert.offsetHeight]);
+      pdf.addImage(imgData, "PNG", 0, 0, cert.offsetWidth, cert.offsetHeight);
+      pdf.save("solaraxis_certificate.pdf");
+    }
   </script>
 </body>
 </html>
