@@ -1,76 +1,450 @@
+<!-- ===== admindash.html (READY TO REPLACE) ===== -->
 <!DOCTYPE html>
 <html lang="en">
 <head>
-<meta charset="UTF-8">
-<meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>Admin Dashboard - Magic Room</title>
-<link rel="stylesheet" href="assets/css/styles.css">
-<style>
-body { margin:0; font-family:Arial,sans-serif; display:flex; height:100vh; }
-.sidebar { width:220px; background:#2b3d34; color:#fff; display:flex; flex-direction:column; padding:20px; }
-.sidebar h2 { margin-bottom:20px; font-size:1.2rem; text-align:center; }
-.sidebar a { color:#fff; text-decoration:none; padding:10px; display:block; border-radius:5px; margin-bottom:8px; transition:background 0.3s; cursor:pointer; }
-.sidebar a:hover { background:#248f52; }
-.main { flex:1; padding:20px; overflow-y:auto; }
-.section { display:none; }
-.section.active { display:block; }
-h1 { margin-bottom:1rem; }
-</style>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+  <title>Admin Dashboard - Magic Room</title>
+  <link rel="stylesheet" href="assets/css/styles.css" />
+  <style>
+    body { margin:0; font-family: Arial, sans-serif; display:flex; height:100vh; }
+    .sidebar { width: 230px; background:#2b3d34; color:#fff; display:flex; flex-direction:column; padding:20px; }
+    .sidebar h2 { margin: 0 0 16px; font-size: 1.2rem; text-align:center; }
+    .sidebar a { color:#fff; text-decoration:none; padding:10px; border-radius:6px; margin-bottom:8px; cursor:pointer; display:block; transition: background .2s; }
+    .sidebar a:hover { background:#248f52; }
+    .main { flex:1; padding:18px; overflow-y:auto; }
+    .section { display:none; }
+    .section.active { display:block; }
+    h1 { margin-top:0; }
+    .row { display:grid; grid-template-columns:1fr 1fr; gap:14px; }
+    .card { border:1px solid #eee; border-radius:10px; padding:14px; background:#fff; }
+    label { display:block; font-size:13px; color:#444; margin-bottom:6px; }
+    input, textarea { width:100%; padding:9px; border:1px solid #ccc; border-radius:6px; margin-bottom:10px; }
+    button { padding:10px 14px; border:0; border-radius:6px; background:#2b3d34; color:#fff; cursor:pointer; }
+    button.secondary { background:#666; }
+    table { width:100%; border-collapse: collapse; }
+    th, td { border-bottom:1px solid #ddd; padding:8px; text-align:left; }
+    .pill { padding:2px 8px; border-radius:999px; font-size:12px; background:#eee; display:inline-block; }
+    .toolbar { display:flex; gap:10px; margin-bottom:10px; flex-wrap: wrap; }
+    .muted { color:#777; font-size:12px; }
+  </style>
 </head>
 <body>
-<div class="sidebar">
-<h2>Magic Room</h2>
-<a onclick="showSection('dashboard')">Dashboard</a>
-<a onclick="showSection('indexControl')">Index Control</a>
-<a onclick="showSection('registerControl')">Register Control</a>
-<a onclick="showSection('applicants')">Applicants</a>
-<a onclick="showSection('adminManagement')">Admin Management</a>
-<a onclick="showSection('settings')">Settings</a>
-<a onclick="logout()">Logout</a>
-</div>
+  <div class="sidebar">
+    <h2>Magic Room</h2>
+    <a onclick="showSection('dashboard')">Dashboard</a>
+    <a onclick="showSection('indexControl')">Index Control</a>
+    <a onclick="showSection('registerControl')">Register Control</a>
+    <a onclick="showSection('media')">Media / Gallery</a>
+    <a onclick="showSection('comments')">Tributes / Comments</a>
+    <a onclick="showSection('applicants')">Applicants</a>
+    <a onclick="showSection('adminManagement')">Admin Management</a>
+    <a onclick="showSection('settings')">Settings</a>
+    <a onclick="logout()">Logout</a>
+  </div>
 
-<div class="main">
-<div id="dashboard" class="section active">
-<h1>Welcome to the Magic Room ✨</h1>
-<p>Select a section from the left menu to begin controlling your website.</p>
-</div>
-<div id="indexControl" class="section">
-<h1>Index Control</h1>
-<p>Manage homepage content: Add/Remove pages, update gallery, edit texts.</p>
-</div>
-<div id="registerControl" class="section">
-<h1>Register Control</h1>
-<p>Switch between Membership, Scholarship, Empowerment, Grant, Loan forms.</p>
-</div>
-<div id="applicants" class="section">
-<h1>Applicants</h1>
-<p>View and export applicants' data here.</p>
-</div>
-<div id="adminManagement" class="section">
-<h1>Admin Management</h1>
-<p>Add or remove admins, reset passwords.</p>
-</div>
-<div id="settings" class="section">
-<h1>Settings</h1>
-<p>Update site-wide settings like colors, contact info, and footer text.</p>
-</div>
-</div>
+  <div class="main">
+    <!-- Dashboard -->
+    <div id="dashboard" class="section active">
+      <h1>Welcome to the Magic Room ✨</h1>
+      <p class="muted">You’re signed in. Use the left menu to manage your site.</p>
+    </div>
 
-<script>
-function showSection(id) {
-  document.querySelectorAll('.section').forEach(s=>s.classList.remove('active'));
-  document.getElementById(id).classList.add('active');
-}
+    <!-- Index / Homepage -->
+    <div id="indexControl" class="section">
+      <h1>Index Control</h1>
+      <div class="row">
+        <div class="card">
+          <h3>Homepage Content</h3>
+          <label>Headline</label>
+          <input id="homeHeadline" />
+          <label>Subheadline</label>
+          <input id="homeSubheadline" />
+          <label>Intro Text</label>
+          <textarea id="homeIntro" rows="5"></textarea>
+          <label>Hero Image URL</label>
+          <input id="homeHero" />
+          <button id="saveHome">Save Homepage</button>
+        </div>
+        <div class="card">
+          <h3>Preview (read-only)</h3>
+          <p><b>Headline:</b> <span id="prevHeadline"></span></p>
+          <p><b>Subheadline:</b> <span id="prevSubheadline"></span></p>
+          <p><b>Intro:</b> <span id="prevIntro"></span></p>
+          <p><b>Hero:</b> <span id="prevHero"></span></p>
+        </div>
+      </div>
+    </div>
 
-// ✅ Check localStorage session
-if(!localStorage.getItem("adminLoggedIn")) {
-  window.location.href="admin-login.html";
-}
+    <!-- Register Control -->
+    <div id="registerControl" class="section">
+      <h1>Register Control</h1>
+      <div class="card">
+        <div class="toolbar">
+          <label><input type="checkbox" id="featMembership"/> Membership</label>
+          <label><input type="checkbox" id="featScholarship"/> Scholarship</label>
+          <label><input type="checkbox" id="featEmpowerment"/> Empowerment</label>
+          <label><input type="checkbox" id="featGrant"/> Grant</label>
+          <label><input type="checkbox" id="featLoan"/> Loan</label>
+        </div>
+        <button id="saveFeatures">Save Form Toggles</button>
+        <p class="muted">Public site can read these flags to show/hide forms.</p>
+      </div>
+    </div>
 
-function logout() {
-  localStorage.removeItem("adminLoggedIn");
-  window.location.href="admin-login.html";
-}
-</script>
+    <!-- Media -->
+    <div id="media" class="section">
+      <h1>Media / Gallery</h1>
+      <div class="card">
+        <h3>Add Media</h3>
+        <label>Title</label>
+        <input id="mediaTitle" />
+        <label>Image/Video URL</label>
+        <input id="mediaUrl" />
+        <button id="addMedia">Add</button>
+      </div>
+      <div class="card">
+        <h3>Library</h3>
+        <table>
+          <thead><tr><th>Title</th><th>URL</th><th></th></tr></thead>
+          <tbody id="mediaTbody"></tbody>
+        </table>
+      </div>
+    </div>
+
+    <!-- Comments / Tributes -->
+    <div id="comments" class="section">
+      <h1>Tributes / Comments</h1>
+      <div class="card">
+        <table>
+          <thead><tr><th>Name</th><th>Text</th><th>Approved</th><th>Action</th></tr></thead>
+          <tbody id="commentsTbody"></tbody>
+        </table>
+      </div>
+    </div>
+
+    <!-- Applicants -->
+    <div id="applicants" class="section">
+      <h1>Applicants</h1>
+      <div class="card">
+        <table>
+          <thead><tr><th>Name</th><th>Email</th><th>Program</th><th>Status</th><th>Action</th></tr></thead>
+          <tbody id="appsTbody"></tbody>
+        </table>
+      </div>
+    </div>
+
+    <!-- Admin Management -->
+    <div id="adminManagement" class="section">
+      <h1>Admin Management</h1>
+      <div class="card">
+        <h3>Admins</h3>
+        <table>
+          <thead><tr><th>Username</th><th>Email</th></tr></thead>
+          <tbody id="adminsTbody"></tbody>
+        </table>
+      </div>
+      <div class="card">
+        <h3>Reset Password (by Email)</h3>
+        <label>Email</label>
+        <input id="resetEmail" type="email"/>
+        <label>New Password</label>
+        <input id="resetPass" type="password"/>
+        <button id="resetBtn">Reset</button>
+      </div>
+    </div>
+
+    <!-- Settings -->
+    <div id="settings" class="section">
+      <h1>Settings</h1>
+      <div class="card">
+        <h3>Contact</h3>
+        <label>Email</label>
+        <input id="setEmail" type="email"/>
+        <label>Phone</label>
+        <input id="setPhone"/>
+        <label>Address</label>
+        <input id="setAddress"/>
+        <button id="saveSettings">Save Settings</button>
+      </div>
+    </div>
+  </div>
+
+  <script>
+    // IMPORTANT: your Render base URL
+    const API_URL = "https://hon-isyaku-bawa-na-abi-2025.onrender.com";
+
+    // ---- session gate
+    async function requireSession() {
+      try {
+        const r = await fetch(`${API_URL}/api/admins/check`, { credentials: 'include' });
+        const j = await r.json();
+        if (!j.loggedIn) window.location.href = "admin-login.html";
+      } catch {
+        window.location.href = "admin-login.html";
+      }
+    }
+    document.addEventListener('DOMContentLoaded', async () => {
+      await requireSession();
+      await loadAll();
+    });
+
+    function showSection(id) {
+      document.querySelectorAll('.section').forEach(s => s.classList.remove('active'));
+      document.getElementById(id).classList.add('active');
+      // Lazy load per section if needed
+      if (id === 'media') loadMedia();
+      if (id === 'comments') loadComments();
+      if (id === 'applicants') loadApplicants();
+      if (id === 'adminManagement') loadAdmins();
+    }
+
+    async function logout() {
+      try {
+        await fetch(`${API_URL}/api/admins/logout`, { method:'POST', credentials:'include' });
+      } catch {}
+      window.location.href = "admin-login.html";
+    }
+
+    // ------- Load everything used on first page view
+    async function loadAll() {
+      await loadSite();
+      await loadMedia();
+      await loadComments();
+      await loadApplicants();
+      await loadAdmins();
+    }
+
+    // ------- Site (home + settings)
+    async function loadSite() {
+      const r = await fetch(`${API_URL}/api/site`, { credentials:'include' });
+      const site = await r.json();
+      // Home
+      document.getElementById('homeHeadline').value = site.home?.headline || '';
+      document.getElementById('homeSubheadline').value = site.home?.subheadline || '';
+      document.getElementById('homeIntro').value = site.home?.introText || '';
+      document.getElementById('homeHero').value = site.home?.heroImage || '';
+      document.getElementById('prevHeadline').textContent = site.home?.headline || '';
+      document.getElementById('prevSubheadline').textContent = site.home?.subheadline || '';
+      document.getElementById('prevIntro').textContent = site.home?.introText || '';
+      document.getElementById('prevHero').textContent = site.home?.heroImage || '';
+
+      // Settings
+      const s = site.settings || {};
+      const c = s.contact || {};
+      const f = s.features || {};
+      document.getElementById('setEmail').value = c.email || '';
+      document.getElementById('setPhone').value = c.phone || '';
+      document.getElementById('setAddress').value = c.address || '';
+      document.getElementById('featMembership').checked = !!f.membershipEnabled;
+      document.getElementById('featScholarship').checked = !!f.scholarshipEnabled;
+      document.getElementById('featEmpowerment').checked = !!f.empowermentEnabled;
+      document.getElementById('featGrant').checked = !!f.grantEnabled;
+      document.getElementById('featLoan').checked = !!f.loanEnabled;
+    }
+
+    document.getElementById('saveHome').addEventListener('click', async () => {
+      const payload = {
+        home: {
+          headline: document.getElementById('homeHeadline').value.trim(),
+          subheadline: document.getElementById('homeSubheadline').value.trim(),
+          introText: document.getElementById('homeIntro').value.trim(),
+          heroImage: document.getElementById('homeHero').value.trim()
+        }
+      };
+      const r = await fetch(`${API_URL}/api/site`, {
+        method:'POST', headers:{'Content-Type':'application/json'},
+        credentials:'include', body: JSON.stringify(payload)
+      });
+      const j = await r.json();
+      alert(j.message || 'Saved');
+      loadSite();
+    });
+
+    document.getElementById('saveSettings').addEventListener('click', async () => {
+      const payload = {
+        settings: {
+          contact: {
+            email: document.getElementById('setEmail').value.trim(),
+            phone: document.getElementById('setPhone').value.trim(),
+            address: document.getElementById('setAddress').value.trim()
+          }
+        }
+      };
+      const r = await fetch(`${API_URL}/api/site`, {
+        method:'POST', headers:{'Content-Type':'application/json'},
+        credentials:'include', body: JSON.stringify(payload)
+      });
+      const j = await r.json();
+      alert(j.message || 'Saved');
+    });
+
+    document.getElementById('saveFeatures').addEventListener('click', async () => {
+      const payload = {
+        settings: {
+          features: {
+            membershipEnabled: document.getElementById('featMembership').checked,
+            scholarshipEnabled: document.getElementById('featScholarship').checked,
+            empowermentEnabled: document.getElementById('featEmpowerment').checked,
+            grantEnabled: document.getElementById('featGrant').checked,
+            loanEnabled: document.getElementById('featLoan').checked
+          }
+        }
+      };
+      const r = await fetch(`${API_URL}/api/site`, {
+        method:'POST', headers:{'Content-Type':'application/json'},
+        credentials:'include', body: JSON.stringify(payload)
+      });
+      const j = await r.json();
+      alert(j.message || 'Saved');
+    });
+
+    // ------- Media
+    async function loadMedia() {
+      const r = await fetch(`${API_URL}/api/media`, { credentials:'include' });
+      const items = await r.json();
+      const tbody = document.getElementById('mediaTbody');
+      tbody.innerHTML = '';
+      items.forEach(it => {
+        const tr = document.createElement('tr');
+        tr.innerHTML = `
+          <td>${escapeHtml(it.title)}</td>
+          <td><a href="${escapeAttr(it.url)}" target="_blank">${escapeHtml(it.url)}</a></td>
+          <td><button data-id="${it.id}" class="delMedia">Delete</button></td>
+        `;
+        tbody.appendChild(tr);
+      });
+      [...document.querySelectorAll('.delMedia')].forEach(btn => {
+        btn.addEventListener('click', () => deleteMedia(btn.getAttribute('data-id')));
+      });
+    }
+
+    document.getElementById('addMedia').addEventListener('click', async () => {
+      const title = document.getElementById('mediaTitle').value.trim();
+      const url = document.getElementById('mediaUrl').value.trim();
+      if (!title || !url) return alert('Title and URL required');
+      const r = await fetch(`${API_URL}/api/media`, {
+        method:'POST', headers:{'Content-Type':'application/json'},
+        credentials:'include', body: JSON.stringify({ title, url })
+      });
+      const j = await r.json();
+      if (j.error) return alert(j.error);
+      document.getElementById('mediaTitle').value = '';
+      document.getElementById('mediaUrl').value = '';
+      loadMedia();
+    });
+
+    async function deleteMedia(id) {
+      const r = await fetch(`${API_URL}/api/media/${id}`, {
+        method:'DELETE', credentials:'include'
+      });
+      const j = await r.json();
+      if (j.error) return alert(j.error);
+      loadMedia();
+    }
+
+    // ------- Comments
+    async function loadComments() {
+      const r = await fetch(`${API_URL}/api/comments`, { credentials:'include' });
+      const items = await r.json();
+      const tbody = document.getElementById('commentsTbody');
+      tbody.innerHTML = '';
+      items.forEach(c => {
+        const tr = document.createElement('tr');
+        tr.innerHTML = `
+          <td>${escapeHtml(c.name)}</td>
+          <td>${escapeHtml(c.text)}</td>
+          <td>${c.approved ? '<span class="pill">approved</span>' : '<span class="pill">pending</span>'}</td>
+          <td>
+            <button class="approveBtn" data-id="${c.id}" data-val="true">Approve</button>
+            <button class="approveBtn secondary" data-id="${c.id}" data-val="false">Unapprove</button>
+          </td>
+        `;
+        tbody.appendChild(tr);
+      });
+      [...document.querySelectorAll('.approveBtn')].forEach(btn => {
+        btn.addEventListener('click', async () => {
+          const id = btn.getAttribute('data-id');
+          const val = btn.getAttribute('data-val') === 'true';
+          const r = await fetch(`${API_URL}/api/comments/${id}/moderate`, {
+            method:'POST', headers:{'Content-Type':'application/json'},
+            credentials:'include', body: JSON.stringify({ approved: val })
+          });
+          const j = await r.json();
+          if (j.error) return alert(j.error);
+          loadComments();
+        });
+      });
+    }
+
+    // ------- Applicants
+    async function loadApplicants() {
+      const r = await fetch(`${API_URL}/api/applicants`, { credentials:'include' });
+      const items = await r.json();
+      const tbody = document.getElementById('appsTbody');
+      tbody.innerHTML = '';
+      items.forEach(a => {
+        const tr = document.createElement('tr');
+        tr.innerHTML = `
+          <td>${escapeHtml(a.name)}</td>
+          <td>${escapeHtml(a.email)}</td>
+          <td>${escapeHtml(a.program)}</td>
+          <td><span class="pill">${escapeHtml(a.status)}</span></td>
+          <td>
+            <button class="appStatus" data-id="${a.id}" data-status="approved">Approve</button>
+            <button class="appStatus secondary" data-id="${a.id}" data-status="rejected">Reject</button>
+          </td>
+        `;
+        tbody.appendChild(tr);
+      });
+      [...document.querySelectorAll('.appStatus')].forEach(btn => {
+        btn.addEventListener('click', async () => {
+          const id = btn.getAttribute('data-id');
+          const status = btn.getAttribute('data-status');
+          const r = await fetch(`${API_URL}/api/applicants/${id}/status`, {
+            method:'POST', headers:{'Content-Type':'application/json'},
+            credentials:'include', body: JSON.stringify({ status })
+          });
+          const j = await r.json();
+          if (j.error) return alert(j.error);
+          loadApplicants();
+        });
+      });
+    }
+
+    // ------- Admins
+    async function loadAdmins() {
+      const r = await fetch(`${API_URL}/api/admins`, { credentials:'include' });
+      const items = await r.json();
+      const tbody = document.getElementById('adminsTbody');
+      tbody.innerHTML = '';
+      items.forEach(a => {
+        const tr = document.createElement('tr');
+        tr.innerHTML = `<td>${escapeHtml(a.username)}</td><td>${escapeHtml(a.email)}</td>`;
+        tbody.appendChild(tr);
+      });
+    }
+
+    document.getElementById('resetBtn').addEventListener('click', async () => {
+      const email = document.getElementById('resetEmail').value.trim();
+      const newPassword = document.getElementById('resetPass').value.trim();
+      if (!email || !newPassword) return alert('Email and new password required');
+      const r = await fetch(`${API_URL}/api/admins/reset`, {
+        method:'POST', headers:{'Content-Type':'application/json'},
+        credentials:'include', body: JSON.stringify({ email, newPassword })
+      });
+      const j = await r.json();
+      if (j.error) return alert(j.error);
+      alert(j.message || 'Password reset');
+      document.getElementById('resetEmail').value = '';
+      document.getElementById('resetPass').value = '';
+    });
+
+    // ------- Utils
+    function escapeHtml(s='') {
+      return s.replace(/[&<>"']/g, c => ({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#039;'}[c]));
+    }
+    function escapeAttr(s='') { return s.replace(/"/g, '&quot;'); }
+  </script>
 </body>
 </html>
